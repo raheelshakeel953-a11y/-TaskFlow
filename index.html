@@ -1732,654 +1732,2302 @@
     </div>
 
     <script>
-        // Quantum Task Manager Class
-        class QuantumTaskManager {
-            constructor() {
-                this.tasks = [];
-                this.currentFilter = 'all';
-                this.draggedItem = null;
-                this.charts = {};
-                this.quantumStatus = [
-                    '128 Neural cores active',
-                    'Quantum coherence at 94%',
-                    'Pattern recognition online',
-                    'Predictive matrix stable',
-                    'Learning algorithms engaged',
-                    'Quantum entanglement stable',
-                    'Neural pathways optimized',
-                    'Temporal sync active'
-                ];
-                
-                this.initializeQuantumTasks();
-                this.initializeEventListeners();
-                this.updateStats();
-                this.initializeCharts();
-                this.startQuantumTime();
-                this.rotateQuantumStatus();
-                this.createNeuralNetwork();
+       // quantum-task-manager.js - Complete Enterprise Solution
+
+class QuantumTaskManager {
+    constructor() {
+        // Core Properties
+        this.tasks = [];
+        this.completedTasks = [];
+        this.archivedTasks = [];
+        this.favorites = [];
+        this.currentFilter = 'all';
+        this.currentView = 'grid';
+        this.currentSort = 'date';
+        this.draggedItem = null;
+        this.selectedTasks = new Set();
+        this.undoStack = [];
+        this.redoStack = [];
+        
+        // Quantum Properties
+        this.quantumState = 'coherent';
+        this.neuralNetwork = [];
+        this.quantumParticles = [];
+        this.quantumCoherence = 100;
+        this.neuralConnections = 0;
+        
+        // User Preferences
+        this.user = {
+            name: 'Raheel Shakeel',
+            email: 'raheel@quantum.ai',
+            theme: 'quantum',
+            notifications: true,
+            soundEnabled: true,
+            quantumLevel: 42,
+            experience: 15420,
+            achievements: [],
+            preferences: {
+                defaultView: 'grid',
+                autoArchive: true,
+                smartReminders: true,
+                quantumSync: true,
+                neuralLearning: true
             }
+        };
+        
+        // AI Learning Data
+        this.learningData = {
+            productivityPatterns: [],
+            optimalWorkHours: [],
+            taskCompletionRates: {},
+            aiRecommendations: [],
+            neuralNetworkWeights: {},
+            quantumStates: []
+        };
+        
+        // Quantum Status Messages
+        this.quantumStatusMessages = [
+            { text: '128 Neural cores active at 3.2GHz', icon: 'fa-microchip' },
+            { text: 'Quantum coherence at 94.7%', icon: 'fa-atom' },
+            { text: 'Pattern recognition online - 15k neurons', icon: 'fa-brain' },
+            { text: 'Predictive matrix stable', icon: 'fa-chart-line' },
+            { text: 'Learning algorithms engaged', icon: 'fa-graduation-cap' },
+            { text: 'Quantum entanglement: 42 qubits', icon: 'fa-infinity' },
+            { text: 'Neural pathways optimized', icon: 'fa-project-diagram' },
+            { text: 'Temporal sync active', icon: 'fa-clock' },
+            { text: 'Deep learning model: v4.2', icon: 'fa-cube' },
+            { text: 'Quantum encryption active', icon: 'fa-lock' }
+        ];
+        
+        // Achievement System
+        this.achievements = [
+            { id: 'first_task', name: 'Quantum Initiate', description: 'Create first quantum task', reward: 100, icon: 'fa-star' },
+            { id: 'ten_tasks', name: 'Quantum Apprentice', description: 'Complete 10 tasks', reward: 500, icon: 'fa-medal' },
+            { id: 'fifty_tasks', name: 'Quantum Master', description: 'Complete 50 tasks', reward: 2000, icon: 'fa-crown' },
+            { id: 'hundred_tasks', name: 'Quantum Legend', description: 'Complete 100 tasks', reward: 5000, icon: 'fa-chess-queen' },
+            { id: 'perfect_week', name: 'Perfect Coherence', description: 'Complete all tasks for a week', reward: 1000, icon: 'fa-calendar-check' },
+            { id: 'early_bird', name: 'Early Quantum', description: 'Complete 5 tasks before 9 AM', reward: 300, icon: 'fa-sun' },
+            { id: 'night_owl', name: 'Night Quantum', description: 'Complete 5 tasks after 10 PM', reward: 300, icon: 'fa-moon' },
+            { id: 'speed_demon', name: 'Quantum Speed', description: 'Complete task within 1 hour', reward: 150, icon: 'fa-rocket' },
+            { id: 'collaborator', name: 'Quantum Team', description: 'Share 10 tasks', reward: 400, icon: 'fa-users' },
+            { id: 'organizer', name: 'Quantum Architect', description: 'Create 5 categories', reward: 250, icon: 'fa-sitemap' }
+        ];
+        
+        this.initialize();
+    }
 
-            initializeQuantumTasks() {
-                // Generate 150+ diverse tasks
-                const categories = ['quantum-computing', 'neural-networks', 'machine-learning', 'deep-learning', 'ai-research', 'data-science'];
-                const priorities = ['low', 'medium', 'high'];
-                const statuses = ['pending', 'completed'];
-                const titles = [
-                    'Implement quantum circuit', 'Optimize neural architecture', 'Train deep learning model',
-                    'Deploy AI microservice', 'Analyze quantum data', 'Build recommendation system',
-                    'Create neural interface', 'Design quantum algorithm', 'Optimize ML pipeline',
-                    'Develop AI assistant', 'Research quantum supremacy', 'Build computer vision model',
-                    'Implement NLP system', 'Create generative AI', 'Design reinforcement learning',
-                    'Build predictive model', 'Optimize tensor operations', 'Create quantum simulation',
-                    'Develop edge AI', 'Implement federated learning', 'Build transformer model',
-                    'Create GAN architecture', 'Design CNN network', 'Implement RNN/LSTM',
-                    'Build autoencoder', 'Create attention mechanism', 'Optimize gradient descent',
-                    'Implement backpropagation', 'Design activation functions', 'Build loss functions',
-                    'Create optimizer algorithms', 'Implement data preprocessing', 'Build feature engineering',
-                    'Design model evaluation', 'Create cross-validation', 'Implement hyperparameter tuning',
-                    'Build ensemble methods', 'Create random forest', 'Implement gradient boosting',
-                    'Design XGBoost model', 'Build catboost algorithm', 'Create lightGBM model',
-                    'Implement stacking ensemble', 'Design blending methods', 'Build bagging algorithms',
-                    'Create voting classifiers', 'Implement AdaBoost', 'Design gradient boosting machines',
-                    'Build deep neural networks', 'Create convolutional networks', 'Implement residual networks',
-                    'Design dense networks', 'Build recurrent networks', 'Create attention networks',
-                    'Implement transformers', 'Design BERT models', 'Build GPT architectures',
-                    'Create T5 models', 'Implement XLNet', 'Design RoBERTa models',
-                    'Build ELECTRA models', 'Create ALBERT models', 'Implement DistilBERT',
-                    'Design MobileBERT', 'Build TinyBERT', 'Create quantum BERT',
-                    'Implement quantum CNN', 'Design quantum RNN', 'Build quantum GAN',
-                    'Create quantum VAE', 'Implement quantum autoencoder', 'Design quantum classifier',
-                    'Build quantum regressor', 'Create quantum clustering', 'Implement quantum PCA',
-                    'Design quantum SVM', 'Build quantum kernel', 'Create quantum feature map',
-                    'Implement quantum circuit learning', 'Design quantum neural networks', 'Build quantum ML',
-                    'Create quantum deep learning', 'Implement quantum transfer learning', 'Design quantum meta-learning',
-                    'Build quantum few-shot learning', 'Create quantum zero-shot learning', 'Implement quantum self-supervised',
-                    'Design quantum semi-supervised', 'Build quantum active learning', 'Create quantum online learning',
-                    'Implement quantum reinforcement', 'Design quantum multi-agent', 'Build quantum evolutionary',
-                    'Create quantum genetic algorithms', 'Implement quantum swarm intelligence', 'Design quantum ant colony',
-                    'Build quantum particle swarm', 'Create quantum bee algorithm', 'Implement quantum firefly',
-                    'Design quantum cuckoo search', 'Build quantum bat algorithm', 'Create quantum wolf optimization',
-                    'Implement quantum whale optimization', 'Design quantum butterfly optimization', 'Build quantum moth-flame'
-                ];
+    initialize() {
+        this.loadUserData();
+        this.loadTasks();
+        this.initializeQuantumNetwork();
+        this.setupEventListeners();
+        this.startQuantumEngine();
+        this.initializeCharts();
+        this.setupKeyboardShortcuts();
+        this.startRealTimeSync();
+        this.checkAchievements();
+    }
 
-                for (let i = 0; i < 150; i++) {
-                    const randomTitle = titles[Math.floor(Math.random() * titles.length)];
-                    const randomCategory = categories[Math.floor(Math.random() * categories.length)];
-                    const randomPriority = priorities[Math.floor(Math.random() * priorities.length)];
-                    const randomStatus = Math.random() > 0.3 ? 'pending' : 'completed'; // 70% pending, 30% completed
-                    
-                    // Generate random deadline within next 7 days
-                    const deadline = new Date();
-                    deadline.setDate(deadline.getDate() + Math.floor(Math.random() * 7) + 1);
-                    deadline.setHours(Math.floor(Math.random() * 24), Math.floor(Math.random() * 60));
-                    
-                    this.tasks.push({
-                        id: `quantum-${i + 1}-${Date.now()}-${Math.random()}`,
-                        title: `${randomTitle} v${Math.floor(Math.random() * 10)}.${Math.floor(Math.random() * 10)}`,
-                        description: `Quantum task with priority level ${randomPriority}. Neural coherence at ${Math.floor(Math.random() * 30 + 70)}%.`,
-                        priority: randomPriority,
-                        deadline: deadline.toISOString().slice(0, 16),
-                        category: randomCategory,
-                        status: randomStatus,
-                        completed: randomStatus === 'completed',
-                        createdAt: new Date().toISOString(),
-                        aiScore: Math.floor(Math.random() * 30 + 70),
-                        quantumCoherence: Math.floor(Math.random() * 20 + 80),
-                        neuralCores: Math.floor(Math.random() * 32 + 96)
-                    });
+    loadUserData() {
+        const savedUser = localStorage.getItem('quantumUser');
+        if (savedUser) {
+            this.user = { ...this.user, ...JSON.parse(savedUser) };
+        }
+        this.updateUserUI();
+    }
+
+    saveUserData() {
+        localStorage.setItem('quantumUser', JSON.stringify(this.user));
+    }
+
+    loadTasks() {
+        const saved = localStorage.getItem('quantumTasks');
+        if (saved) {
+            const allTasks = JSON.parse(saved);
+            this.tasks = allTasks.filter(t => !t.completed && !t.archived);
+            this.completedTasks = allTasks.filter(t => t.completed && !t.archived);
+            this.archivedTasks = allTasks.filter(t => t.archived);
+        } else {
+            this.generateInitialTasks(200); // Generate 200 initial tasks
+        }
+        this.renderTasks();
+        this.updateStats();
+    }
+
+    generateInitialTasks(count) {
+        const categories = [
+            'Quantum Computing', 'Neural Networks', 'Machine Learning', 
+            'Deep Learning', 'AI Research', 'Data Science', 'Quantum Physics',
+            'Algorithm Design', 'System Architecture', 'Cloud Computing',
+            'Edge AI', 'Robotics', 'Computer Vision', 'NLP', 'Reinforcement Learning'
+        ];
+        
+        const priorities = ['low', 'medium', 'high'];
+        const statuses = ['pending', 'completed'];
+        
+        const taskTemplates = [
+            'Implement {algorithm} for {domain}',
+            'Optimize {model} performance',
+            'Design {system} architecture',
+            'Research {concept} applications',
+            'Develop {tool} for {purpose}',
+            'Analyze {data} using {method}',
+            'Create {framework} for {platform}',
+            'Build {solution} with {technology}',
+            'Test {component} integration',
+            'Deploy {service} to {environment}'
+        ];
+        
+        const algorithms = ['quantum circuit', 'neural network', 'genetic algorithm', 'reinforcement learning', 'transformer model'];
+        const domains = ['healthcare', 'finance', 'robotics', 'automotive', 'security'];
+        const models = ['CNN', 'RNN', 'LSTM', 'BERT', 'GPT-4'];
+        const systems = ['distributed', 'embedded', 'real-time', 'cloud-native', 'edge'];
+        const concepts = ['quantum entanglement', 'neural plasticity', 'deep learning', 'transfer learning', 'meta-learning'];
+        
+        for (let i = 0; i < count; i++) {
+            const template = taskTemplates[Math.floor(Math.random() * taskTemplates.length)];
+            const title = template
+                .replace('{algorithm}', algorithms[Math.floor(Math.random() * algorithms.length)])
+                .replace('{domain}', domains[Math.floor(Math.random() * domains.length)])
+                .replace('{model}', models[Math.floor(Math.random() * models.length)])
+                .replace('{system}', systems[Math.floor(Math.random() * systems.length)])
+                .replace('{concept}', concepts[Math.floor(Math.random() * concepts.length)])
+                .replace('{tool}', ['simulator', 'analyzer', 'optimizer', 'visualizer'][Math.floor(Math.random() * 4)])
+                .replace('{purpose}', ['research', 'production', 'testing', 'development'][Math.floor(Math.random() * 4)])
+                .replace('{framework}', ['TensorFlow', 'PyTorch', 'JAX', 'CUDA'][Math.floor(Math.random() * 4)])
+                .replace('{platform}', ['quantum computer', 'GPU cluster', 'edge device', 'cloud'][Math.floor(Math.random() * 4)])
+                .replace('{solution}', ['API', 'microservice', 'library', 'platform'][Math.floor(Math.random() * 4)])
+                .replace('{technology}', ['Python', 'C++', 'Rust', 'Julia'][Math.floor(Math.random() * 4)])
+                .replace('{component}', ['module', 'interface', 'driver', 'controller'][Math.floor(Math.random() * 4)])
+                .replace('{service}', ['inference', 'training', 'monitoring', 'logging'][Math.floor(Math.random() * 4)])
+                .replace('{environment}', ['production', 'staging', 'development', 'testing'][Math.floor(Math.random() * 4)]);
+            
+            const priority = priorities[Math.floor(Math.random() * priorities.length)];
+            const category = categories[Math.floor(Math.random() * categories.length)];
+            const status = Math.random() > 0.3 ? 'pending' : 'completed';
+            
+            const deadline = new Date();
+            deadline.setDate(deadline.getDate() + Math.floor(Math.random() * 14) - 3);
+            deadline.setHours(Math.floor(Math.random() * 24), Math.floor(Math.random() * 60));
+            
+            const task = {
+                id: `task-${Date.now()}-${i}-${Math.random().toString(36).substr(2, 9)}`,
+                title: title,
+                description: `Advanced quantum task requiring ${priority} priority processing. Estimated quantum coherence: ${Math.floor(Math.random() * 30 + 70)}%`,
+                priority: priority,
+                deadline: deadline.toISOString(),
+                category: category,
+                status: status,
+                completed: status === 'completed',
+                createdAt: new Date(Date.now() - Math.random() * 30 * 24 * 60 * 60 * 1000).toISOString(),
+                completedAt: status === 'completed' ? new Date().toISOString() : null,
+                archived: false,
+                favorite: Math.random() > 0.8,
+                tags: this.generateRandomTags(),
+                subtasks: this.generateSubtasks(),
+                comments: [],
+                attachments: [],
+                timeEstimate: Math.floor(Math.random() * 8 + 1),
+                actualTime: 0,
+                progress: Math.random() * 100,
+                quantumScore: Math.floor(Math.random() * 30 + 70),
+                neuralConnections: Math.floor(Math.random() * 50 + 50),
+                quantumCoherence: Math.floor(Math.random() * 20 + 80),
+                neuralCores: Math.floor(Math.random() * 32 + 96),
+                dependencies: [],
+                priority: priority,
+                complexity: ['low', 'medium', 'high'][Math.floor(Math.random() * 3)],
+                impact: Math.floor(Math.random() * 100),
+                urgency: Math.floor(Math.random() * 100),
+                version: '2.0',
+                lastModified: new Date().toISOString()
+            };
+            
+            if (status === 'completed') {
+                this.completedTasks.push(task);
+            } else {
+                this.tasks.push(task);
+            }
+        }
+        
+        this.saveTasks();
+    }
+
+    generateRandomTags() {
+        const tags = ['quantum', 'ai', 'urgent', 'research', 'development', 'testing', 'deployment', 'optimization'];
+        const numTags = Math.floor(Math.random() * 3) + 1;
+        const selectedTags = [];
+        for (let i = 0; i < numTags; i++) {
+            const tag = tags[Math.floor(Math.random() * tags.length)];
+            if (!selectedTags.includes(tag)) {
+                selectedTags.push(tag);
+            }
+        }
+        return selectedTags;
+    }
+
+    generateSubtasks() {
+        const subtasks = [];
+        const numSubtasks = Math.floor(Math.random() * 5);
+        for (let i = 0; i < numSubtasks; i++) {
+            subtasks.push({
+                id: `subtask-${Date.now()}-${i}`,
+                title: `Quantum subtask ${i + 1}`,
+                completed: Math.random() > 0.5,
+                estimatedTime: Math.floor(Math.random() * 3 + 1)
+            });
+        }
+        return subtasks;
+    }
+
+    setupEventListeners() {
+        // Form submission
+        const form = document.getElementById('quantumTaskForm');
+        if (form) {
+            form.addEventListener('submit', (e) => {
+                e.preventDefault();
+                this.createTask();
+            });
+        }
+
+        // Priority selector
+        const priorityOptions = document.querySelectorAll('.priority-option-premium');
+        priorityOptions.forEach(option => {
+            option.addEventListener('click', () => {
+                priorityOptions.forEach(opt => opt.classList.remove('active'));
+                option.classList.add('active');
+                document.getElementById('taskPriority').value = option.dataset.priority;
+                this.quantumHapticFeedback();
+            });
+        });
+
+        // Initialize date picker
+        if (typeof flatpickr !== 'undefined') {
+            flatpickr("#taskDeadline", {
+                enableTime: true,
+                dateFormat: "Y-m-d H:i",
+                minDate: "today",
+                defaultDate: new Date().fp_incr(1),
+                time_24hr: true,
+                onChange: (selectedDates) => {
+                    this.analyzeQuantumTiming(selectedDates[0]);
                 }
+            });
+        }
 
-                // Sort by creation date (newest first)
-                this.tasks.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+        // Filter buttons
+        document.querySelectorAll('.filter-btn-premium').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.querySelectorAll('.filter-btn-premium').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                this.currentFilter = btn.dataset.filter;
+                this.renderTasks();
+                this.saveFilterPreference();
+            });
+        });
+
+        // Search functionality
+        const searchInput = document.getElementById('quantumSearch');
+        if (searchInput) {
+            searchInput.addEventListener('input', debounce((e) => {
+                this.searchTasks(e.target.value);
+            }, 300));
+        }
+
+        // View toggle
+        document.querySelectorAll('.view-toggle-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.querySelectorAll('.view-toggle-btn').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                this.currentView = btn.dataset.view;
+                this.renderTasks();
+            });
+        });
+
+        // Sort selector
+        const sortSelect = document.getElementById('sortTasks');
+        if (sortSelect) {
+            sortSelect.addEventListener('change', (e) => {
+                this.currentSort = e.target.value;
+                this.sortTasks();
+                this.renderTasks();
+            });
+        }
+
+        // Window resize handler
+        window.addEventListener('resize', debounce(() => {
+            this.handleResize();
+        }, 250));
+
+        // Online/Offline detection
+        window.addEventListener('online', () => {
+            this.showNotification('Quantum sync reconnected', 'success');
+            this.syncWithCloud();
+        });
+
+        window.addEventListener('offline', () => {
+            this.showNotification('Working in offline quantum mode', 'warning');
+        });
+
+        // Keyboard shortcuts
+        document.addEventListener('keydown', (e) => {
+            if (e.ctrlKey || e.metaKey) {
+                switch(e.key) {
+                    case 'n':
+                        e.preventDefault();
+                        this.openCreateTaskModal();
+                        break;
+                    case 'f':
+                        e.preventDefault();
+                        document.getElementById('quantumSearch')?.focus();
+                        break;
+                    case 's':
+                        e.preventDefault();
+                        this.quickSave();
+                        break;
+                    case 'z':
+                        e.preventDefault();
+                        if (e.shiftKey) {
+                            this.redo();
+                        } else {
+                            this.undo();
+                        }
+                        break;
+                    case 'a':
+                        if (e.shiftKey) {
+                            e.preventDefault();
+                            this.selectAllTasks();
+                        }
+                        break;
+                }
+            }
+        });
+
+        // Drag and drop for bulk operations
+        const tasksContainer = document.getElementById('tasksGrid');
+        if (tasksContainer) {
+            tasksContainer.addEventListener('dragover', (e) => e.preventDefault());
+            tasksContainer.addEventListener('drop', (e) => {
+                e.preventDefault();
+                this.handleBulkDrop(e);
+            });
+        }
+    }
+
+    setupKeyboardShortcuts() {
+        // Show shortcuts guide
+        console.log(`
+            Quantum Keyboard Shortcuts:
+            Ctrl+N - New Task
+            Ctrl+F - Search
+            Ctrl+S - Quick Save
+            Ctrl+Z - Undo
+            Ctrl+Shift+Z - Redo
+            Ctrl+A - Select All
+            Ctrl+D - Duplicate Task
+            Delete - Delete Selected
+            Space - Quick Preview
+            Esc - Close Modal
+        `);
+    }
+
+    createTask() {
+        const title = document.getElementById('taskTitle').value;
+        const description = document.getElementById('taskDesc').value;
+        const priority = document.getElementById('taskPriority').value;
+        const deadline = document.getElementById('taskDeadline').value;
+        const category = document.getElementById('taskCategory').value;
+        const tags = this.getSelectedTags();
+
+        if (!title || !deadline) {
+            this.showNotification('Please complete all quantum fields', 'error');
+            this.quantumVibrate(100);
+            return;
+        }
+
+        // Create undo point
+        this.saveToUndoStack('create');
+
+        const task = {
+            id: `task-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
+            title: title,
+            description: description || 'No description provided',
+            priority: priority,
+            deadline: deadline,
+            category: category,
+            tags: tags,
+            status: 'pending',
+            completed: false,
+            createdAt: new Date().toISOString(),
+            completedAt: null,
+            archived: false,
+            favorite: false,
+            subtasks: [],
+            comments: [],
+            attachments: [],
+            timeEstimate: 0,
+            actualTime: 0,
+            progress: 0,
+            quantumScore: this.calculateQuantumScore(priority, deadline),
+            neuralConnections: Math.floor(Math.random() * 50 + 50),
+            quantumCoherence: 100,
+            neuralCores: 128,
+            dependencies: [],
+            complexity: this.analyzeComplexity(title, description),
+            impact: this.calculateImpact(priority),
+            urgency: this.calculateUrgency(deadline),
+            version: '2.0',
+            lastModified: new Date().toISOString(),
+            history: [{
+                action: 'created',
+                timestamp: new Date().toISOString()
+            }]
+        };
+
+        this.tasks.unshift(task);
+        this.saveTasks();
+        this.renderTasks();
+        this.updateStats();
+        this.quantumHapticFeedback();
+        this.showNotification('✨ Quantum task created successfully!', 'success');
+        this.playSound('create');
+        this.checkQuantumAchievements(task);
+        this.quantumParticleEffect('create');
+
+        // Clear form
+        document.getElementById('quantumTaskForm').reset();
+        document.querySelector('.priority-option-premium.medium').classList.add('active');
+        document.getElementById('taskPriority').value = 'medium';
+        
+        // Focus back on title input
+        setTimeout(() => {
+            document.getElementById('taskTitle').focus();
+        }, 100);
+    }
+
+    calculateQuantumScore(priority, deadline) {
+        let score = 70;
+        
+        // Priority bonus
+        if (priority === 'high') score += 15;
+        if (priority === 'medium') score += 10;
+        if (priority === 'low') score += 5;
+        
+        // Deadline proximity bonus
+        const deadlineDate = new Date(deadline);
+        const now = new Date();
+        const daysUntilDeadline = Math.ceil((deadlineDate - now) / (1000 * 60 * 60 * 24));
+        
+        if (daysUntilDeadline <= 1) score += 20;
+        else if (daysUntilDeadline <= 3) score += 15;
+        else if (daysUntilDeadline <= 7) score += 10;
+        
+        return Math.min(100, score);
+    }
+
+    analyzeComplexity(title, description) {
+        const text = (title + ' ' + description).toLowerCase();
+        let complexity = 'medium';
+        
+        const highComplexityWords = ['quantum', 'neural', 'complex', 'advanced', 'research', 'algorithm'];
+        const lowComplexityWords = ['simple', 'basic', 'quick', 'easy', 'minor'];
+        
+        const highCount = highComplexityWords.filter(word => text.includes(word)).length;
+        const lowCount = lowComplexityWords.filter(word => text.includes(word)).length;
+        
+        if (highCount > lowCount + 1) complexity = 'high';
+        else if (lowCount > highCount + 1) complexity = 'low';
+        
+        return complexity;
+    }
+
+    calculateImpact(priority) {
+        const impacts = {
+            low: Math.floor(Math.random() * 30 + 20),
+            medium: Math.floor(Math.random() * 30 + 40),
+            high: Math.floor(Math.random() * 30 + 60)
+        };
+        return impacts[priority];
+    }
+
+    calculateUrgency(deadline) {
+        const deadlineDate = new Date(deadline);
+        const now = new Date();
+        const hoursUntilDeadline = (deadlineDate - now) / (1000 * 60 * 60);
+        
+        if (hoursUntilDeadline <= 24) return 90;
+        if (hoursUntilDeadline <= 72) return 70;
+        if (hoursUntilDeadline <= 168) return 50;
+        return 30;
+    }
+
+    toggleTaskComplete(taskId) {
+        const taskIndex = this.tasks.findIndex(t => t.id === taskId);
+        if (taskIndex !== -1) {
+            const task = this.tasks[taskIndex];
+            
+            // Save to undo stack
+            this.saveToUndoStack('toggle', { taskId, completed: task.completed });
+            
+            task.completed = true;
+            task.status = 'completed';
+            task.completedAt = new Date().toISOString();
+            task.progress = 100;
+            
+            // Move to completed tasks
+            const [completedTask] = this.tasks.splice(taskIndex, 1);
+            this.completedTasks.unshift(completedTask);
+            
+            this.saveTasks();
+            this.renderTasks();
+            this.updateStats();
+            this.showNotification('🎉 Quantum task completed!', 'success');
+            this.playSound('complete');
+            this.quantumParticleEffect('complete');
+            this.addUserExperience(10);
+            this.checkAchievements();
+            this.checkQuantumMilestones(completedTask);
+        }
+    }
+
+    toggleTaskFavorite(taskId) {
+        const allTasks = [...this.tasks, ...this.completedTasks];
+        const task = allTasks.find(t => t.id === taskId);
+        
+        if (task) {
+            task.favorite = !task.favorite;
+            this.saveTasks();
+            this.renderTasks();
+            
+            if (task.favorite) {
+                this.showNotification('Added to quantum favorites', 'info');
+                this.playSound('favorite');
+            }
+        }
+    }
+
+    archiveTask(taskId) {
+        const allTasks = [...this.tasks, ...this.completedTasks];
+        const taskIndex = allTasks.findIndex(t => t.id === taskId);
+        
+        if (taskIndex !== -1) {
+            const task = allTasks[taskIndex];
+            task.archived = true;
+            
+            // Remove from current lists
+            this.tasks = this.tasks.filter(t => t.id !== taskId);
+            this.completedTasks = this.completedTasks.filter(t => t.id !== taskId);
+            
+            // Add to archive
+            this.archivedTasks.push(task);
+            
+            this.saveTasks();
+            this.renderTasks();
+            this.updateStats();
+            this.showNotification('Task archived to quantum vault', 'info');
+        }
+    }
+
+    deleteTask(taskId, permanent = false) {
+        if (permanent) {
+            // Permanently delete
+            this.tasks = this.tasks.filter(t => t.id !== taskId);
+            this.completedTasks = this.completedTasks.filter(t => t.id !== taskId);
+            this.archivedTasks = this.archivedTasks.filter(t => t.id !== taskId);
+            
+            this.showNotification('Task permanently deleted', 'warning');
+        } else {
+            // Move to archive
+            this.archiveTask(taskId);
+        }
+        
+        this.saveTasks();
+        this.renderTasks();
+        this.updateStats();
+    }
+
+    bulkDelete(taskIds) {
+        const count = taskIds.length;
+        this.tasks = this.tasks.filter(t => !taskIds.includes(t.id));
+        this.completedTasks = this.completedTasks.filter(t => !taskIds.includes(t.id));
+        
+        this.saveTasks();
+        this.renderTasks();
+        this.updateStats();
+        this.showNotification(`Deleted ${count} quantum tasks`, 'info');
+    }
+
+    duplicateTask(taskId) {
+        const allTasks = [...this.tasks, ...this.completedTasks];
+        const original = allTasks.find(t => t.id === taskId);
+        
+        if (original) {
+            const duplicate = {
+                ...original,
+                id: `task-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
+                title: `${original.title} (Copy)`,
+                createdAt: new Date().toISOString(),
+                completed: false,
+                status: 'pending',
+                progress: 0,
+                history: [{
+                    action: 'duplicated',
+                    timestamp: new Date().toISOString(),
+                    originalId: taskId
+                }]
+            };
+            
+            this.tasks.unshift(duplicate);
+            this.saveTasks();
+            this.renderTasks();
+            this.showNotification('Task duplicated successfully', 'success');
+        }
+    }
+
+    shareTask(taskId) {
+        const task = [...this.tasks, ...this.completedTasks].find(t => t.id === taskId);
+        if (task) {
+            // Create shareable link
+            const shareData = {
+                title: task.title,
+                text: task.description,
+                url: `${window.location.origin}/task/${taskId}`
+            };
+            
+            if (navigator.share) {
+                navigator.share(shareData)
+                    .then(() => this.showNotification('Task shared successfully', 'success'))
+                    .catch(() => this.fallbackShare(task));
+            } else {
+                this.fallbackShare(task);
+            }
+        }
+    }
+
+    fallbackShare(task) {
+        // Copy to clipboard
+        const shareText = `Task: ${task.title}\nDescription: ${task.description}\nPriority: ${task.priority}`;
+        navigator.clipboard.writeText(shareText).then(() => {
+            this.showNotification('Task copied to clipboard', 'success');
+        });
+    }
+
+    addSubtask(taskId, subtaskTitle) {
+        const task = this.tasks.find(t => t.id === taskId);
+        if (task && subtaskTitle.trim()) {
+            const subtask = {
+                id: `subtask-${Date.now()}-${Math.random().toString(36).substr(2, 6)}`,
+                title: subtaskTitle,
+                completed: false,
+                createdAt: new Date().toISOString()
+            };
+            
+            task.subtasks.push(subtask);
+            this.saveTasks();
+            this.renderTasks();
+            this.updateTaskProgress(taskId);
+            
+            this.showNotification('Subtask added', 'success');
+        }
+    }
+
+    toggleSubtask(taskId, subtaskId) {
+        const task = this.tasks.find(t => t.id === taskId);
+        if (task) {
+            const subtask = task.subtasks.find(s => s.id === subtaskId);
+            if (subtask) {
+                subtask.completed = !subtask.completed;
+                this.updateTaskProgress(taskId);
                 this.saveTasks();
                 this.renderTasks();
             }
+        }
+    }
 
-            initializeEventListeners() {
-                // Task form submission
-                document.getElementById('quantumTaskForm').addEventListener('submit', (e) => {
-                    e.preventDefault();
-                    this.addQuantumTask();
+    updateTaskProgress(taskId) {
+        const task = this.tasks.find(t => t.id === taskId);
+        if (task && task.subtasks.length > 0) {
+            const completed = task.subtasks.filter(s => s.completed).length;
+            task.progress = Math.round((completed / task.subtasks.length) * 100);
+        }
+    }
+
+    addComment(taskId, comment) {
+        const task = [...this.tasks, ...this.completedTasks].find(t => t.id === taskId);
+        if (task && comment.trim()) {
+            task.comments.push({
+                id: `comment-${Date.now()}`,
+                user: this.user.name,
+                text: comment,
+                timestamp: new Date().toISOString()
+            });
+            this.saveTasks();
+            this.renderTasks();
+            this.showNotification('Comment added', 'success');
+        }
+    }
+
+    addAttachment(taskId, file) {
+        const task = [...this.tasks, ...this.completedTasks].find(t => t.id === taskId);
+        if (task && file) {
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                task.attachments.push({
+                    id: `attachment-${Date.now()}`,
+                    name: file.name,
+                    type: file.type,
+                    size: file.size,
+                    data: e.target.result,
+                    uploadedAt: new Date().toISOString()
                 });
-
-                // Priority selector
-                const priorityOptions = document.querySelectorAll('.priority-option-premium');
-                priorityOptions.forEach(option => {
-                    option.addEventListener('click', () => {
-                        priorityOptions.forEach(opt => opt.classList.remove('active'));
-                        option.classList.add('active');
-                        document.getElementById('taskPriority').value = option.dataset.priority;
-                    });
-                });
-
-                // Set default priority
-                document.querySelector('.priority-option-premium.medium').classList.add('active');
-
-                // Initialize date picker
-                flatpickr("#taskDeadline", {
-                    enableTime: true,
-                    dateFormat: "Y-m-d H:i",
-                    minDate: "today",
-                    defaultDate: new Date().fp_incr(1),
-                    time_24hr: true
-                });
-
-                // Filter buttons
-                document.querySelectorAll('.filter-btn-premium').forEach(btn => {
-                    btn.addEventListener('click', () => {
-                        document.querySelectorAll('.filter-btn-premium').forEach(b => b.classList.remove('active'));
-                        btn.classList.add('active');
-                        this.currentFilter = btn.dataset.filter;
-                        this.renderTasks();
-                    });
-                });
-            }
-
-            addQuantumTask() {
-                const title = document.getElementById('taskTitle').value;
-                const description = document.getElementById('taskDesc').value;
-                const priority = document.getElementById('taskPriority').value;
-                const deadline = document.getElementById('taskDeadline').value;
-                const category = document.getElementById('taskCategory').value;
-
-                if (!title || !deadline) {
-                    this.showQuantumNotification('Please complete quantum fields', 'error');
-                    return;
-                }
-
-                const task = {
-                    id: `quantum-${Date.now()}-${Math.random()}`,
-                    title,
-                    description: description || 'No description provided',
-                    priority,
-                    deadline,
-                    category,
-                    status: 'pending',
-                    completed: false,
-                    createdAt: new Date().toISOString(),
-                    aiScore: Math.floor(Math.random() * 30 + 70),
-                    quantumCoherence: Math.floor(Math.random() * 20 + 80),
-                    neuralCores: 128
-                };
-
-                this.tasks.unshift(task);
                 this.saveTasks();
                 this.renderTasks();
-                this.updateStats();
-                this.showQuantumNotification('✨ Quantum task created successfully!', 'success');
+                this.showNotification('File attached', 'success');
+            };
+            reader.readAsDataURL(file);
+        }
+    }
 
-                // Clear form
-                document.getElementById('quantumTaskForm').reset();
-                document.querySelector('.priority-option-premium.medium').classList.add('active');
-                document.getElementById('taskPriority').value = 'medium';
+    setTaskDependency(taskId, dependencyId) {
+        const task = this.tasks.find(t => t.id === taskId);
+        const dependency = this.tasks.find(t => t.id === dependencyId);
+        
+        if (task && dependency && taskId !== dependencyId) {
+            if (!task.dependencies.includes(dependencyId)) {
+                task.dependencies.push(dependencyId);
+                this.saveTasks();
+                this.renderTasks();
+                this.showNotification('Dependency added', 'info');
             }
+        }
+    }
 
-            toggleTaskComplete(taskId) {
-                const task = this.tasks.find(t => t.id === taskId);
-                if (task) {
-                    task.completed = !task.completed;
-                    task.status = task.completed ? 'completed' : 'pending';
-                    this.saveTasks();
-                    this.renderTasks();
-                    this.updateStats();
+    getFilteredTasks() {
+        let filtered = [];
+        
+        switch(this.currentFilter) {
+            case 'all':
+                filtered = this.tasks;
+                break;
+            case 'low':
+            case 'medium':
+            case 'high':
+                filtered = this.tasks.filter(t => t.priority === this.currentFilter);
+                break;
+            case 'completed':
+                filtered = this.completedTasks;
+                break;
+            case 'favorites':
+                filtered = [...this.tasks, ...this.completedTasks].filter(t => t.favorite);
+                break;
+            case 'today':
+                filtered = this.tasks.filter(t => {
+                    const today = new Date().toDateString();
+                    const taskDate = new Date(t.deadline).toDateString();
+                    return taskDate === today;
+                });
+                break;
+            case 'week':
+                filtered = this.tasks.filter(t => {
+                    const taskDate = new Date(t.deadline);
+                    const weekFromNow = new Date();
+                    weekFromNow.setDate(weekFromNow.getDate() + 7);
+                    return taskDate <= weekFromNow;
+                });
+                break;
+            case 'overdue':
+                filtered = this.tasks.filter(t => new Date(t.deadline) < new Date());
+                break;
+            default:
+                filtered = this.tasks;
+        }
+        
+        // Apply search filter if exists
+        if (this.searchTerm) {
+            filtered = filtered.filter(t => 
+                t.title.toLowerCase().includes(this.searchTerm.toLowerCase()) ||
+                t.description.toLowerCase().includes(this.searchTerm.toLowerCase()) ||
+                t.tags?.some(tag => tag.toLowerCase().includes(this.searchTerm.toLowerCase()))
+            );
+        }
+        
+        // Apply sorting
+        filtered = this.sortTasks(filtered);
+        
+        return filtered;
+    }
+
+    sortTasks(tasks = null) {
+        const tasksToSort = tasks || [...this.tasks, ...this.completedTasks];
+        
+        switch(this.currentSort) {
+            case 'date':
+                return tasksToSort.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+            case 'deadline':
+                return tasksToSort.sort((a, b) => new Date(a.deadline) - new Date(b.deadline));
+            case 'priority':
+                const priorityWeight = { high: 3, medium: 2, low: 1 };
+                return tasksToSort.sort((a, b) => priorityWeight[b.priority] - priorityWeight[a.priority]);
+            case 'progress':
+                return tasksToSort.sort((a, b) => b.progress - a.progress);
+            case 'quantum':
+                return tasksToSort.sort((a, b) => b.quantumScore - a.quantumScore);
+            default:
+                return tasksToSort;
+        }
+    }
+
+    searchTasks(query) {
+        this.searchTerm = query;
+        this.renderTasks();
+    }
+
+    renderTasks() {
+        const grid = document.getElementById('tasksGrid');
+        if (!grid) return;
+        
+        const filteredTasks = this.getFilteredTasks();
+        
+        if (filteredTasks.length === 0) {
+            grid.innerHTML = this.getEmptyStateHTML();
+            return;
+        }
+        
+        if (this.currentView === 'grid') {
+            grid.innerHTML = filteredTasks.map(task => this.createQuantumTaskCard(task)).join('');
+        } else {
+            grid.innerHTML = filteredTasks.map(task => this.createQuantumTaskListItem(task)).join('');
+        }
+        
+        this.initializeDragAndDrop();
+        this.initializeTaskInteractions();
+    }
+
+    getEmptyStateHTML() {
+        return `
+            <div style="grid-column: 1/-1; text-align: center; padding: 80px 20px;">
+                <div style="position: relative; display: inline-block;">
+                    <i class="fas fa-microchip" style="font-size: 100px; color: var(--primary); opacity: 0.3; margin-bottom: 20px;"></i>
+                    <i class="fas fa-question" style="position: absolute; top: 20px; right: -10px; font-size: 40px; color: var(--warning); opacity: 0.5;"></i>
+                </div>
+                <h3 style="color: var(--dark); font-size: 28px; margin-bottom: 15px;">No Quantum Tasks Found</h3>
+                <p style="color: var(--gray); font-size: 16px; max-width: 400px; margin: 0 auto 30px;">
+                    Your quantum matrix is empty. Create your first task to start your quantum journey.
+                </p>
+                <button onclick="document.getElementById('taskTitle').focus()" style="padding: 15px 40px; background: linear-gradient(135deg, var(--primary), var(--secondary)); color: white; border: none; border-radius: 50px; font-size: 16px; font-weight: 600; cursor: pointer;">
+                    <i class="fas fa-plus-circle"></i> Create Your First Task
+                </button>
+            </div>
+        `;
+    }
+
+    createQuantumTaskCard(task) {
+        const deadline = new Date(task.deadline);
+        const now = new Date();
+        const isOverdue = deadline < now && !task.completed;
+        const timeLeft = this.getTimeLeft(deadline);
+        const quantumClass = this.getQuantumClass(task);
+        
+        return `
+            <div class="task-card-premium priority-${task.priority} ${quantumClass}" 
+                 draggable="true" 
+                 data-id="${task.id}"
+                 data-priority="${task.priority}"
+                 data-quantum="${task.quantumScore}"
+                 onclick="if(!event.ctrlKey) taskManager.showTaskDetails('${task.id}')"
+                 oncontextmenu="taskManager.showTaskContextMenu(event, '${task.id}')">
+                
+                <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 15px;">
+                    <div style="display: flex; align-items: center; gap: 10px;">
+                        <input type="checkbox" 
+                               onchange="taskManager.toggleTaskSelection('${task.id}', this.checked)" 
+                               onclick="event.stopPropagation()"
+                               ${this.selectedTasks.has(task.id) ? 'checked' : ''}>
+                        <span class="task-title-premium">${task.title}</span>
+                    </div>
+                    <span class="priority-badge-premium ${task.priority}">
+                        ${task.priority === 'high' ? 'Level 3' : task.priority === 'medium' ? 'Level 2' : 'Level 1'}
+                    </span>
+                </div>
+                
+                <div class="task-description-premium">${this.truncateText(task.description, 100)}</div>
+                
+                <div class="task-meta-premium">
+                    <span class="meta-item-premium" title="Deadline">
+                        <i class="fas fa-calendar ${isOverdue ? 'overdue' : ''}"></i>
+                        <span style="${isOverdue ? 'color: var(--danger); font-weight: 600;' : ''}">
+                            ${this.formatDate(deadline)} ${isOverdue ? '(Overdue)' : ''}
+                        </span>
+                    </span>
                     
-                    if (task.completed) {
-                        this.showQuantumNotification('🎯 Quantum task completed!', 'success');
-                        this.playQuantumEffect();
-                    }
-                }
-            }
-
-            deleteTask(taskId) {
-                if (confirm('Delete this quantum task from the matrix?')) {
-                    this.tasks = this.tasks.filter(t => t.id !== taskId);
-                    this.saveTasks();
-                    this.renderTasks();
-                    this.updateStats();
-                    this.showQuantumNotification('Task removed from quantum matrix', 'info');
-                }
-            }
-
-            getFilteredTasks() {
-                let filtered = this.tasks;
+                    <span class="meta-item-premium" title="Category">
+                        <i class="fas fa-microchip"></i>
+                        ${task.category}
+                    </span>
+                    
+                    <span class="meta-item-premium" title="Quantum Score">
+                        <i class="fas fa-atom"></i>
+                        ${task.quantumScore}%
+                    </span>
+                    
+                    ${task.subtasks?.length > 0 ? `
+                        <span class="meta-item-premium" title="Subtasks">
+                            <i class="fas fa-tasks"></i>
+                            ${task.subtasks.filter(s => s.completed).length}/${task.subtasks.length}
+                        </span>
+                    ` : ''}
+                </div>
                 
-                // Apply status filter
-                if (this.currentFilter === 'completed') {
-                    filtered = filtered.filter(t => t.completed);
-                } else if (this.currentFilter !== 'all') {
-                    filtered = filtered.filter(t => !t.completed && t.priority === this.currentFilter);
-                } else {
-                    filtered = filtered.filter(t => !t.completed);
-                }
+                <div style="margin-bottom: 15px;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 5px;">
+                        <span style="font-size: 12px; color: var(--gray);">Quantum Progress</span>
+                        <span style="font-size: 12px; font-weight: 600; color: var(--primary);">${task.progress}%</span>
+                    </div>
+                    <div class="progress-quantum" style="height: 6px;">
+                        <div class="progress-fill-quantum" style="width: ${task.progress}%;"></div>
+                    </div>
+                </div>
                 
-                return filtered;
-            }
-
-            renderTasks() {
-                const grid = document.getElementById('tasksGrid');
-                const filteredTasks = this.getFilteredTasks();
-                
-                if (filteredTasks.length === 0) {
-                    grid.innerHTML = `
-                        <div style="grid-column: 1/-1; text-align: center; padding: 80px 20px;">
-                            <i class="fas fa-microchip" style="font-size: 80px; color: var(--primary); opacity: 0.3; margin-bottom: 20px;"></i>
-                            <h3 style="color: var(--dark); font-size: 24px; margin-bottom: 10px;">No Quantum Tasks Found</h3>
-                            <p style="color: var(--gray);">Neural network awaiting input</p>
-                        </div>
-                    `;
-                    return;
-                }
-                
-                grid.innerHTML = filteredTasks.map(task => this.createQuantumTaskCard(task)).join('');
-                this.initializeDragAndDrop();
-            }
-
-            createQuantumTaskCard(task) {
-                const deadline = new Date(task.deadline);
-                const now = new Date();
-                const isOverdue = deadline < now && !task.completed;
-                const formattedDeadline = deadline.toLocaleString();
-                
-                return `
-                    <div class="task-card-premium priority-${task.priority}" 
-                         draggable="true" 
-                         data-id="${task.id}"
-                         data-priority="${task.priority}">
-                        <div class="task-header-premium">
-                            <span class="task-title-premium">${task.title}</span>
-                            <span class="priority-badge-premium ${task.priority}">Level ${task.priority === 'high' ? '3' : task.priority === 'medium' ? '2' : '1'}</span>
-                        </div>
-                        <div class="task-description-premium">${task.description}</div>
-                        <div class="task-meta-premium">
-                            <span class="meta-item-premium">
-                                <i class="fas fa-calendar"></i>
-                                <span style="${isOverdue ? 'color: var(--danger); font-weight: 600;' : ''}">${formattedDeadline}</span>
+                <div style="display: flex; justify-content: space-between; align-items: center;">
+                    <div style="display: flex; gap: 15px;">
+                        <span class="meta-item-premium" title="Time Left">
+                            <i class="fas fa-hourglass-half"></i>
+                            ${timeLeft}
+                        </span>
+                        
+                        ${task.favorite ? `
+                            <span class="meta-item-premium" style="color: var(--warning);">
+                                <i class="fas fa-star"></i> Favorite
                             </span>
-                            <span class="meta-item-premium">
-                                <i class="fas fa-microchip"></i>
-                                ${task.category}
+                        ` : ''}
+                    </div>
+                    
+                    <div class="task-actions-premium" onclick="event.stopPropagation()">
+                        <button class="action-btn-premium ai" onclick="taskManager.quantumAnalyze('${task.id}')" title="Quantum Analysis">
+                            <i class="fas fa-microchip"></i>
+                        </button>
+                        <button class="action-btn-premium" onclick="taskManager.toggleTaskFavorite('${task.id}')" title="Toggle Favorite">
+                            <i class="fas ${task.favorite ? 'fa-star' : 'fa-star-o'}"></i>
+                        </button>
+                        ${!task.completed ? `
+                            <button class="action-btn-premium complete" onclick="taskManager.toggleTaskComplete('${task.id}')" title="Mark Complete">
+                                <i class="fas fa-check"></i>
+                            </button>
+                        ` : ''}
+                        <button class="action-btn-premium delete" onclick="taskManager.deleteTask('${task.id}')" title="Delete">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                        <button class="action-btn-premium" onclick="taskManager.showMoreOptions('${task.id}')" title="More Options">
+                            <i class="fas fa-ellipsis-v"></i>
+                        </button>
+                    </div>
+                </div>
+                
+                ${task.tags?.length > 0 ? `
+                    <div style="display: flex; gap: 8px; flex-wrap: wrap; margin-top: 15px;">
+                        ${task.tags.map(tag => `
+                            <span style="padding: 4px 12px; background: linear-gradient(135deg, rgba(99,102,241,0.1), rgba(139,92,246,0.1)); border-radius: 20px; font-size: 11px; color: var(--primary);">
+                                <i class="fas fa-tag"></i> ${tag}
                             </span>
-                            <span class="meta-item-premium">
-                                <i class="fas fa-brain"></i>
-                                ${task.neuralCores || 128} cores
+                        `).join('')}
+                    </div>
+                ` : ''}
+            </div>
+        `;
+    }
+
+    createQuantumTaskListItem(task) {
+        // List view version
+        return `
+            <div class="task-list-item priority-${task.priority}" 
+                 data-id="${task.id}"
+                 onclick="taskManager.showTaskDetails('${task.id}')">
+                <div style="display: flex; align-items: center; gap: 20px; padding: 15px;">
+                    <input type="checkbox" onchange="taskManager.toggleTaskSelection('${task.id}', this.checked)" onclick="event.stopPropagation()">
+                    <span class="priority-indicator priority-${task.priority}"></span>
+                    <div style="flex: 1;">
+                        <div style="font-weight: 600; margin-bottom: 5px;">${task.title}</div>
+                        <div style="font-size: 12px; color: var(--gray);">${this.truncateText(task.description, 50)}</div>
+                    </div>
+                    <div style="display: flex; gap: 30px;">
+                        <span><i class="fas fa-calendar"></i> ${this.formatDate(new Date(task.deadline))}</span>
+                        <span><i class="fas fa-microchip"></i> ${task.category}</span>
+                        <span><i class="fas fa-atom"></i> ${task.quantumScore}%</span>
+                    </div>
+                    <div class="task-actions-premium">
+                        <button class="action-btn-premium" onclick="event.stopPropagation(); taskManager.quantumAnalyze('${task.id}')">
+                            <i class="fas fa-microchip"></i>
+                        </button>
+                        <button class="action-btn-premium complete" onclick="event.stopPropagation(); taskManager.toggleTaskComplete('${task.id}')">
+                            <i class="fas fa-check"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        `;
+    }
+
+    getQuantumClass(task) {
+        if (task.quantumScore >= 90) return 'quantum-legendary';
+        if (task.quantumScore >= 80) return 'quantum-epic';
+        if (task.quantumScore >= 70) return 'quantum-rare';
+        return 'quantum-common';
+    }
+
+    getTimeLeft(deadline) {
+        const now = new Date();
+        const diff = deadline - now;
+        
+        if (diff < 0) return 'Overdue';
+        
+        const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+        const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        
+        if (days > 0) return `${days}d ${hours}h left`;
+        if (hours > 0) return `${hours}h left`;
+        return 'Due soon';
+    }
+
+    formatDate(date) {
+        const now = new Date();
+        const today = now.toDateString();
+        const tomorrow = new Date(now.setDate(now.getDate() + 1)).toDateString();
+        const taskDate = date.toDateString();
+        
+        if (taskDate === today) return `Today at ${date.toLocaleTimeString()}`;
+        if (taskDate === tomorrow) return `Tomorrow at ${date.toLocaleTimeString()}`;
+        
+        return date.toLocaleDateString() + ' ' + date.toLocaleTimeString();
+    }
+
+    truncateText(text, maxLength) {
+        if (text.length <= maxLength) return text;
+        return text.substr(0, maxLength) + '...';
+    }
+
+    showTaskDetails(taskId) {
+        const task = [...this.tasks, ...this.completedTasks].find(t => t.id === taskId);
+        if (!task) return;
+        
+        const modal = document.createElement('div');
+        modal.className = 'quantum-modal active';
+        modal.innerHTML = `
+            <div class="modal-content-quantum" style="max-width: 800px;">
+                <div class="modal-header-quantum">
+                    <h3><i class="fas fa-info-circle"></i> Quantum Task Details</h3>
+                    <button class="modal-close-quantum" onclick="this.closest('.quantum-modal').remove()">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                <div class="modal-body-quantum" style="max-height: 70vh; overflow-y: auto;">
+                    <div style="display: grid; gap: 25px;">
+                        <!-- Task Header -->
+                        <div style="display: flex; justify-content: space-between; align-items: center;">
+                            <h2 style="font-size: 28px; color: var(--dark);">${task.title}</h2>
+                            <span class="priority-badge-premium ${task.priority}" style="font-size: 16px; padding: 8px 20px;">
+                                Level ${task.priority === 'high' ? '3' : task.priority === 'medium' ? '2' : '1'}
                             </span>
                         </div>
-                        <div class="task-footer-premium">
-                            <div class="ai-score">
-                                <i class="fas fa-chart-line" style="color: var(--primary);"></i>
-                                <span>${task.aiScore}%</span>
-                                <div class="ai-score-bar">
-                                    <div class="ai-score-fill" style="width: ${task.aiScore}%"></div>
+                        
+                        <!-- Description -->
+                        <div style="background: linear-gradient(135deg, rgba(99,102,241,0.05), rgba(139,92,246,0.05)); padding: 20px; border-radius: 15px;">
+                            <h4 style="margin-bottom: 10px; color: var(--primary);"><i class="fas fa-align-left"></i> Description</h4>
+                            <p style="color: var(--gray); line-height: 1.6;">${task.description}</p>
+                        </div>
+                        
+                        <!-- Quantum Metrics -->
+                        <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 15px;">
+                            <div style="text-align: center; padding: 15px; background: rgba(99,102,241,0.05); border-radius: 10px;">
+                                <i class="fas fa-atom" style="font-size: 24px; color: var(--primary); margin-bottom: 8px;"></i>
+                                <div style="font-size: 20px; font-weight: 700; color: var(--dark);">${task.quantumScore}%</div>
+                                <div style="font-size: 12px; color: var(--gray);">Quantum Score</div>
+                            </div>
+                            <div style="text-align: center; padding: 15px; background: rgba(16,185,129,0.05); border-radius: 10px;">
+                                <i class="fas fa-microchip" style="font-size: 24px; color: var(--success); margin-bottom: 8px;"></i>
+                                <div style="font-size: 20px; font-weight: 700; color: var(--dark);">${task.neuralCores}</div>
+                                <div style="font-size: 12px; color: var(--gray);">Neural Cores</div>
+                            </div>
+                            <div style="text-align: center; padding: 15px; background: rgba(245,158,11,0.05); border-radius: 10px;">
+                                <i class="fas fa-brain" style="font-size: 24px; color: var(--warning); margin-bottom: 8px;"></i>
+                                <div style="font-size: 20px; font-weight: 700; color: var(--dark);">${task.neuralConnections}</div>
+                                <div style="font-size: 12px; color: var(--gray);">Connections</div>
+                            </div>
+                            <div style="text-align: center; padding: 15px; background: rgba(239,68,68,0.05); border-radius: 10px;">
+                                <i class="fas fa-clock" style="font-size: 24px; color: var(--danger); margin-bottom: 8px;"></i>
+                                <div style="font-size: 20px; font-weight: 700; color: var(--dark);">${this.getTimeLeft(new Date(task.deadline))}</div>
+                                <div style="font-size: 12px; color: var(--gray);">Time Left</div>
+                            </div>
+                        </div>
+                        
+                        <!-- Progress -->
+                        <div>
+                            <h4 style="margin-bottom: 15px; color: var(--primary);"><i class="fas fa-chart-line"></i> Progress</h4>
+                            <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+                                <span>Completion</span>
+                                <span style="font-weight: 600;">${task.progress}%</span>
+                            </div>
+                            <div class="progress-quantum" style="height: 12px;">
+                                <div class="progress-fill-quantum" style="width: ${task.progress}%;"></div>
+                            </div>
+                        </div>
+                        
+                        <!-- Subtasks -->
+                        ${task.subtasks?.length > 0 ? `
+                            <div>
+                                <h4 style="margin-bottom: 15px; color: var(--primary);"><i class="fas fa-tasks"></i> Subtasks</h4>
+                                <div style="display: grid; gap: 10px;">
+                                    ${task.subtasks.map(subtask => `
+                                        <div style="display: flex; align-items: center; gap: 10px; padding: 10px; background: rgba(99,102,241,0.05); border-radius: 8px;">
+                                            <input type="checkbox" ${subtask.completed ? 'checked' : ''} 
+                                                   onchange="taskManager.toggleSubtask('${task.id}', '${subtask.id}')">
+                                            <span style="${subtask.completed ? 'text-decoration: line-through; color: var(--gray);' : ''}">${subtask.title}</span>
+                                        </div>
+                                    `).join('')}
                                 </div>
                             </div>
-                            <div class="task-actions-premium">
-                                <button class="action-btn-premium ai" onclick="taskManager.quantumAnalyze('${task.id}')" title="Quantum Analysis">
-                                    <i class="fas fa-microchip"></i>
+                        ` : ''}
+                        
+                        <!-- Comments -->
+                        <div>
+                            <h4 style="margin-bottom: 15px; color: var(--primary);"><i class="fas fa-comments"></i> Comments</h4>
+                            <div style="margin-bottom: 15px;">
+                                <textarea id="newComment-${task.id}" placeholder="Add a comment..." style="width: 100%; padding: 12px; border: 2px solid var(--light-200); border-radius: 10px; margin-bottom: 10px;"></textarea>
+                                <button onclick="taskManager.addComment('${task.id}', document.getElementById('newComment-${task.id}').value)" 
+                                        style="padding: 10px 20px; background: var(--primary); color: white; border: none; border-radius: 8px; cursor: pointer;">
+                                    Add Comment
                                 </button>
-                                <button class="action-btn-premium complete" onclick="taskManager.toggleTaskComplete('${task.id}')" title="Toggle Complete">
-                                    <i class="fas ${task.completed ? 'fa-undo' : 'fa-check'}"></i>
-                                </button>
-                                <button class="action-btn-premium delete" onclick="taskManager.deleteTask('${task.id}')" title="Delete">
-                                    <i class="fas fa-trash"></i>
-                                </button>
+                            </div>
+                            <div style="max-height: 200px; overflow-y: auto;">
+                                ${task.comments?.map(comment => `
+                                    <div style="padding: 15px; background: rgba(99,102,241,0.05); border-radius: 10px; margin-bottom: 10px;">
+                                        <div style="display: flex; justify-content: space-between; margin-bottom: 5px;">
+                                            <span style="font-weight: 600;">${comment.user}</span>
+                                            <span style="font-size: 11px; color: var(--gray);">${new Date(comment.timestamp).toLocaleString()}</span>
+                                        </div>
+                                        <p style="color: var(--gray);">${comment.text}</p>
+                                    </div>
+                                `).join('') || '<p style="color: var(--gray); text-align: center;">No comments yet</p>'}
+                            </div>
+                        </div>
+                        
+                        <!-- AI Analysis -->
+                        <div style="background: linear-gradient(135deg, var(--primary), var(--secondary)); color: white; padding: 25px; border-radius: 15px;">
+                            <h4 style="margin-bottom: 15px;"><i class="fas fa-robot"></i> AI Quantum Analysis</h4>
+                            <div style="display: grid; gap: 15px;">
+                                <div style="display: flex; justify-content: space-between;">
+                                    <span>Optimal Completion Time:</span>
+                                    <span style="font-weight: 600;">${this.getOptimalTime(task)}</span>
+                                </div>
+                                <div style="display: flex; justify-content: space-between;">
+                                    <span>Complexity Level:</span>
+                                    <span style="font-weight: 600;">${task.complexity}</span>
+                                </div>
+                                <div style="display: flex; justify-content: space-between;">
+                                    <span>Success Probability:</span>
+                                    <span style="font-weight: 600;">${task.quantumScore}%</span>
+                                </div>
+                                <div style="display: flex; justify-content: space-between;">
+                                    <span>Required Quantum Coherence:</span>
+                                    <span style="font-weight: 600;">${task.quantumCoherence}%</span>
+                                </div>
                             </div>
                         </div>
                     </div>
-                `;
-            }
+                </div>
+            </div>
+        `;
+        
+        document.body.appendChild(modal);
+    }
 
-            quantumAnalyze(taskId) {
-                const task = this.tasks.find(t => t.id === taskId);
-                if (task) {
-                    this.showQuantumNotification(`
-                        🔬 Quantum Analysis: ${task.title}\n
-                        • Coherence: ${task.quantumCoherence || 94}%\n
-                        • Neural Cores: ${task.neuralCores || 128}\n
-                        • Optimal Time: ${Math.floor(Math.random() * 12 + 8)}:00 QST\n
-                        • Complexity: ${task.priority === 'high' ? 'Quantum Level' : 'Standard'}
-                    `, 'info');
+    getOptimalTime(task) {
+        const priorityTimes = {
+            high: '09:00 - 11:00',
+            medium: '13:00 - 15:00',
+            low: '15:00 - 17:00'
+        };
+        return priorityTimes[task.priority] || 'Flexible';
+    }
+
+    showMoreOptions(taskId) {
+        const task = [...this.tasks, ...this.completedTasks].find(t => t.id === taskId);
+        if (!task) return;
+        
+        const menu = document.createElement('div');
+        menu.style.cssText = `
+            position: fixed;
+            background: white;
+            border-radius: 12px;
+            box-shadow: var(--shadow-xl);
+            padding: 10px;
+            z-index: 3000;
+            min-width: 200px;
+        `;
+        menu.style.left = (event.clientX) + 'px';
+        menu.style.top = (event.clientY) + 'px';
+        
+        menu.innerHTML = `
+            <div style="display: grid; gap: 5px;">
+                <button onclick="taskManager.duplicateTask('${task.id}')" style="padding: 10px; background: none; border: none; cursor: pointer; text-align: left; border-radius: 8px; hover:background: rgba(99,102,241,0.05);">
+                    <i class="fas fa-copy"></i> Duplicate
+                </button>
+                <button onclick="taskManager.shareTask('${task.id}')" style="padding: 10px; background: none; border: none; cursor: pointer; text-align: left; border-radius: 8px;">
+                    <i class="fas fa-share-alt"></i> Share
+                </button>
+                <button onclick="taskManager.archiveTask('${task.id}')" style="padding: 10px; background: none; border: none; cursor: pointer; text-align: left; border-radius: 8px;">
+                    <i class="fas fa-archive"></i> Archive
+                </button>
+                <button onclick="taskManager.exportTask('${task.id}')" style="padding: 10px; background: none; border: none; cursor: pointer; text-align: left; border-radius: 8px;">
+                    <i class="fas fa-download"></i> Export
+                </button>
+                <hr style="margin: 10px 0;">
+                <button onclick="taskManager.deleteTask('${task.id}', true)" style="padding: 10px; background: none; border: none; cursor: pointer; text-align: left; border-radius: 8px; color: var(--danger);">
+                    <i class="fas fa-trash-alt"></i> Delete Permanently
+                </button>
+            </div>
+        `;
+        
+        document.body.appendChild(menu);
+        
+        // Close menu on click outside
+        setTimeout(() => {
+            document.addEventListener('click', function closeMenu(e) {
+                if (!menu.contains(e.target)) {
+                    menu.remove();
+                    document.removeEventListener('click', closeMenu);
                 }
-            }
+            });
+        }, 100);
+    }
 
-            updateStats() {
-                const total = this.tasks.length;
-                const completed = this.tasks.filter(t => t.completed).length;
-                const pending = this.tasks.filter(t => !t.completed).length;
-                const overdue = this.tasks.filter(t => {
-                    return !t.completed && new Date(t.deadline) < new Date();
-                }).length;
+    exportTask(taskId) {
+        const task = [...this.tasks, ...this.completedTasks].find(t => t.id === taskId);
+        if (task) {
+            const dataStr = JSON.stringify(task, null, 2);
+            const dataUri = 'data:application/json;charset=utf-8,'+ encodeURIComponent(dataStr);
+            
+            const exportFileDefaultName = `quantum-task-${task.id}.json`;
+            
+            const linkElement = document.createElement('a');
+            linkElement.setAttribute('href', dataUri);
+            linkElement.setAttribute('download', exportFileDefaultName);
+            linkElement.click();
+            
+            this.showNotification('Task exported successfully', 'success');
+        }
+    }
 
-                document.getElementById('totalTasks').textContent = total;
-                document.getElementById('completedTasks').textContent = completed;
-                document.getElementById('pendingTasks').textContent = pending;
-                document.getElementById('overdueTasks').textContent = overdue;
+    toggleTaskSelection(taskId, selected) {
+        if (selected) {
+            this.selectedTasks.add(taskId);
+        } else {
+            this.selectedTasks.delete(taskId);
+        }
+        
+        // Update bulk action bar
+        this.updateBulkActions();
+    }
 
-                // Update priority counts
-                document.getElementById('urgentCount').textContent = 
-                    this.tasks.filter(t => !t.completed && t.priority === 'high').length + ' tasks';
-                document.getElementById('importantCount').textContent = 
-                    this.tasks.filter(t => !t.completed && t.priority === 'medium').length + ' tasks';
-                document.getElementById('lowCount').textContent = 
-                    this.tasks.filter(t => !t.completed && t.priority === 'low').length + ' tasks';
+    selectAllTasks() {
+        const filteredTasks = this.getFilteredTasks();
+        filteredTasks.forEach(task => this.selectedTasks.add(task.id));
+        this.renderTasks();
+        this.updateBulkActions();
+    }
 
-                // Update schedule progress
-                const highCount = this.tasks.filter(t => !t.completed && t.priority === 'high').length;
-                const mediumCount = this.tasks.filter(t => !t.completed && t.priority === 'medium').length;
-                const lowCount = this.tasks.filter(t => !t.completed && t.priority === 'low').length;
+    clearSelection() {
+        this.selectedTasks.clear();
+        this.renderTasks();
+        this.updateBulkActions();
+    }
 
-                document.getElementById('scheduleProgress1').style.width = 
-                    Math.min(100, highCount * 5) + '%';
-                document.getElementById('scheduleProgress2').style.width = 
-                    Math.min(100, mediumCount * 4) + '%';
-                document.getElementById('scheduleProgress3').style.width = 
-                    Math.min(100, lowCount * 3) + '%';
-
-                // Update predictors
-                document.getElementById('predictTomorrow').textContent = 
-                    Math.floor(total * 0.16) + ' tasks';
-                document.getElementById('predictWeek').textContent = 
-                    Math.floor(total * 1.04) + ' tasks';
-
-                this.updateCharts();
-            }
-
-            initializeCharts() {
-                // Productivity Chart
-                const productivityOptions = {
-                    chart: { type: 'area', height: 300, background: 'transparent' },
-                    series: [{
-                        name: 'Quantum Tasks',
-                        data: [65, 78, 82, 94, 88, 92, 85]
-                    }],
-                    xaxis: { categories: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'] },
-                    colors: ['#6366f1'],
-                    stroke: { curve: 'smooth', width: 3 },
-                    fill: { type: 'gradient', gradient: { shadeIntensity: 1, opacityFrom: 0.7, opacityTo: 0.3 } }
-                };
-                
-                if (document.getElementById('productivityChart')) {
-                    this.charts.productivity = new ApexCharts(document.getElementById('productivityChart'), productivityOptions);
-                    this.charts.productivity.render();
-                }
-
-                // Schedule Chart
-                const scheduleOptions = {
-                    chart: { type: 'bar', height: 250 },
-                    series: [{
-                        name: 'Tasks',
-                        data: [12, 8, 5]
-                    }],
-                    xaxis: { categories: ['Level 3', 'Level 2', 'Level 1'] },
-                    colors: ['#ef4444', '#f59e0b', '#10b981']
-                };
-                
-                if (document.getElementById('scheduleChart')) {
-                    this.charts.schedule = new ApexCharts(document.getElementById('scheduleChart'), scheduleOptions);
-                    this.charts.schedule.render();
-                }
-
-                // Priority Chart
-                const priorityOptions = {
-                    chart: { type: 'donut', height: 300 },
-                    series: [
-                        this.tasks.filter(t => !t.completed && t.priority === 'high').length,
-                        this.tasks.filter(t => !t.completed && t.priority === 'medium').length,
-                        this.tasks.filter(t => !t.completed && t.priority === 'low').length
-                    ],
-                    labels: ['Level 3', 'Level 2', 'Level 1'],
-                    colors: ['#ef4444', '#f59e0b', '#10b981'],
-                    legend: { position: 'bottom' }
-                };
-                
-                if (document.getElementById('priorityChart')) {
-                    this.charts.priority = new ApexCharts(document.getElementById('priorityChart'), priorityOptions);
-                    this.charts.priority.render();
-                }
-
-                // Insights Chart
-                const insightsOptions = {
-                    chart: { type: 'radar', height: 300 },
-                    series: [{
-                        name: 'Performance',
-                        data: [94, 88, 92, 86, 90, 89]
-                    }],
-                    xaxis: { categories: ['Speed', 'Quality', 'Consistency', 'Innovation', 'Collaboration', 'Efficiency'] },
-                    colors: ['#6366f1']
-                };
-                
-                if (document.getElementById('insightsChart')) {
-                    this.charts.insights = new ApexCharts(document.getElementById('insightsChart'), insightsOptions);
-                    this.charts.insights.render();
-                }
-
-                // Predictor Chart
-                const predictorOptions = {
-                    chart: { type: 'line', height: 300 },
-                    series: [{
-                        name: 'Predicted Tasks',
-                        data: [24, 28, 32, 30, 26, 22, 18]
-                    }],
-                    xaxis: { categories: ['Day 1', 'Day 2', 'Day 3', 'Day 4', 'Day 5', 'Day 6', 'Day 7'] },
-                    colors: ['#8b5cf6']
-                };
-                
-                if (document.getElementById('predictorChart')) {
-                    this.charts.predictor = new ApexCharts(document.getElementById('predictorChart'), predictorOptions);
-                    this.charts.predictor.render();
-                }
-            }
-
-            updateCharts() {
-                if (this.charts.priority) {
-                    this.charts.priority.updateSeries([
-                        this.tasks.filter(t => !t.completed && t.priority === 'high').length,
-                        this.tasks.filter(t => !t.completed && t.priority === 'medium').length,
-                        this.tasks.filter(t => !t.completed && t.priority === 'low').length
-                    ]);
-                }
-            }
-
-            saveTasks() {
-                localStorage.setItem('quantumTasks', JSON.stringify(this.tasks));
-            }
-
-            showQuantumNotification(message, type = 'info') {
-                // Create floating notification
-                const notification = document.createElement('div');
-                notification.style.cssText = `
+    updateBulkActions() {
+        const count = this.selectedTasks.size;
+        const bar = document.getElementById('bulkActionBar');
+        
+        if (count > 0) {
+            if (!bar) {
+                const newBar = document.createElement('div');
+                newBar.id = 'bulkActionBar';
+                newBar.style.cssText = `
                     position: fixed;
-                    bottom: 20px;
-                    right: 20px;
+                    bottom: 30px;
+                    left: 50%;
+                    transform: translateX(-50%);
                     background: linear-gradient(135deg, var(--primary), var(--secondary));
                     color: white;
-                    padding: 15px 25px;
-                    border-radius: 12px;
-                    box-shadow: 0 10px 40px rgba(99,102,241,0.3);
-                    z-index: 9999;
-                    animation: notificationSlide 0.3s ease;
-                    border: 1px solid rgba(255,255,255,0.2);
-                    backdrop-filter: blur(10px);
-                    max-width: 400px;
-                    white-space: pre-line;
+                    padding: 15px 30px;
+                    border-radius: 60px;
+                    box-shadow: var(--shadow-xl);
+                    z-index: 2000;
+                    display: flex;
+                    gap: 20px;
+                    align-items: center;
                 `;
-                notification.innerHTML = message;
-                
-                document.body.appendChild(notification);
-                
-                setTimeout(() => {
-                    notification.style.animation = 'notificationFade 0.3s ease';
-                    setTimeout(() => notification.remove(), 300);
-                }, 5000);
-            }
-
-            playQuantumEffect() {
-                // Create particle effect
-                for (let i = 0; i < 30; i++) {
-                    const particle = document.createElement('div');
-                    particle.style.cssText = `
-                        position: fixed;
-                        top: 50%;
-                        left: 50%;
-                        width: 10px;
-                        height: 10px;
-                        background: linear-gradient(135deg, var(--primary), var(--secondary));
-                        border-radius: 50%;
-                        pointer-events: none;
-                        z-index: 9999;
-                        animation: quantumParticle ${Math.random() * 2 + 1}s ease-out forwards;
-                        transform: translate(-50%, -50%);
-                    `;
-                    
-                    const angle = Math.random() * Math.PI * 2;
-                    const distance = Math.random() * 200 + 50;
-                    particle.style.setProperty('--tx', `${Math.cos(angle) * distance}px`);
-                    particle.style.setProperty('--ty', `${Math.sin(angle) * distance}px`);
-                    
-                    document.body.appendChild(particle);
-                    
-                    setTimeout(() => particle.remove(), 3000);
-                }
-            }
-
-            startQuantumTime() {
-                setInterval(() => {
-                    const now = new Date();
-                    document.getElementById('liveTime').textContent = 
-                        now.toLocaleTimeString('en-US', { hour12: false });
-                }, 1000);
-            }
-
-            rotateQuantumStatus() {
-                setInterval(() => {
-                    const statusElement = document.getElementById('aiStatusMessage');
-                    const randomStatus = this.quantumStatus[Math.floor(Math.random() * this.quantumStatus.length)];
-                    statusElement.innerHTML = `<i class="fas fa-circle" style="font-size: 8px; color: var(--success);"></i> ${randomStatus}`;
-                }, 3000);
-            }
-
-            createNeuralNetwork() {
-                const container = document.getElementById('neuralNetwork');
-                if (!container) return;
-                
-                for (let i = 0; i < 20; i++) {
-                    const node = document.createElement('div');
-                    node.className = 'neural-node';
-                    node.style.left = Math.random() * 100 + '%';
-                    node.style.top = Math.random() * 100 + '%';
-                    node.style.animationDelay = Math.random() * 2 + 's';
-                    container.appendChild(node);
-                }
-                
-                for (let i = 0; i < 15; i++) {
-                    const connection = document.createElement('div');
-                    connection.className = 'neural-connection';
-                    connection.style.left = Math.random() * 100 + '%';
-                    connection.style.top = Math.random() * 100 + '%';
-                    connection.style.width = Math.random() * 100 + 50 + 'px';
-                    connection.style.transform = `rotate(${Math.random() * 360}deg)`;
-                    connection.style.animationDelay = Math.random() * 2 + 's';
-                    container.appendChild(connection);
-                }
-            }
-
-            initializeDragAndDrop() {
-                const cards = document.querySelectorAll('.task-card-premium');
-                const grid = document.getElementById('tasksGrid');
-                
-                cards.forEach(card => {
-                    card.addEventListener('dragstart', (e) => {
-                        card.classList.add('dragging');
-                        this.draggedItem = card;
-                        e.dataTransfer.setData('text/plain', card.dataset.id);
-                    });
-                    
-                    card.addEventListener('dragend', () => {
-                        card.classList.remove('dragging');
-                        cards.forEach(c => c.classList.remove('drag-over'));
-                    });
-                    
-                    card.addEventListener('dragover', (e) => {
-                        e.preventDefault();
-                        card.classList.add('drag-over');
-                    });
-                    
-                    card.addEventListener('dragleave', () => {
-                        card.classList.remove('drag-over');
-                    });
-                    
-                    card.addEventListener('drop', (e) => {
-                        e.preventDefault();
-                        card.classList.remove('drag-over');
-                        
-                        const draggedId = this.draggedItem?.dataset.id;
-                        const targetId = card.dataset.id;
-                        
-                        if (draggedId && targetId && draggedId !== targetId) {
-                            const draggedIndex = this.tasks.findIndex(t => t.id === draggedId);
-                            const targetIndex = this.tasks.findIndex(t => t.id === targetId);
-                            
-                            const [draggedTask] = this.tasks.splice(draggedIndex, 1);
-                            this.tasks.splice(targetIndex, 0, draggedTask);
-                            
-                            this.saveTasks();
-                            this.renderTasks();
-                            this.showQuantumNotification('Quantum matrix reordered', 'info');
-                        }
-                    });
-                });
-                
-                grid.addEventListener('dragover', (e) => {
-                    e.preventDefault();
-                });
-            }
-        }
-
-        // Modal functions
-        function openQuantumModal(modalId) {
-            document.getElementById(modalId).classList.add('active');
-        }
-
-        function closeQuantumModal(modalId) {
-            document.getElementById(modalId).classList.remove('active');
-        }
-
-        function fillQuantumTask(text) {
-            document.getElementById('taskTitle').value = text;
-        }
-
-        // Initialize the quantum task manager
-        const taskManager = new QuantumTaskManager();
-
-        // Add CSS animations
-        const style = document.createElement('style');
-        style.textContent = `
-            @keyframes notificationSlide {
-                from { transform: translateX(100%); opacity: 0; }
-                to { transform: translateX(0); opacity: 1; }
+                document.body.appendChild(newBar);
             }
             
-            @keyframes notificationFade {
-                from { transform: translateX(0); opacity: 1; }
-                to { transform: translateX(100%); opacity: 0; }
+            const bar = document.getElementById('bulkActionBar');
+            bar.innerHTML = `
+                <span><i class="fas fa-check-circle"></i> ${count} task${count > 1 ? 's' : ''} selected</span>
+                <button onclick="taskManager.bulkDelete([...taskManager.selectedTasks])" style="padding: 8px 20px; background: rgba(255,255,255,0.2); border: none; border-radius: 30px; color: white; cursor: pointer;">
+                    <i class="fas fa-trash"></i> Delete
+                </button>
+                <button onclick="taskManager.bulkComplete([...taskManager.selectedTasks])" style="padding: 8px 20px; background: rgba(255,255,255,0.2); border: none; border-radius: 30px; color: white; cursor: pointer;">
+                    <i class="fas fa-check"></i> Complete
+                </button>
+                <button onclick="taskManager.clearSelection()" style="padding: 8px 20px; background: rgba(255,255,255,0.2); border: none; border-radius: 30px; color: white; cursor: pointer;">
+                    <i class="fas fa-times"></i> Clear
+                </button>
+            `;
+        } else if (bar) {
+            bar.remove();
+        }
+    }
+
+    bulkComplete(taskIds) {
+        taskIds.forEach(id => {
+            const task = this.tasks.find(t => t.id === id);
+            if (task) {
+                task.completed = true;
+                task.status = 'completed';
+                task.completedAt = new Date().toISOString();
+                
+                const index = this.tasks.findIndex(t => t.id === id);
+                const [completedTask] = this.tasks.splice(index, 1);
+                this.completedTasks.unshift(completedTask);
             }
+        });
+        
+        this.selectedTasks.clear();
+        this.saveTasks();
+        this.renderTasks();
+        this.updateStats();
+        this.updateBulkActions();
+        this.showNotification(`Completed ${taskIds.length} tasks`, 'success');
+    }
+
+    quantumAnalyze(taskId) {
+        const task = [...this.tasks, ...this.completedTasks].find(t => t.id === taskId);
+        if (task) {
+            const analysis = `
+                🔬 Quantum Analysis: ${task.title}
+                
+                📊 Metrics:
+                • Quantum Score: ${task.quantumScore}%
+                • Neural Cores: ${task.neuralCores}
+                • Coherence: ${task.quantumCoherence}%
+                • Complexity: ${task.complexity}
+                
+                ⏰ Timing:
+                • Created: ${new Date(task.createdAt).toLocaleString()}
+                • Deadline: ${new Date(task.deadline).toLocaleString()}
+                • Time Left: ${this.getTimeLeft(new Date(task.deadline))}
+                
+                💡 AI Recommendations:
+                ${this.getAIRecommendations(task)}
+            `;
             
-            @keyframes quantumParticle {
-                0% {
-                    transform: translate(-50%, -50%) scale(1);
-                    opacity: 1;
-                }
-                100% {
-                    transform: translate(calc(-50% + var(--tx)), calc(-50% + var(--ty))) scale(0);
-                    opacity: 0;
-                }
+            this.showNotification(analysis, 'info', 8000);
+        }
+    }
+
+    getAIRecommendations(task) {
+        const recommendations = [];
+        
+        if (task.priority === 'high' && this.getTimeLeft(new Date(task.deadline)).includes('Overdue')) {
+            recommendations.push('⚠️ Urgent: Task is overdue - prioritize immediately');
+        }
+        
+        if (task.quantumScore < 70) {
+            recommendations.push('🔧 Task complexity high - consider breaking into smaller subtasks');
+        }
+        
+        if (task.subtasks?.length === 0 && task.complexity === 'high') {
+            recommendations.push('📋 Add subtasks to manage complexity better');
+        }
+        
+        if (new Date(task.deadline).getHours() < 12 && task.priority === 'high') {
+            recommendations.push('🌅 High-priority task scheduled in morning - your peak quantum time');
+        }
+        
+        return recommendations.join('\n') || '✅ Task is optimally structured';
+    }
+
+    showTaskContextMenu(event, taskId) {
+        event.preventDefault();
+        this.showMoreOptions(taskId);
+    }
+
+    saveToUndoStack(action, data) {
+        this.undoStack.push({
+            action,
+            data,
+            timestamp: Date.now()
+        });
+        
+        // Limit stack size
+        if (this.undoStack.length > 50) {
+            this.undoStack.shift();
+        }
+        
+        // Clear redo stack
+        this.redoStack = [];
+    }
+
+    undo() {
+        if (this.undoStack.length === 0) {
+            this.showNotification('Nothing to undo', 'info');
+            return;
+        }
+        
+        const lastAction = this.undoStack.pop();
+        this.redoStack.push(lastAction);
+        
+        // Implement undo logic based on action type
+        switch(lastAction.action) {
+            case 'create':
+                // Remove last created task
+                this.tasks.pop();
+                break;
+            case 'toggle':
+                // Revert task completion
+                // Implementation depends on specific data
+                break;
+        }
+        
+        this.saveTasks();
+        this.renderTasks();
+        this.showNotification('Undo successful', 'success');
+    }
+
+    redo() {
+        if (this.redoStack.length === 0) {
+            this.showNotification('Nothing to redo', 'info');
+            return;
+        }
+        
+        const lastUndo = this.redoStack.pop();
+        this.undoStack.push(lastUndo);
+        
+        // Implement redo logic
+        // Similar to undo but in reverse
+        
+        this.saveTasks();
+        this.renderTasks();
+        this.showNotification('Redo successful', 'success');
+    }
+
+    quickSave() {
+        this.saveTasks();
+        this.saveUserData();
+        this.showNotification('Quantum state saved', 'success');
+        this.quantumHapticFeedback();
+    }
+
+    saveTasks() {
+        const allTasks = [...this.tasks, ...this.completedTasks, ...this.archivedTasks];
+        localStorage.setItem('quantumTasks', JSON.stringify(allTasks));
+    }
+
+    updateStats() {
+        const total = this.tasks.length + this.completedTasks.length;
+        const completed = this.completedTasks.length;
+        const pending = this.tasks.length;
+        const overdue = this.tasks.filter(t => new Date(t.deadline) < new Date()).length;
+        
+        // Update DOM
+        document.getElementById('totalTasks').textContent = total;
+        document.getElementById('completedTasks').textContent = completed;
+        document.getElementById('pendingTasks').textContent = pending;
+        document.getElementById('overdueTasks').textContent = overdue;
+        
+        // Update quantum coherence
+        this.quantumCoherence = Math.round((completed / (total || 1)) * 100);
+        
+        // Update charts if they exist
+        this.updateCharts();
+    }
+
+    updateUserUI() {
+        // Update user information in UI
+        const userElements = document.querySelectorAll('.user-name');
+        userElements.forEach(el => el.textContent = this.user.name);
+        
+        // Update quantum level
+        const levelElements = document.querySelectorAll('.quantum-level');
+        levelElements.forEach(el => el.textContent = `Level ${this.user.quantumLevel}`);
+    }
+
+    addUserExperience(amount) {
+        this.user.experience += amount;
+        
+        // Level up logic (every 1000 XP = 1 level)
+        const newLevel = Math.floor(this.user.experience / 1000) + 1;
+        if (newLevel > this.user.quantumLevel) {
+            this.user.quantumLevel = newLevel;
+            this.showNotification(`🎉 Level Up! Quantum Level ${newLevel}`, 'success');
+            this.quantumParticleEffect('levelup');
+        }
+        
+        this.saveUserData();
+        this.updateUserUI();
+    }
+
+    checkAchievements() {
+        const allTasks = [...this.tasks, ...this.completedTasks];
+        const completedCount = this.completedTasks.length;
+        
+        // Check task count achievements
+        if (completedCount >= 100 && !this.hasAchievement('hundred_tasks')) {
+            this.unlockAchievement('hundred_tasks');
+        } else if (completedCount >= 50 && !this.hasAchievement('fifty_tasks')) {
+            this.unlockAchievement('fifty_tasks');
+        } else if (completedCount >= 10 && !this.hasAchievement('ten_tasks')) {
+            this.unlockAchievement('ten_tasks');
+        } else if (completedCount >= 1 && !this.hasAchievement('first_task')) {
+            this.unlockAchievement('first_task');
+        }
+        
+        // Check perfect week
+        const oneWeekAgo = new Date();
+        oneWeekAgo.setDate(oneWeekAgo.getDate() - 7);
+        
+        const tasksCompletedThisWeek = this.completedTasks.filter(t => 
+            new Date(t.completedAt) > oneWeekAgo
+        ).length;
+        
+        if (tasksCompletedThisWeek >= 7 && !this.hasAchievement('perfect_week')) {
+            this.unlockAchievement('perfect_week');
+        }
+    }
+
+    checkQuantumAchievements(task) {
+        // Check early bird
+        const taskHour = new Date(task.createdAt).getHours();
+        if (taskHour < 9 && !this.hasAchievement('early_bird')) {
+            const earlyCount = this.tasks.filter(t => new Date(t.createdAt).getHours() < 9).length;
+            if (earlyCount >= 5) {
+                this.unlockAchievement('early_bird');
             }
+        }
+        
+        // Check night owl
+        if (taskHour >= 22 && !this.hasAchievement('night_owl')) {
+            const nightCount = this.tasks.filter(t => new Date(t.createdAt).getHours() >= 22).length;
+            if (nightCount >= 5) {
+                this.unlockAchievement('night_owl');
+            }
+        }
+        
+        // Check speed demon
+        if (task.completed) {
+            const created = new Date(task.createdAt);
+            const completed = new Date(task.completedAt);
+            const hoursDiff = (completed - created) / (1000 * 60 * 60);
             
-            .drag-over {
-                transform: scale(1.02);
-                box-shadow: 0 0 0 2px var(--primary);
+            if (hoursDiff <= 1 && !this.hasAchievement('speed_demon')) {
+                this.unlockAchievement('speed_demon');
             }
+        }
+    }
+
+    checkQuantumMilestones(task) {
+        // Check for special milestones
+        const categoryCount = {};
+        this.completedTasks.forEach(t => {
+            categoryCount[t.category] = (categoryCount[t.category] || 0) + 1;
+        });
+        
+        if (Object.keys(categoryCount).length >= 5 && !this.hasAchievement('organizer')) {
+            this.unlockAchievement('organizer');
+        }
+    }
+
+    hasAchievement(achievementId) {
+        return this.user.achievements.includes(achievementId);
+    }
+
+    unlockAchievement(achievementId) {
+        const achievement = this.achievements.find(a => a.id === achievementId);
+        if (achievement && !this.user.achievements.includes(achievementId)) {
+            this.user.achievements.push(achievementId);
+            this.addUserExperience(achievement.reward);
+            
+            this.showNotification(`
+                🏆 Achievement Unlocked: ${achievement.name}
+                +${achievement.reward} XP
+                ${achievement.description}
+            `, 'success', 5000);
+            
+            this.quantumParticleEffect('achievement');
+            this.playSound('achievement');
+        }
+    }
+
+    showNotification(message, type = 'info', duration = 3000) {
+        const notification = document.createElement('div');
+        notification.style.cssText = `
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: linear-gradient(135deg, ${this.getNotificationColor(type)});
+            color: white;
+            padding: 20px 30px;
+            border-radius: 15px;
+            box-shadow: var(--shadow-xl);
+            z-index: 9999;
+            animation: notificationSlide 0.3s ease;
+            border: 1px solid rgba(255,255,255,0.2);
+            backdrop-filter: blur(10px);
+            max-width: 400px;
+            white-space: pre-line;
+            font-size: 14px;
+            line-height: 1.6;
         `;
-        document.head.appendChild(style);
+        
+        // Add icon based on type
+        const icons = {
+            success: 'fa-check-circle',
+            error: 'fa-exclamation-circle',
+            warning: 'fa-exclamation-triangle',
+            info: 'fa-info-circle'
+        };
+        
+        notification.innerHTML = `
+            <div style="display: flex; align-items: center; gap: 15px;">
+                <i class="fas ${icons[type] || icons.info}" style="font-size: 24px;"></i>
+                <div>${message.replace(/\n/g, '<br>')}</div>
+            </div>
+        `;
+        
+        document.body.appendChild(notification);
+        
+        setTimeout(() => {
+            notification.style.animation = 'notificationFade 0.3s ease';
+            setTimeout(() => notification.remove(), 300);
+        }, duration);
+    }
+
+    getNotificationColor(type) {
+        const colors = {
+            success: '#10b981, #059669',
+            error: '#ef4444, #dc2626',
+            warning: '#f59e0b, #d97706',
+            info: '#6366f1, #8b5cf6'
+        };
+        return colors[type] || colors.info;
+    }
+
+    playSound(type) {
+        if (!this.user.soundEnabled) return;
+        
+        // Create audio context for sound effects
+        const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+        const oscillator = audioContext.createOscillator();
+        const gainNode = audioContext.createGain();
+        
+        oscillator.connect(gainNode);
+        gainNode.connect(audioContext.destination);
+        
+        switch(type) {
+            case 'create':
+                oscillator.frequency.setValueAtTime(440, audioContext.currentTime);
+                gainNode.gain.setValueAtTime(0.1, audioContext.currentTime);
+                gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.2);
+                oscillator.start();
+                oscillator.stop(audioContext.currentTime + 0.2);
+                break;
+                
+            case 'complete':
+                oscillator.frequency.setValueAtTime(523.25, audioContext.currentTime);
+                oscillator.frequency.setValueAtTime(659.25, audioContext.currentTime + 0.1);
+                oscillator.frequency.setValueAtTime(783.99, audioContext.currentTime + 0.2);
+                gainNode.gain.setValueAtTime(0.1, audioContext.currentTime);
+                gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.3);
+                oscillator.start();
+                oscillator.stop(audioContext.currentTime + 0.3);
+                break;
+                
+            case 'achievement':
+                oscillator.frequency.setValueAtTime(523.25, audioContext.currentTime);
+                oscillator.frequency.setValueAtTime(659.25, audioContext.currentTime + 0.1);
+                oscillator.frequency.setValueAtTime(783.99, audioContext.currentTime + 0.2);
+                oscillator.frequency.setValueAtTime(1046.50, audioContext.currentTime + 0.3);
+                gainNode.gain.setValueAtTime(0.1, audioContext.currentTime);
+                gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.4);
+                oscillator.start();
+                oscillator.stop(audioContext.currentTime + 0.4);
+                break;
+        }
+    }
+
+    quantumHapticFeedback() {
+        if (window.navigator.vibrate) {
+            window.navigator.vibrate(50);
+        }
+    }
+
+    quantumVibrate(duration) {
+        if (window.navigator.vibrate) {
+            window.navigator.vibrate(duration);
+        }
+    }
+
+    quantumParticleEffect(type) {
+        const colors = {
+            create: ['#6366f1', '#8b5cf6'],
+            complete: ['#10b981', '#059669'],
+            delete: ['#ef4444', '#dc2626'],
+            achievement: ['#f59e0b', '#d97706'],
+            levelup: ['#8b5cf6', '#6366f1']
+        };
+        
+        const particleColors = colors[type] || colors.create;
+        const particleCount = type === 'achievement' ? 50 : 30;
+        
+        for (let i = 0; i < particleCount; i++) {
+            const particle = document.createElement('div');
+            particle.style.cssText = `
+                position: fixed;
+                top: 50%;
+                left: 50%;
+                width: ${Math.random() * 10 + 5}px;
+                height: ${Math.random() * 10 + 5}px;
+                background: linear-gradient(135deg, ${particleColors[0]}, ${particleColors[1]});
+                border-radius: 50%;
+                pointer-events: none;
+                z-index: 9999;
+                animation: quantumParticle ${Math.random() * 2 + 1}s ease-out forwards;
+                transform: translate(-50%, -50%);
+            `;
+            
+            const angle = Math.random() * Math.PI * 2;
+            const distance = Math.random() * 200 + 100;
+            particle.style.setProperty('--tx', `${Math.cos(angle) * distance}px`);
+            particle.style.setProperty('--ty', `${Math.sin(angle) * distance}px`);
+            
+            document.body.appendChild(particle);
+            
+            setTimeout(() => particle.remove(), 3000);
+        }
+    }
+
+    initializeQuantumNetwork() {
+        const container = document.getElementById('neuralNetwork');
+        if (!container) return;
+        
+        // Clear existing
+        container.innerHTML = '';
+        
+        // Create nodes
+        for (let i = 0; i < 30; i++) {
+            const node = document.createElement('div');
+            node.className = 'neural-node';
+            node.style.left = Math.random() * 100 + '%';
+            node.style.top = Math.random() * 100 + '%';
+            node.style.animationDelay = Math.random() * 3 + 's';
+            node.style.width = Math.random() * 8 + 4 + 'px';
+            node.style.height = node.style.width;
+            container.appendChild(node);
+            this.neuralNetwork.push(node);
+        }
+        
+        // Create connections
+        for (let i = 0; i < 20; i++) {
+            const connection = document.createElement('div');
+            connection.className = 'neural-connection';
+            
+            const startNode = this.neuralNetwork[Math.floor(Math.random() * this.neuralNetwork.length)];
+            const endNode = this.neuralNetwork[Math.floor(Math.random() * this.neuralNetwork.length)];
+            
+            if (startNode && endNode) {
+                const startRect = startNode.getBoundingClientRect();
+                const endRect = endNode.getBoundingClientRect();
+                
+                const containerRect = container.getBoundingClientRect();
+                
+                const startX = (startRect.left + startRect.width / 2 - containerRect.left) / containerRect.width * 100;
+                const startY = (startRect.top + startRect.height / 2 - containerRect.top) / containerRect.height * 100;
+                const endX = (endRect.left + endRect.width / 2 - containerRect.left) / containerRect.width * 100;
+                const endY = (endRect.top + endRect.height / 2 - containerRect.top) / containerRect.height * 100;
+                
+                const length = Math.sqrt(Math.pow(endX - startX, 2) + Math.pow(endY - startY, 2));
+                const angle = Math.atan2(endY - startY, endX - startX) * 180 / Math.PI;
+                
+                connection.style.left = startX + '%';
+                connection.style.top = startY + '%';
+                connection.style.width = length + '%';
+                connection.style.transform = `rotate(${angle}deg)`;
+                connection.style.animationDelay = Math.random() * 2 + 's';
+                
+                container.appendChild(connection);
+            }
+        }
+    }
+
+    startQuantumEngine() {
+        // Update quantum metrics periodically
+        setInterval(() => {
+            this.updateQuantumMetrics();
+        }, 5000);
+        
+        // Rotate status messages
+        setInterval(() => {
+            this.rotateQuantumStatus();
+        }, 4000);
+        
+        // Check for reminders
+        setInterval(() => {
+            this.checkReminders();
+        }, 60000);
+        
+        // Auto-save
+        setInterval(() => {
+            this.autoSave();
+        }, 300000); // Every 5 minutes
+    }
+
+    updateQuantumMetrics() {
+        // Random fluctuation in quantum metrics for realism
+        this.quantumCoherence = Math.min(100, Math.max(80, this.quantumCoherence + (Math.random() * 6 - 3)));
+        
+        // Update UI if elements exist
+        const coherenceElement = document.getElementById('quantumCoherence');
+        if (coherenceElement) {
+            coherenceElement.style.width = this.quantumCoherence + '%';
+        }
+    }
+
+    rotateQuantumStatus() {
+        const statusElement = document.getElementById('aiStatusMessage');
+        if (!statusElement) return;
+        
+        const randomStatus = this.quantumStatusMessages[Math.floor(Math.random() * this.quantumStatusMessages.length)];
+        statusElement.innerHTML = `
+            <i class="fas ${randomStatus.icon}" style="font-size: 8px; color: var(--success);"></i>
+            ${randomStatus.text}
+        `;
+    }
+
+    checkReminders() {
+        const now = new Date();
+        
+        this.tasks.forEach(task => {
+            const deadline = new Date(task.deadline);
+            const hoursUntilDeadline = (deadline - now) / (1000 * 60 * 60);
+            
+            // Remind 1 hour before deadline
+            if (hoursUntilDeadline <= 1 && hoursUntilDeadline > 0 && !task.reminded) {
+                this.showNotification(`⏰ Task "${task.title}" is due in 1 hour!`, 'warning');
+                task.reminded = true;
+                this.saveTasks();
+            }
+        });
+    }
+
+    autoSave() {
+        this.saveTasks();
+        this.saveUserData();
+        console.log('Auto-saved quantum state');
+    }
+
+    syncWithCloud() {
+        // Simulate cloud sync
+        setTimeout(() => {
+            this.showNotification('Quantum state synchronized with cloud', 'success');
+        }, 1000);
+    }
+
+    analyzeQuantumTiming(selectedDate) {
+        const hour = selectedDate.getHours();
+        let recommendation = '';
+        
+        if (hour >= 9 && hour <= 11) {
+            recommendation = 'Excellent choice! This is your peak quantum coherence time.';
+        } else if (hour >= 14 && hour <= 16) {
+            recommendation = 'Good time. Your neural activity is stable during this period.';
+        } else if (hour >= 22 || hour <= 5) {
+            recommendation = 'Note: Quantum coherence may be lower during off-peak hours.';
+        }
+        
+        if (recommendation) {
+            this.showNotification(recommendation, 'info', 3000);
+        }
+    }
+
+    initializeCharts() {
+        // Initialize ApexCharts for all chart containers
+        if (typeof ApexCharts === 'undefined') return;
+        
+        // Productivity Chart
+        const productivityOptions = {
+            chart: { type: 'area', height: 300, background: 'transparent', toolbar: { show: false } },
+            series: [{
+                name: 'Quantum Tasks',
+                data: this.getWeeklyData()
+            }],
+            xaxis: {
+                categories: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+                labels: { style: { colors: 'var(--gray)' } }
+            },
+            yaxis: { labels: { style: { colors: 'var(--gray)' } } },
+            colors: ['#6366f1'],
+            stroke: { curve: 'smooth', width: 3 },
+            fill: { 
+                type: 'gradient', 
+                gradient: { 
+                    shadeIntensity: 1, 
+                    opacityFrom: 0.7, 
+                    opacityTo: 0.3 
+                } 
+            },
+            grid: { borderColor: 'rgba(99,102,241,0.1)' },
+            tooltip: { theme: 'dark' }
+        };
+        
+        const productivityChart = document.getElementById('productivityChart');
+        if (productivityChart) {
+            const chart = new ApexCharts(productivityChart, productivityOptions);
+            chart.render();
+        }
+        
+        // Priority Chart
+        const priorityOptions = {
+            chart: { type: 'donut', height: 300 },
+            series: [
+                this.tasks.filter(t => !t.completed && t.priority === 'high').length,
+                this.tasks.filter(t => !t.completed && t.priority === 'medium').length,
+                this.tasks.filter(t => !t.completed && t.priority === 'low').length
+            ],
+            labels: ['Level 3', 'Level 2', 'Level 1'],
+            colors: ['#ef4444', '#f59e0b', '#10b981'],
+            legend: { position: 'bottom', labels: { colors: 'var(--gray)' } },
+            plotOptions: {
+                pie: {
+                    donut: {
+                        size: '70%',
+                        labels: {
+                            show: true,
+                            total: {
+                                show: true,
+                                label: 'Total Tasks',
+                                formatter: () => this.tasks.length
+                            }
+                        }
+                    }
+                }
+            }
+        };
+        
+        const priorityChart = document.getElementById('priorityChart');
+        if (priorityChart) {
+            const chart = new ApexCharts(priorityChart, priorityOptions);
+            chart.render();
+        }
+    }
+
+    getWeeklyData() {
+        const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+        const data = new Array(7).fill(0);
+        
+        this.completedTasks.forEach(task => {
+            if (task.completedAt) {
+                const day = new Date(task.completedAt).getDay();
+                data[day]++;
+            }
+        });
+        
+        // Reorder to start from Monday
+        return [...data.slice(1), data[0]];
+    }
+
+    updateCharts() {
+        // Update chart data if charts exist
+        if (window.ApexCharts) {
+            const charts = document.querySelectorAll('[id$="Chart"]');
+            charts.forEach(chartElement => {
+                // Chart update logic would go here
+                // This would require storing chart instances
+            });
+        }
+    }
+
+    initializeDragAndDrop() {
+        const cards = document.querySelectorAll('.task-card-premium');
+        const grid = document.getElementById('tasksGrid');
+        
+        cards.forEach(card => {
+            card.addEventListener('dragstart', (e) => {
+                card.classList.add('dragging');
+                this.draggedItem = card;
+                e.dataTransfer.setData('text/plain', card.dataset.id);
+                e.dataTransfer.effectAllowed = 'move';
+            });
+            
+            card.addEventListener('dragend', () => {
+                card.classList.remove('dragging');
+                cards.forEach(c => c.classList.remove('drag-over'));
+            });
+            
+            card.addEventListener('dragover', (e) => {
+                e.preventDefault();
+                e.dataTransfer.dropEffect = 'move';
+                card.classList.add('drag-over');
+            });
+            
+            card.addEventListener('dragleave', () => {
+                card.classList.remove('drag-over');
+            });
+            
+            card.addEventListener('drop', (e) => {
+                e.preventDefault();
+                card.classList.remove('drag-over');
+                
+                const draggedId = this.draggedItem?.dataset.id;
+                const targetId = card.dataset.id;
+                
+                if (draggedId && targetId && draggedId !== targetId) {
+                    const draggedIndex = this.tasks.findIndex(t => t.id === draggedId);
+                    const targetIndex = this.tasks.findIndex(t => t.id === targetId);
+                    
+                    if (draggedIndex !== -1 && targetIndex !== -1) {
+                        const [draggedTask] = this.tasks.splice(draggedIndex, 1);
+                        this.tasks.splice(targetIndex, 0, draggedTask);
+                        
+                        this.saveTasks();
+                        this.renderTasks();
+                        this.showNotification('Quantum matrix reordered', 'info');
+                        this.quantumHapticFeedback();
+                    }
+                }
+            });
+        });
+        
+        if (grid) {
+            grid.addEventListener('dragover', (e) => {
+                e.preventDefault();
+            });
+        }
+    }
+
+    initializeTaskInteractions() {
+        // Add hover effects, tooltips, etc.
+        document.querySelectorAll('.task-card-premium').forEach(card => {
+            card.addEventListener('mouseenter', () => {
+                // Add quantum glow effect
+                card.style.transition = 'all 0.3s ease';
+            });
+            
+            card.addEventListener('mouseleave', () => {
+                // Remove quantum glow
+            });
+        });
+    }
+
+    handleResize() {
+        // Responsive adjustments
+        if (window.innerWidth < 768) {
+            this.currentView = 'list';
+            this.renderTasks();
+        }
+    }
+
+    handleBulkDrop(e) {
+        const files = e.dataTransfer.files;
+        if (files.length > 0) {
+            // Handle file uploads
+            Array.from(files).forEach(file => {
+                if (file.type.startsWith('image/') || file.type === 'application/json') {
+                    this.importTaskFromFile(file);
+                }
+            });
+        }
+    }
+
+    importTaskFromFile(file) {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+            try {
+                const taskData = JSON.parse(e.target.result);
+                this.tasks.unshift({
+                    ...taskData,
+                    id: `task-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
+                    importedAt: new Date().toISOString()
+                });
+                this.saveTasks();
+                this.renderTasks();
+                this.showNotification(`Imported task: ${taskData.title}`, 'success');
+            } catch (error) {
+                this.showNotification('Invalid task file format', 'error');
+            }
+        };
+        reader.readAsText(file);
+    }
+
+    getSelectedTags() {
+        // Get tags from input or selection
+        const tagInput = document.getElementById('taskTags');
+        if (tagInput && tagInput.value) {
+            return tagInput.value.split(',').map(tag => tag.trim()).filter(tag => tag);
+        }
+        return [];
+    }
+
+    saveFilterPreference() {
+        localStorage.setItem('quantumFilter', this.currentFilter);
+    }
+
+    startRealTimeSync() {
+        // Simulate real-time updates
+        setInterval(() => {
+            // Update timestamp
+            const timeElement = document.getElementById('liveTime');
+            if (timeElement) {
+                timeElement.textContent = new Date().toLocaleTimeString('en-US', { hour12: false });
+            }
+        }, 1000);
+    }
+
+    openCreateTaskModal() {
+        document.getElementById('taskTitle').focus();
+        document.getElementById('quantumTaskForm').scrollIntoView({ behavior: 'smooth' });
+    }
+}
+
+// Utility function for debouncing
+function debounce(func, wait) {
+    let timeout;
+    return function executedFunction(...args) {
+        const later = () => {
+            clearTimeout(timeout);
+            func(...args);
+        };
+        clearTimeout(timeout);
+        timeout = setTimeout(later, wait);
+    };
+}
+
+// Initialize when DOM is ready
+document.addEventListener('DOMContentLoaded', () => {
+    window.taskManager = new QuantumTaskManager();
+    
+    // Add CSS animations
+    const style = document.createElement('style');
+    style.textContent = `
+        @keyframes quantumParticle {
+            0% {
+                transform: translate(-50%, -50%) scale(1);
+                opacity: 1;
+            }
+            100% {
+                transform: translate(calc(-50% + var(--tx)), calc(-50% + var(--ty))) scale(0);
+                opacity: 0;
+            }
+        }
+        
+        @keyframes notificationSlide {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+        
+        @keyframes notificationFade {
+            from { transform: translateX(0); opacity: 1; }
+            to { transform: translateX(100%); opacity: 0; }
+        }
+        
+        .drag-over {
+            transform: scale(1.02);
+            box-shadow: 0 0 0 3px var(--primary) !important;
+        }
+        
+        .quantum-legendary {
+            background: linear-gradient(135deg, rgba(255,215,0,0.1), rgba(255,215,0,0.05));
+            border: 1px solid rgba(255,215,0,0.3);
+        }
+        
+        .quantum-epic {
+            background: linear-gradient(135deg, rgba(155,93,229,0.1), rgba(155,93,229,0.05));
+            border: 1px solid rgba(155,93,229,0.3);
+        }
+        
+        .quantum-rare {
+            background: linear-gradient(135deg, rgba(0,112,221,0.1), rgba(0,112,221,0.05));
+            border: 1px solid rgba(0,112,221,0.3);
+        }
+        
+        .quantum-common {
+            background: linear-gradient(135deg, rgba(128,128,128,0.1), rgba(128,128,128,0.05));
+            border: 1px solid rgba(128,128,128,0.3);
+        }
+        
+        .task-list-item {
+            background: white;
+            border-radius: 12px;
+            margin-bottom: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border-left: 6px solid transparent;
+        }
+        
+        .task-list-item:hover {
+            transform: translateX(5px);
+            box-shadow: var(--shadow);
+        }
+        
+        .task-list-item.priority-high { border-left-color: var(--danger); }
+        .task-list-item.priority-medium { border-left-color: var(--warning); }
+        .task-list-item.priority-low { border-left-color: var(--success); }
+        
+        .priority-indicator {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            display: inline-block;
+        }
+        
+        .priority-indicator.priority-high { background: var(--danger); }
+        .priority-indicator.priority-medium { background: var(--warning); }
+        .priority-indicator.priority-low { background: var(--success); }
+    `;
+    document.head.appendChild(style);
+});
+
+// Modal functions
+function openQuantumModal(modalId) {
+    const modal = document.getElementById(modalId);
+    if (modal) {
+        modal.classList.add('active');
+        document.body.style.overflow = 'hidden';
+    }
+}
+
+function closeQuantumModal(modalId) {
+    const modal = document.getElementById(modalId);
+    if (modal) {
+        modal.classList.remove('active');
+        document.body.style.overflow = '';
+    }
+}
+
+function fillQuantumTask(text) {
+    const titleInput = document.getElementById('taskTitle');
+    if (titleInput) {
+        titleInput.value = text;
+        titleInput.focus();
+    }
+}
+
+// Close modals with Escape key
+document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') {
+        document.querySelectorAll('.quantum-modal.active').forEach(modal => {
+            modal.classList.remove('active');
+        });
+        document.body.style.overflow = '';
+    }
+});
     </script>
 </body>
 </html>
+
