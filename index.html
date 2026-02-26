@@ -1734,6 +1734,8 @@
     <script>
        // quantum-task-manager.js - Complete Enterprise Solution
 
+// Enhanced Quantum Task Manager with Dynamic Leveling System
+
 class QuantumTaskManager {
     constructor() {
         // Core Properties
@@ -1750,22 +1752,32 @@ class QuantumTaskManager {
         this.redoStack = [];
         
         // Quantum Properties
-        this.quantumState = 'coherent';
+        this.quantumState = 'idle';
         this.neuralNetwork = [];
         this.quantumParticles = [];
-        this.quantumCoherence = 100;
+        this.quantumCoherence = 0;
         this.neuralConnections = 0;
         
-        // User Preferences
+        // Timer Properties
+        this.timerInterval = null;
+        this.quantumStartTime = null;
+        this.quantumElapsedTime = 0;
+        this.isQuantumActive = false;
+        this.firstTaskCreated = false;
+        
+        // Level System
         this.user = {
             name: 'Raheel Shakeel',
             email: 'raheel@quantum.ai',
             theme: 'quantum',
             notifications: true,
             soundEnabled: true,
-            quantumLevel: 42,
-            experience: 15420,
+            quantumLevel: 0,
+            experience: 0,
+            nextLevelExp: 100,
+            totalTasksCompleted: 0,
             achievements: [],
+            quantumRank: 'Quantum Initiate',
             preferences: {
                 defaultView: 'grid',
                 autoArchive: true,
@@ -1774,6 +1786,637 @@ class QuantumTaskManager {
                 neuralLearning: true
             }
         };
+        
+        // Quantum Ranks
+        this.quantumRanks = [
+            { level: 0, name: 'Quantum Initiate', expRequired: 0, color: '#94a3b8' },
+            { level: 1, name: 'Quantum Apprentice', expRequired: 100, color: '#6366f1' },
+            { level: 2, name: 'Quantum Novice', expRequired: 250, color: '#8b5cf6' },
+            { level: 3, name: 'Quantum Adept', expRequired: 500, color: '#a855f7' },
+            { level: 4, name: 'Quantum Expert', expRequired: 1000, color: '#d946ef' },
+            { level: 5, name: 'Quantum Master', expRequired: 2000, color: '#ec4899' },
+            { level: 6, name: 'Quantum Grandmaster', expRequired: 3500, color: '#f43f5e' },
+            { level: 7, name: 'Quantum Sage', expRequired: 5500, color: '#ef4444' },
+            { level: 8, name: 'Quantum Oracle', expRequired: 8000, color: '#f97316' },
+            { level: 9, name: 'Quantum Legend', expRequired: 11000, color: '#eab308' },
+            { level: 10, name: 'Quantum God', expRequired: 15000, color: '#22c55e' }
+        ];
+        
+        // Quantum Status Messages
+        this.quantumStatusMessages = [
+            { text: 'System idle - Create your first task to activate quantum core', icon: 'fa-microchip', state: 'idle' },
+            { text: 'Quantum core activated - Neural networks initializing', icon: 'fa-microchip', state: 'active' },
+            { text: 'Processing task quantum coherence', icon: 'fa-atom', state: 'active' },
+            { text: 'Learning patterns from completed tasks', icon: 'fa-brain', state: 'active' },
+            { text: 'Calculating quantum level progression', icon: 'fa-chart-line', state: 'active' },
+            { text: 'Neural pathways optimizing', icon: 'fa-project-diagram', state: 'active' },
+            { text: 'Quantum sync with task matrix', icon: 'fa-clock', state: 'active' },
+            { text: 'Deep learning model training', icon: 'fa-cube', state: 'active' }
+        ];
+        
+        // Achievement System
+        this.achievements = [
+            { id: 'first_task', name: 'Quantum Initiate', description: 'Create your first quantum task', reward: 50, icon: 'fa-star', level: 1 },
+            { id: 'ten_tasks', name: 'Quantum Apprentice', description: 'Complete 10 tasks', reward: 100, icon: 'fa-medal', level: 2 },
+            { id: 'twenty_five_tasks', name: 'Quantum Novice', description: 'Complete 25 tasks', reward: 200, icon: 'fa-shield', level: 3 },
+            { id: 'fifty_tasks', name: 'Quantum Adept', description: 'Complete 50 tasks', reward: 350, icon: 'fa-crown', level: 4 },
+            { id: 'seventy_five_tasks', name: 'Quantum Expert', description: 'Complete 75 tasks', reward: 500, icon: 'fa-chess-queen', level: 5 },
+            { id: 'hundred_tasks', name: 'Quantum Master', description: 'Complete 100 tasks', reward: 750, icon: 'fa-dragon', level: 6 },
+            { id: 'hundred_fifty_tasks', name: 'Quantum Grandmaster', description: 'Complete 150 tasks', reward: 1000, icon: 'fa-phoenix', level: 7 },
+            { id: 'two_hundred_tasks', name: 'Quantum Sage', description: 'Complete 200 tasks', reward: 1500, icon: 'fa-robot', level: 8 },
+            { id: 'perfect_week', name: 'Perfect Coherence', description: 'Complete all tasks for a week', reward: 300, icon: 'fa-calendar-check', level: 3 },
+            { id: 'speed_demon', name: 'Quantum Speed', description: 'Complete 5 tasks within 1 hour', reward: 200, icon: 'fa-rocket', level: 2 },
+            { id: 'night_owl', name: 'Night Quantum', description: 'Complete 10 tasks at night', reward: 150, icon: 'fa-moon', level: 2 },
+            { id: 'early_bird', name: 'Early Quantum', description: 'Complete 10 tasks in the morning', reward: 150, icon: 'fa-sun', level: 2 }
+        ];
+        
+        this.initialize();
+    }
+
+    initialize() {
+        this.loadUserData();
+        this.loadTasks();
+        this.initializeQuantumNetwork();
+        this.setupEventListeners();
+        this.startQuantumEngine();
+        this.initializeCharts();
+        this.setupKeyboardShortcuts();
+        this.updateUI();
+        this.checkQuantumActivation();
+    }
+
+    checkQuantumActivation() {
+        // Check if any tasks exist to activate quantum state
+        if (this.tasks.length > 0 || this.completedTasks.length > 0) {
+            this.firstTaskCreated = true;
+            this.activateQuantumCore();
+        }
+    }
+
+    activateQuantumCore() {
+        if (!this.isQuantumActive && this.firstTaskCreated) {
+            this.isQuantumActive = true;
+            this.quantumState = 'active';
+            this.quantumStartTime = new Date();
+            this.startQuantumTimer();
+            this.updateQuantumStatus('Quantum core activated - Neural networks online');
+            this.quantumParticleEffect('activate');
+        }
+    }
+
+    startQuantumTimer() {
+        if (this.timerInterval) {
+            clearInterval(this.timerInterval);
+        }
+
+        this.timerInterval = setInterval(() => {
+            if (this.isQuantumActive) {
+                this.quantumElapsedTime++;
+                this.updateQuantumTimeDisplay();
+                this.calculateQuantumCoherence();
+            }
+        }, 1000);
+    }
+
+    updateQuantumTimeDisplay() {
+        const timeElement = document.getElementById('liveTime');
+        if (timeElement) {
+            const hours = Math.floor(this.quantumElapsedTime / 3600);
+            const minutes = Math.floor((this.quantumElapsedTime % 3600) / 60);
+            const seconds = this.quantumElapsedTime % 60;
+            
+            timeElement.textContent = `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+            
+            // Add pulse animation on update
+            timeElement.classList.add('time-pulse');
+            setTimeout(() => timeElement.classList.remove('time-pulse'), 200);
+        }
+    }
+
+    calculateQuantumCoherence() {
+        // Calculate coherence based on task completion rate and time
+        const totalTasks = this.tasks.length + this.completedTasks.length;
+        const completionRate = totalTasks > 0 ? (this.completedTasks.length / totalTasks) * 100 : 0;
+        
+        // Coherence formula: base 50% + (completion rate * 0.3) + (time factor * 0.2)
+        const timeFactor = Math.min(100, this.quantumElapsedTime / 3600); // Max 100 hours
+        this.quantumCoherence = Math.min(100, Math.round(50 + (completionRate * 0.3) + (timeFactor * 0.2)));
+        
+        // Update coherence bar if exists
+        const coherenceBar = document.getElementById('quantumCoherenceBar');
+        if (coherenceBar) {
+            coherenceBar.style.width = this.quantumCoherence + '%';
+            coherenceBar.style.background = `linear-gradient(90deg, #6366f1, ${this.getCoherenceColor()})`;
+        }
+    }
+
+    getCoherenceColor() {
+        if (this.quantumCoherence >= 80) return '#10b981';
+        if (this.quantumCoherence >= 60) return '#f59e0b';
+        if (this.quantumCoherence >= 40) return '#f97316';
+        return '#ef4444';
+    }
+
+    createTask() {
+        const title = document.getElementById('taskTitle').value;
+        const description = document.getElementById('taskDesc').value;
+        const priority = document.getElementById('taskPriority').value;
+        const deadline = document.getElementById('taskDeadline').value;
+        const category = document.getElementById('taskCategory').value;
+        const tags = this.getSelectedTags();
+
+        if (!title || !deadline) {
+            this.showNotification('Please complete all quantum fields', 'error');
+            this.quantumVibrate(100);
+            return;
+        }
+
+        // Check if this is the first task
+        if (!this.firstTaskCreated) {
+            this.firstTaskCreated = true;
+            this.activateQuantumCore();
+            this.showNotification('⚡ QUANTUM CORE ACTIVATED! Your journey begins now!', 'success', 5000);
+        }
+
+        // Save to undo stack
+        this.saveToUndoStack('create');
+
+        const task = {
+            id: `task-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
+            title: title,
+            description: description || 'No description provided',
+            priority: priority,
+            deadline: deadline,
+            category: category,
+            tags: tags,
+            status: 'pending',
+            completed: false,
+            createdAt: new Date().toISOString(),
+            completedAt: null,
+            archived: false,
+            favorite: false,
+            subtasks: [],
+            comments: [],
+            attachments: [],
+            timeEstimate: 0,
+            actualTime: 0,
+            progress: 0,
+            quantumScore: this.calculateQuantumScore(priority, deadline),
+            neuralConnections: Math.floor(Math.random() * 50 + 50),
+            quantumCoherence: 100,
+            neuralCores: 128,
+            dependencies: [],
+            complexity: this.analyzeComplexity(title, description),
+            impact: this.calculateImpact(priority),
+            urgency: this.calculateUrgency(deadline),
+            version: '2.0',
+            lastModified: new Date().toISOString(),
+            history: [{
+                action: 'created',
+                timestamp: new Date().toISOString()
+            }]
+        };
+
+        this.tasks.unshift(task);
+        this.saveTasks();
+        this.renderTasks();
+        this.updateStats();
+        this.quantumHapticFeedback();
+        this.showNotification('✨ Quantum task created successfully!', 'success');
+        this.playSound('create');
+        this.checkQuantumAchievements(task);
+        this.quantumParticleEffect('create');
+        this.updateQuantumMetrics();
+
+        // Clear form
+        document.getElementById('quantumTaskForm').reset();
+        document.querySelector('.priority-option-premium.medium').classList.add('active');
+        document.getElementById('taskPriority').value = 'medium';
+        
+        // Focus back on title input
+        setTimeout(() => {
+            document.getElementById('taskTitle').focus();
+        }, 100);
+    }
+
+    toggleTaskComplete(taskId) {
+        const taskIndex = this.tasks.findIndex(t => t.id === taskId);
+        if (taskIndex !== -1) {
+            const task = this.tasks[taskIndex];
+            
+            // Save to undo stack
+            this.saveToUndoStack('toggle', { taskId, completed: task.completed });
+            
+            task.completed = true;
+            task.status = 'completed';
+            task.completedAt = new Date().toISOString();
+            task.progress = 100;
+            
+            // Update user progress
+            this.user.totalTasksCompleted++;
+            this.addUserExperience(10); // Base XP for completing a task
+            
+            // Bonus XP based on priority
+            if (task.priority === 'high') this.addUserExperience(15);
+            if (task.priority === 'medium') this.addUserExperience(10);
+            if (task.priority === 'low') this.addUserExperience(5);
+            
+            // Check for level up every 10 tasks
+            if (this.user.totalTasksCompleted % 10 === 0) {
+                this.handleTaskMilestone(this.user.totalTasksCompleted);
+            }
+            
+            // Move to completed tasks
+            const [completedTask] = this.tasks.splice(taskIndex, 1);
+            this.completedTasks.unshift(completedTask);
+            
+            this.saveTasks();
+            this.renderTasks();
+            this.updateStats();
+            this.updateQuantumMetrics();
+            this.showNotification('🎉 Quantum task completed!', 'success');
+            this.playSound('complete');
+            this.quantumParticleEffect('complete');
+            this.checkAchievements();
+            this.checkQuantumMilestones(completedTask);
+            
+            // Update quantum rank display
+            this.updateQuantumRank();
+        }
+    }
+
+    handleTaskMilestone(taskCount) {
+        // Level up every 10 tasks
+        const newLevel = Math.floor(taskCount / 10);
+        const previousLevel = this.user.quantumLevel;
+        
+        if (newLevel > previousLevel) {
+            this.user.quantumLevel = newLevel;
+            this.updateQuantumRank();
+            
+            // Special celebration for milestone levels
+            if (taskCount === 10) {
+                this.showNotification('🌟 LEVEL 1 ACHIEVED! You are now a Quantum Apprentice!', 'success', 6000);
+                this.quantumParticleEffect('levelup', 100);
+            } else if (taskCount === 50) {
+                this.showNotification('👑 LEVEL 5 ACHIEVED! You are now a Quantum Master!', 'success', 6000);
+                this.quantumParticleEffect('levelup', 150);
+            } else if (taskCount === 100) {
+                this.showNotification('🏆 LEVEL 10 ACHIEVED! You are now a Quantum Legend!', 'success', 6000);
+                this.quantumParticleEffect('levelup', 200);
+            } else {
+                this.showNotification(`🎯 LEVEL ${newLevel} ACHIEVED! Keep up the quantum momentum!`, 'success', 4000);
+                this.quantumParticleEffect('levelup', 50);
+            }
+            
+            // Update quantum core speed
+            this.quantumElapsedTime += 100; // Bonus time for level up
+        }
+    }
+
+    updateQuantumRank() {
+        const rank = this.quantumRanks.find(r => r.level === this.user.quantumLevel) || this.quantumRanks[0];
+        this.user.quantumRank = rank.name;
+        
+        // Update UI
+        const rankElement = document.getElementById('quantumRank');
+        if (rankElement) {
+            rankElement.textContent = rank.name;
+            rankElement.style.color = rank.color;
+        }
+        
+        const levelElement = document.getElementById('quantumLevel');
+        if (levelElement) {
+            levelElement.textContent = `Level ${this.user.quantumLevel}`;
+        }
+        
+        const progressElement = document.getElementById('levelProgress');
+        if (progressElement) {
+            const nextLevelExp = this.user.quantumLevel < 10 ? 
+                this.quantumRanks[this.user.quantumLevel + 1].expRequired : 
+                this.quantumRanks[10].expRequired;
+            const currentLevelExp = this.quantumRanks[this.user.quantumLevel].expRequired;
+            const progress = ((this.user.experience - currentLevelExp) / (nextLevelExp - currentLevelExp)) * 100;
+            progressElement.style.width = Math.min(100, progress) + '%';
+        }
+        
+        this.saveUserData();
+    }
+
+    addUserExperience(amount) {
+        this.user.experience += amount;
+        
+        // Check for level up
+        const newLevel = Math.floor(this.user.experience / 100);
+        if (newLevel > this.user.quantumLevel) {
+            this.user.quantumLevel = newLevel;
+            this.handleLevelUp(newLevel);
+        }
+        
+        this.updateQuantumRank();
+        this.saveUserData();
+    }
+
+    handleLevelUp(newLevel) {
+        const rank = this.quantumRanks.find(r => r.level === newLevel) || this.quantumRanks[this.quantumRanks.length - 1];
+        
+        // Celebration effects
+        this.showNotification(`
+            🎉 QUANTUM LEVEL UP! 🎉
+            New Rank: ${rank.name}
+            Level: ${newLevel}
+            Quantum Coherence Increased!
+        `, 'success', 6000);
+        
+        this.quantumParticleEffect('levelup', 100);
+        this.playSound('levelup');
+        
+        // Increase quantum coherence
+        this.quantumCoherence = Math.min(100, this.quantumCoherence + 5);
+        
+        // Special rewards at certain levels
+        if (newLevel === 5) {
+            this.showNotification('🔓 Unlocked: Quantum Multi-task Processing!', 'info', 4000);
+        } else if (newLevel === 10) {
+            this.showNotification('🔓 Unlocked: Quantum Time Manipulation!', 'info', 4000);
+        }
+    }
+
+    updateQuantumMetrics() {
+        // Update quantum status based on activity
+        const activeStatus = this.quantumStatusMessages.filter(msg => msg.state === 'active');
+        const randomStatus = activeStatus[Math.floor(Math.random() * activeStatus.length)];
+        
+        const statusElement = document.getElementById('aiStatusMessage');
+        if (statusElement && this.isQuantumActive) {
+            statusElement.innerHTML = `
+                <i class="fas ${randomStatus.icon}" style="color: var(--success);"></i>
+                ${randomStatus.text} | Tasks: ${this.completedTasks.length} | Level: ${this.user.quantumLevel}
+            `;
+        } else if (statusElement) {
+            statusElement.innerHTML = `
+                <i class="fas fa-microchip" style="color: var(--gray);"></i>
+                System idle - Create your first task to activate quantum core
+            `;
+        }
+        
+        // Update live indicator
+        const liveIndicator = document.querySelector('.live-indicator-3d');
+        if (liveIndicator) {
+            if (this.isQuantumActive) {
+                liveIndicator.style.opacity = '1';
+                liveIndicator.style.animation = 'pulse 2s infinite';
+            } else {
+                liveIndicator.style.opacity = '0.5';
+                liveIndicator.style.animation = 'none';
+            }
+        }
+        
+        // Update quantum state badge
+        const stateBadge = document.getElementById('quantumState');
+        if (stateBadge) {
+            stateBadge.textContent = this.isQuantumActive ? 'QUANTUM ACTIVE' : 'QUANTUM IDLE';
+            stateBadge.style.background = this.isQuantumActive ? 
+                'linear-gradient(135deg, var(--success), #059669)' : 
+                'linear-gradient(135deg, var(--gray), #475569)';
+        }
+    }
+
+    updateStats() {
+        const total = this.tasks.length + this.completedTasks.length;
+        const completed = this.completedTasks.length;
+        const pending = this.tasks.length;
+        const overdue = this.tasks.filter(t => new Date(t.deadline) < new Date()).length;
+        
+        // Update DOM
+        document.getElementById('totalTasks').textContent = total;
+        document.getElementById('completedTasks').textContent = completed;
+        document.getElementById('pendingTasks').textContent = pending;
+        document.getElementById('overdueTasks').textContent = overdue;
+        
+        // Update quantum metrics
+        this.calculateQuantumCoherence();
+        this.updateQuantumMetrics();
+        
+        // Update charts if they exist
+        this.updateCharts();
+    }
+
+    updateUI() {
+        // Create quantum rank display if it doesn't exist
+        if (!document.getElementById('quantumRankDisplay')) {
+            this.createQuantumRankDisplay();
+        }
+        
+        // Update all UI elements
+        this.updateQuantumRank();
+        this.updateQuantumMetrics();
+    }
+
+    createQuantumRankDisplay() {
+        const bannerRight = document.querySelector('.banner-right');
+        if (bannerRight) {
+            const rankDisplay = document.createElement('div');
+            rankDisplay.id = 'quantumRankDisplay';
+            rankDisplay.style.cssText = `
+                display: flex;
+                align-items: center;
+                gap: 15px;
+                background: rgba(0,0,0,0.2);
+                padding: 8px 20px;
+                border-radius: 40px;
+                border: 1px solid rgba(255,255,255,0.2);
+            `;
+            rankDisplay.innerHTML = `
+                <div style="display: flex; align-items: center; gap: 10px;">
+                    <i class="fas fa-crown" style="color: #f59e0b;"></i>
+                    <span style="color: white; font-weight: 600;" id="quantumRank">Quantum Initiate</span>
+                </div>
+                <div style="width: 100px; height: 6px; background: rgba(255,255,255,0.2); border-radius: 3px;">
+                    <div id="levelProgress" style="width: 0%; height: 100%; background: linear-gradient(90deg, #f59e0b, #f97316); border-radius: 3px;"></div>
+                </div>
+                <span style="color: white; font-size: 12px;" id="quantumLevel">Level 0</span>
+            `;
+            bannerRight.appendChild(rankDisplay);
+        }
+        
+        // Add quantum state badge
+        const liveIndicator = document.querySelector('.live-indicator-3d');
+        if (liveIndicator) {
+            const stateBadge = document.createElement('span');
+            stateBadge.id = 'quantumState';
+            stateBadge.style.cssText = `
+                padding: 4px 12px;
+                border-radius: 20px;
+                font-size: 11px;
+                font-weight: 600;
+                margin-left: 10px;
+            `;
+            liveIndicator.appendChild(stateBadge);
+        }
+    }
+
+    quantumParticleEffect(type, count = 30) {
+        const colors = {
+            create: ['#6366f1', '#8b5cf6'],
+            complete: ['#10b981', '#059669'],
+            delete: ['#ef4444', '#dc2626'],
+            achievement: ['#f59e0b', '#d97706'],
+            levelup: ['#8b5cf6', '#ec4899'],
+            activate: ['#6366f1', '#22c55e']
+        };
+        
+        const particleColors = colors[type] || colors.create;
+        
+        for (let i = 0; i < count; i++) {
+            const particle = document.createElement('div');
+            particle.style.cssText = `
+                position: fixed;
+                top: 50%;
+                left: 50%;
+                width: ${Math.random() * 10 + 5}px;
+                height: ${Math.random() * 10 + 5}px;
+                background: linear-gradient(135deg, ${particleColors[0]}, ${particleColors[1]});
+                border-radius: 50%;
+                pointer-events: none;
+                z-index: 9999;
+                animation: quantumParticle ${Math.random() * 2 + 1}s ease-out forwards;
+                transform: translate(-50%, -50%);
+            `;
+            
+            const angle = Math.random() * Math.PI * 2;
+            const distance = Math.random() * 200 + 100;
+            particle.style.setProperty('--tx', `${Math.cos(angle) * distance}px`);
+            particle.style.setProperty('--ty', `${Math.sin(angle) * distance}px`);
+            
+            document.body.appendChild(particle);
+            
+            setTimeout(() => particle.remove(), 3000);
+        }
+    }
+
+    playSound(type) {
+        if (!this.user.soundEnabled) return;
+        
+        const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+        const oscillator = audioContext.createOscillator();
+        const gainNode = audioContext.createGain();
+        
+        oscillator.connect(gainNode);
+        gainNode.connect(audioContext.destination);
+        
+        switch(type) {
+            case 'create':
+                oscillator.frequency.setValueAtTime(440, audioContext.currentTime);
+                gainNode.gain.setValueAtTime(0.1, audioContext.currentTime);
+                gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.2);
+                oscillator.start();
+                oscillator.stop(audioContext.currentTime + 0.2);
+                break;
+                
+            case 'complete':
+                oscillator.frequency.setValueAtTime(523.25, audioContext.currentTime);
+                oscillator.frequency.setValueAtTime(659.25, audioContext.currentTime + 0.1);
+                oscillator.frequency.setValueAtTime(783.99, audioContext.currentTime + 0.2);
+                gainNode.gain.setValueAtTime(0.1, audioContext.currentTime);
+                gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.3);
+                oscillator.start();
+                oscillator.stop(audioContext.currentTime + 0.3);
+                break;
+                
+            case 'levelup':
+                oscillator.frequency.setValueAtTime(523.25, audioContext.currentTime);
+                oscillator.frequency.setValueAtTime(659.25, audioContext.currentTime + 0.1);
+                oscillator.frequency.setValueAtTime(783.99, audioContext.currentTime + 0.2);
+                oscillator.frequency.setValueAtTime(1046.50, audioContext.currentTime + 0.3);
+                oscillator.frequency.setValueAtTime(1318.51, audioContext.currentTime + 0.4);
+                gainNode.gain.setValueAtTime(0.15, audioContext.currentTime);
+                gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.5);
+                oscillator.start();
+                oscillator.stop(audioContext.currentTime + 0.5);
+                break;
+        }
+    }
+
+    showNotification(message, type = 'info', duration = 3000) {
+        const notification = document.createElement('div');
+        notification.style.cssText = `
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: linear-gradient(135deg, ${this.getNotificationColor(type)});
+            color: white;
+            padding: 20px 30px;
+            border-radius: 15px;
+            box-shadow: var(--shadow-xl);
+            z-index: 9999;
+            animation: notificationSlide 0.3s ease;
+            border: 1px solid rgba(255,255,255,0.2);
+            backdrop-filter: blur(10px);
+            max-width: 400px;
+            white-space: pre-line;
+            font-size: 14px;
+            line-height: 1.6;
+        `;
+        
+        const icons = {
+            success: 'fa-check-circle',
+            error: 'fa-exclamation-circle',
+            warning: 'fa-exclamation-triangle',
+            info: 'fa-info-circle'
+        };
+        
+        notification.innerHTML = `
+            <div style="display: flex; align-items: center; gap: 15px;">
+                <i class="fas ${icons[type] || icons.info}" style="font-size: 24px;"></i>
+                <div>${message.replace(/\n/g, '<br>')}</div>
+            </div>
+        `;
+        
+        document.body.appendChild(notification);
+        
+        setTimeout(() => {
+            notification.style.animation = 'notificationFade 0.3s ease';
+            setTimeout(() => notification.remove(), 300);
+        }, duration);
+    }
+
+    getNotificationColor(type) {
+        const colors = {
+            success: '#10b981, #059669',
+            error: '#ef4444, #dc2626',
+            warning: '#f59e0b, #d97706',
+            info: '#6366f1, #8b5cf6'
+        };
+        return colors[type] || colors.info;
+    }
+
+    // ... (rest of the existing methods remain the same)
+}
+
+// Add new CSS animations
+const style = document.createElement('style');
+style.textContent += `
+    @keyframes time-pulse {
+        0%, 100% { transform: scale(1); opacity: 1; }
+        50% { transform: scale(1.1); opacity: 0.8; }
+    }
+    
+    .time-pulse {
+        animation: time-pulse 0.2s ease-in-out;
+    }
+    
+    @keyframes quantumPulse {
+        0%, 100% { transform: scale(1); opacity: 1; }
+        50% { transform: scale(1.1); opacity: 0.8; }
+    }
+    
+    .quantum-active {
+        animation: quantumPulse 2s infinite;
+    }
+`;
+
+document.head.appendChild(style);
         
         // AI Learning Data
         this.learningData = {
@@ -4030,4 +4673,5 @@ document.addEventListener('keydown', (e) => {
     </script>
 </body>
 </html>
+
 
