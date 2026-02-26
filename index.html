@@ -3,219 +3,341 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TaskFlow AI - Intelligent Task Management</title>
+    <title>TaskFlow AI Pro - Enterprise Intelligent Task Management</title>
     
-    <!-- Font Awesome -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <!-- Font Awesome 6 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     
     <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     
-    <!-- Flatpickr for date picking -->
+    <!-- Flatpickr -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
     
-    <!-- Chart.js for analytics -->
+    <!-- Chart.js -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     
+    <!-- ApexCharts -->
+    <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+    
+    <!-- Moment.js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.4/moment.min.js"></script>
+    
+    <!-- Anime.js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
+    
     <style>
-        :root {
-            --primary: #6366f1;
-            --primary-dark: #4f46e5;
-            --secondary: #8b5cf6;
-            --success: #10b981;
-            --danger: #ef4444;
-            --warning: #f59e0b;
-            --info: #3b82f6;
-            --dark: #1e293b;
-            --light: #f8fafc;
-            --gray: #64748b;
-            --gray-light: #cbd5e1;
-            --bg: #f1f5f9;
-            --card: #ffffff;
-            --shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
-            --shadow-lg: 0 20px 60px rgba(0, 0, 0, 0.12);
-            --radius: 16px;
-            --radius-sm: 12px;
-            --gradient: linear-gradient(135deg, var(--primary), var(--secondary));
-            --gradient-success: linear-gradient(135deg, #10b981, #059669);
-            --gradient-warning: linear-gradient(135deg, #f59e0b, #d97706);
-            --gradient-danger: linear-gradient(135deg, #ef4444, #dc2626);
-        }
-
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Inter', sans-serif;
+        }
+
+        :root {
+            --primary: #6366f1;
+            --primary-dark: #4f46e5;
+            --primary-light: #a5b4fc;
+            --secondary: #8b5cf6;
+            --secondary-dark: #7c3aed;
+            --success: #10b981;
+            --success-dark: #059669;
+            --warning: #f59e0b;
+            --warning-dark: #d97706;
+            --danger: #ef4444;
+            --danger-dark: #dc2626;
+            --info: #3b82f6;
+            --dark: #0f172a;
+            --dark-800: #1e293b;
+            --dark-700: #334155;
+            --light: #f8fafc;
+            --light-200: #e2e8f0;
+            --light-300: #cbd5e1;
+            --gray: #64748b;
+            --gray-light: #94a3b8;
+            
+            --bg-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --card-gradient: linear-gradient(135deg, rgba(255,255,255,0.1), rgba(255,255,255,0.05));
+            --glass-effect: rgba(255, 255, 255, 0.95);
+            --glass-border: 1px solid rgba(255, 255, 255, 0.2);
+            
+            --shadow-sm: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            --shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
+            --shadow-lg: 0 20px 60px rgba(0, 0, 0, 0.12);
+            --shadow-xl: 0 30px 80px rgba(0, 0, 0, 0.15);
+            
+            --radius-sm: 8px;
+            --radius: 12px;
+            --radius-lg: 16px;
+            --radius-xl: 24px;
+            
+            --font-primary: 'Inter', sans-serif;
+            --font-display: 'Space Grotesk', sans-serif;
         }
 
         body {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            font-family: var(--font-primary);
+            background: var(--bg-gradient);
             min-height: 100vh;
-            padding: 40px 20px;
+            padding: 20px;
             position: relative;
+            overflow-x: hidden;
         }
 
-        /* AI Background Animation */
+        /* Advanced 3D Background */
         .ai-background {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            pointer-events: none;
             z-index: 0;
-            opacity: 0.1;
+            overflow: hidden;
+            perspective: 1000px;
         }
 
-        .ai-background span {
+        .floating-shapes {
             position: absolute;
-            font-size: 24px;
-            color: white;
-            animation: floatAI 20s linear infinite;
+            width: 100%;
+            height: 100%;
+            transform-style: preserve-3d;
         }
 
-        @keyframes floatAI {
-            from { transform: translateY(100vh) rotate(0deg); }
-            to { transform: translateY(-100vh) rotate(360deg); }
+        .shape {
+            position: absolute;
+            background: linear-gradient(135deg, rgba(255,255,255,0.1), rgba(255,255,255,0.05));
+            border-radius: 50%;
+            filter: blur(40px);
+            animation: float3D 20s infinite ease-in-out;
+        }
+
+        .shape:nth-child(1) {
+            width: 300px;
+            height: 300px;
+            top: 10%;
+            left: 10%;
+            background: radial-gradient(circle, rgba(99,102,241,0.2), rgba(139,92,246,0.1));
+            animation-delay: 0s;
+        }
+
+        .shape:nth-child(2) {
+            width: 400px;
+            height: 400px;
+            top: 50%;
+            right: 10%;
+            background: radial-gradient(circle, rgba(16,185,129,0.15), rgba(5,150,105,0.05));
+            animation-delay: -5s;
+        }
+
+        .shape:nth-child(3) {
+            width: 250px;
+            height: 250px;
+            bottom: 10%;
+            left: 20%;
+            background: radial-gradient(circle, rgba(245,158,11,0.15), rgba(217,119,6,0.05));
+            animation-delay: -10s;
+        }
+
+        .neural-network {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                radial-gradient(circle at 30% 40%, rgba(255,255,255,0.1) 1px, transparent 1px),
+                radial-gradient(circle at 70% 60%, rgba(255,255,255,0.1) 1px, transparent 1px),
+                radial-gradient(circle at 40% 80%, rgba(255,255,255,0.1) 1px, transparent 1px);
+            background-size: 50px 50px;
+            opacity: 0.3;
+        }
+
+        @keyframes float3D {
+            0%, 100% { transform: translateZ(0px) translateY(0px) rotate(0deg); }
+            25% { transform: translateZ(50px) translateY(-20px) rotate(5deg); }
+            50% { transform: translateZ(100px) translateY(20px) rotate(10deg); }
+            75% { transform: translateZ(50px) translateY(-10px) rotate(5deg); }
         }
 
         .app-container {
-            max-width: 1400px;
+            max-width: 1600px;
             margin: 0 auto;
             position: relative;
             z-index: 1;
         }
 
-        /* Header with AI Tools */
+        /* Premium Glass Header */
         .app-header {
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(10px);
-            border-radius: var(--radius);
-            padding: 30px;
+            background: var(--glass-effect);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-radius: var(--radius-xl);
+            padding: 25px 35px;
             margin-bottom: 30px;
-            box-shadow: var(--shadow-lg);
+            border: var(--glass-border);
+            box-shadow: var(--shadow-xl);
             display: flex;
             justify-content: space-between;
             align-items: center;
             flex-wrap: wrap;
             gap: 20px;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-        }
-
-        .logo-area {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            position: relative;
-        }
-
-        .logo-icon {
-            width: 60px;
-            height: 60px;
-            background: var(--gradient);
-            border-radius: 16px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-size: 28px;
-            transform: rotate(10deg);
-            transition: all 0.3s;
             position: relative;
             overflow: hidden;
         }
 
-        .logo-icon::before {
+        .app-header::before {
             content: '';
             position: absolute;
             top: -50%;
             left: -50%;
             width: 200%;
             height: 200%;
-            background: linear-gradient(45deg, transparent, rgba(255,255,255,0.3), transparent);
-            transform: rotate(45deg);
-            animation: shine 3s infinite;
+            background: linear-gradient(45deg, 
+                transparent 30%, 
+                rgba(255,255,255,0.1) 50%, 
+                transparent 70%);
+            animation: headerShine 8s infinite;
         }
 
-        @keyframes shine {
-            0% { transform: translateX(-100%) rotate(45deg); }
-            100% { transform: translateX(100%) rotate(45deg); }
+        @keyframes headerShine {
+            from { transform: translateX(-100%) translateY(-100%) rotate(45deg); }
+            to { transform: translateX(100%) translateY(100%) rotate(45deg); }
         }
 
-        .logo-icon:hover {
-            transform: rotate(0deg) scale(1.1);
+        .logo-area {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .logo-3d {
+            position: relative;
+            width: 70px;
+            height: 70px;
+            transform-style: preserve-3d;
+            animation: logoSpin 10s infinite linear;
+        }
+
+        .logo-face {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 30px;
+            box-shadow: 0 10px 30px rgba(99,102,241,0.3);
+            transform: rotateY(0deg) translateZ(35px);
+        }
+
+        .logo-face:nth-child(2) { transform: rotateY(90deg) translateZ(35px); }
+        .logo-face:nth-child(3) { transform: rotateY(180deg) translateZ(35px); }
+        .logo-face:nth-child(4) { transform: rotateY(270deg) translateZ(35px); }
+        .logo-face:nth-child(5) { transform: rotateX(90deg) translateZ(35px); }
+        .logo-face:nth-child(6) { transform: rotateX(270deg) translateZ(35px); }
+
+        @keyframes logoSpin {
+            from { transform: rotateX(0deg) rotateY(0deg); }
+            to { transform: rotateX(360deg) rotateY(360deg); }
         }
 
         .logo-text h1 {
-            font-size: 32px;
+            font-size: 36px;
             font-weight: 800;
-            background: var(--gradient);
+            font-family: var(--font-display);
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            margin-bottom: 5px;
             position: relative;
         }
 
         .logo-text h1::after {
-            content: 'AI';
-            font-size: 14px;
-            background: var(--gradient);
+            content: 'PRO';
+            font-size: 12px;
+            background: var(--primary);
             color: white;
-            padding: 2px 8px;
-            border-radius: 20px;
+            padding: 4px 10px;
+            border-radius: 30px;
             margin-left: 10px;
+            font-weight: 600;
             -webkit-text-fill-color: white;
-            vertical-align: super;
+            box-shadow: 0 4px 10px rgba(99,102,241,0.3);
         }
 
-        .logo-text p {
-            color: var(--gray);
-            font-size: 14px;
+        .ai-badge-group {
             display: flex;
-            align-items: center;
-            gap: 8px;
+            gap: 10px;
+            margin-top: 8px;
         }
 
-        .ai-badge {
-            background: var(--gradient);
+        .premium-badge {
+            background: linear-gradient(135deg, var(--success), var(--success-dark));
             color: white;
-            padding: 4px 12px;
-            border-radius: 20px;
+            padding: 5px 15px;
+            border-radius: 30px;
             font-size: 12px;
             font-weight: 600;
-            animation: pulse 2s infinite;
+            box-shadow: 0 4px 15px rgba(16,185,129,0.3);
+        }
+
+        .quantum-badge {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 5px 15px;
+            border-radius: 30px;
+            font-size: 12px;
+            font-weight: 600;
+            box-shadow: 0 4px 15px rgba(99,102,241,0.3);
         }
 
         .user-profile {
             display: flex;
             align-items: center;
             gap: 20px;
-            background: var(--bg);
-            padding: 10px 20px;
-            border-radius: 50px;
+            background: rgba(255,255,255,0.1);
+            padding: 12px 25px;
+            border-radius: 60px;
+            border: var(--glass-border);
+            backdrop-filter: blur(10px);
+        }
+
+        .hologram-avatar {
             position: relative;
+            width: 50px;
+            height: 50px;
+        }
+
+        .avatar-ring {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            border: 2px solid rgba(255,255,255,0.3);
+            border-radius: 50%;
+            animation: ringPulse 2s infinite;
+        }
+
+        @keyframes ringPulse {
+            0%, 100% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.2); opacity: 0; }
         }
 
         .user-avatar {
-            width: 50px;
-            height: 50px;
-            background: var(--gradient);
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
             color: white;
-            font-weight: 600;
             font-size: 20px;
-            position: relative;
+            font-weight: 600;
         }
 
-        .user-avatar::after {
-            content: '';
+        .user-status {
             position: absolute;
-            top: -2px;
-            right: -2px;
+            bottom: 2px;
+            right: 2px;
             width: 12px;
             height: 12px;
             background: var(--success);
@@ -223,630 +345,81 @@
             border: 2px solid white;
         }
 
-        /* AI Tools Bar */
-        .ai-tools-bar {
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(10px);
-            border-radius: var(--radius-sm);
-            padding: 15px 25px;
+        /* Quantum AI Tools Bar */
+        .quantum-ai-bar {
+            background: rgba(255,255,255,0.9);
+            backdrop-filter: blur(20px);
+            border-radius: var(--radius-xl);
+            padding: 20px 30px;
             margin-bottom: 30px;
+            border: var(--glass-border);
+            box-shadow: var(--shadow-lg);
             display: flex;
             justify-content: space-between;
             align-items: center;
             flex-wrap: wrap;
             gap: 20px;
-            border: 1px solid rgba(99, 102, 241, 0.2);
-            box-shadow: var(--shadow);
         }
 
-        .ai-tools-title {
+        .quantum-title {
             display: flex;
             align-items: center;
-            gap: 10px;
-            color: var(--primary);
-            font-weight: 600;
+            gap: 15px;
         }
 
-        .ai-tools-title i {
-            font-size: 20px;
-            animation: spin 4s linear infinite;
+        .quantum-icon {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 24px;
+            position: relative;
+            overflow: hidden;
         }
 
-        .ai-tools-grid {
+        .quantum-icon::before {
+            content: '';
+            position: absolute;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent, rgba(255,255,255,0.3), transparent);
+            animation: quantumShine 3s infinite;
+        }
+
+        @keyframes quantumShine {
+            from { transform: translateX(-100%) translateY(-100%) rotate(45deg); }
+            to { transform: translateX(100%) translateY(100%) rotate(45deg); }
+        }
+
+        .quantum-tools {
             display: flex;
             gap: 15px;
             flex-wrap: wrap;
         }
 
-        .ai-tool-btn {
-            padding: 10px 20px;
-            border: none;
-            border-radius: 25px;
-            background: linear-gradient(135deg, rgba(99, 102, 241, 0.1), rgba(139, 92, 246, 0.1));
-            color: var(--primary);
-            font-weight: 500;
-            font-size: 14px;
-            cursor: pointer;
-            transition: all 0.3s;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            border: 1px solid rgba(99, 102, 241, 0.2);
-        }
-
-        .ai-tool-btn:hover {
-            background: var(--gradient);
-            color: white;
-            transform: translateY(-2px);
-            box-shadow: 0 10px 25px rgba(99, 102, 241, 0.3);
-        }
-
-        .ai-tool-btn i {
-            font-size: 16px;
-        }
-
-        /* Stats Grid with AI Insights */
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 20px;
-            margin-bottom: 30px;
-        }
-
-        .stat-card {
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(10px);
-            padding: 25px;
-            border-radius: var(--radius);
-            box-shadow: var(--shadow-lg);
-            display: flex;
-            align-items: center;
-            gap: 20px;
-            transition: all 0.3s;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .stat-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(45deg, transparent, rgba(255,255,255,0.1), transparent);
-            transform: translateX(-100%);
-            transition: transform 0.6s;
-        }
-
-        .stat-card:hover::before {
-            transform: translateX(100%);
-        }
-
-        .stat-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 20px 60px rgba(99, 102, 241, 0.2);
-        }
-
-        .stat-icon {
-            width: 70px;
-            height: 70px;
-            border-radius: 18px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 28px;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .stat-icon.total { background: linear-gradient(135deg, rgba(99, 102, 241, 0.2), rgba(139, 92, 246, 0.2)); color: var(--primary); }
-        .stat-icon.completed { background: linear-gradient(135deg, rgba(16, 185, 129, 0.2), rgba(5, 150, 105, 0.2)); color: var(--success); }
-        .stat-icon.pending { background: linear-gradient(135deg, rgba(245, 158, 11, 0.2), rgba(217, 119, 6, 0.2)); color: var(--warning); }
-        .stat-icon.overdue { background: linear-gradient(135deg, rgba(239, 68, 68, 0.2), rgba(220, 38, 38, 0.2)); color: var(--danger); }
-
-        .stat-info h3 {
-            font-size: 36px;
-            font-weight: 800;
-            color: var(--dark);
-            margin-bottom: 5px;
-        }
-
-        .stat-info p {
-            color: var(--gray);
-            font-size: 14px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .ai-insight {
-            font-size: 11px;
-            background: rgba(99, 102, 241, 0.1);
-            padding: 4px 8px;
-            border-radius: 20px;
-            color: var(--primary);
-        }
-
-        /* Real-time Updates Banner - Premium Styling */
-        .realtime-banner {
-            background: linear-gradient(135deg, 
-                rgba(99, 102, 241, 0.95), 
-                rgba(139, 92, 246, 0.95),
-                rgba(79, 70, 229, 0.95)
-            );
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
-            border-radius: 20px;
-            padding: 20px 30px;
-            margin-bottom: 30px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-wrap: wrap;
-            gap: 20px;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            box-shadow: 
-                0 10px 40px rgba(99, 102, 241, 0.3),
-                0 0 0 1px rgba(255, 255, 255, 0.1) inset,
-                0 0 30px rgba(139, 92, 246, 0.3);
-            position: relative;
-            overflow: hidden;
-            animation: borderGlow 3s ease-in-out infinite;
-        }
-
-        @keyframes borderGlow {
-            0%, 100% { 
-                box-shadow: 
-                    0 10px 40px rgba(99, 102, 241, 0.3),
-                    0 0 0 1px rgba(255, 255, 255, 0.1) inset,
-                    0 0 30px rgba(139, 92, 246, 0.3);
-            }
-            50% { 
-                box-shadow: 
-                    0 15px 50px rgba(99, 102, 241, 0.5),
-                    0 0 0 2px rgba(255, 255, 255, 0.2) inset,
-                    0 0 50px rgba(139, 92, 246, 0.5);
-            }
-        }
-
-        .realtime-banner::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: linear-gradient(
-                45deg,
-                transparent,
-                rgba(255, 255, 255, 0.1),
-                transparent
-            );
-            transform: rotate(45deg);
-            animation: shimmer 6s infinite;
-        }
-
-        @keyframes shimmer {
-            0% {
-                transform: translateX(-100%) rotate(45deg);
-            }
-            100% {
-                transform: translateX(100%) rotate(45deg);
-            }
-        }
-
-        .banner-left {
-            display: flex;
-            align-items: center;
-            gap: 20px;
-            position: relative;
-            z-index: 1;
-        }
-
-        .ai-pulse {
-            width: 60px;
-            height: 60px;
-            background: rgba(255, 255, 255, 0.15);
-            border-radius: 18px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            position: relative;
-            backdrop-filter: blur(5px);
-            border: 1px solid rgba(255, 255, 255, 0.3);
-            animation: pulse 2s ease-in-out infinite;
-        }
-
-        @keyframes pulse {
-            0%, 100% {
-                transform: scale(1);
-                box-shadow: 0 0 20px rgba(255, 255, 255, 0.3);
-            }
-            50% {
-                transform: scale(1.1);
-                box-shadow: 0 0 40px rgba(255, 255, 255, 0.5);
-            }
-        }
-
-        .ai-pulse i {
-            font-size: 28px;
-            color: white;
-            filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.5));
-        }
-
-        .ai-pulse::after {
-            content: '';
-            position: absolute;
-            top: -5px;
-            left: -5px;
-            right: -5px;
-            bottom: -5px;
-            border-radius: 22px;
-            background: linear-gradient(135deg, #fff, transparent);
-            opacity: 0.3;
-            animation: rotate 4s linear infinite;
-        }
-
-        @keyframes rotate {
-            from { transform: rotate(0deg); }
-            to { transform: rotate(360deg); }
-        }
-
-        .banner-content {
-            display: flex;
-            flex-direction: column;
-        }
-
-        .banner-title {
-            font-size: 22px;
-            font-weight: 800;
-            color: white;
-            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            margin-bottom: 4px;
-        }
-
-        .banner-title i {
-            font-size: 20px;
-            color: rgba(255, 255, 255, 0.9);
-            animation: spin 10s linear infinite;
-        }
-
-        @keyframes spin {
-            from { transform: rotate(0deg); }
-            to { transform: rotate(360deg); }
-        }
-
-        .banner-subtitle {
-            font-size: 14px;
-            color: rgba(255, 255, 255, 0.8);
-            font-weight: 500;
-            letter-spacing: 0.3px;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            transition: opacity 0.2s ease-in-out;
-        }
-
-        .banner-subtitle::before {
-            content: '⚡';
-            font-size: 16px;
-            animation: spark 1.5s ease-in-out infinite;
-        }
-
-        @keyframes spark {
-            0%, 100% { opacity: 0.5; transform: scale(1); }
-            50% { opacity: 1; transform: scale(1.2); }
-        }
-
-        .banner-right {
-            display: flex;
-            align-items: center;
-            gap: 25px;
-            background: rgba(0, 0, 0, 0.2);
+        .quantum-btn {
             padding: 12px 25px;
-            border-radius: 60px;
-            backdrop-filter: blur(5px);
-            border: 1px solid rgba(255, 255, 255, 0.15);
-            position: relative;
-            z-index: 1;
-            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
-        }
-
-        .live-indicator {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            background: rgba(239, 68, 68, 0.2);
-            padding: 6px 12px;
-            border-radius: 30px;
-            border: 1px solid rgba(239, 68, 68, 0.3);
-        }
-
-        .pulse-dot {
-            width: 10px;
-            height: 10px;
-            background: #ef4444;
-            border-radius: 50%;
-            position: relative;
-        }
-
-        .pulse-dot::before {
-            content: '';
-            position: absolute;
-            top: -5px;
-            left: -5px;
-            right: -5px;
-            bottom: -5px;
-            background: #ef4444;
-            border-radius: 50%;
-            opacity: 0.4;
-            animation: pulse-ring 1.5s ease-out infinite;
-        }
-
-        @keyframes pulse-ring {
-            0% {
-                transform: scale(0.5);
-                opacity: 0.5;
-            }
-            100% {
-                transform: scale(2);
-                opacity: 0;
-            }
-        }
-
-        .live-text {
-            color: white;
-            font-weight: 700;
-            font-size: 12px;
-            letter-spacing: 1px;
-            text-shadow: 0 0 10px #ef4444;
-        }
-
-        .timestamp-container {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            color: white;
-            font-weight: 600;
-        }
-
-        .timestamp-container i {
-            font-size: 16px;
-            opacity: 0.8;
-            animation: tick 2s steps(60) infinite;
-        }
-
-        @keyframes tick {
-            from { transform: rotate(0deg); }
-            to { transform: rotate(360deg); }
-        }
-
-        .timestamp-container .time {
-            font-size: 20px;
-            font-weight: 700;
-            font-family: 'Courier New', monospace;
-            letter-spacing: 2px;
-            background: linear-gradient(135deg, #fff, #e0e7ff);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
-            transition: opacity 0.15s ease-in-out;
-        }
-
-        .timestamp-container .timezone {
-            font-size: 12px;
-            background: rgba(255, 255, 255, 0.2);
-            padding: 4px 8px;
-            border-radius: 20px;
-            font-weight: 600;
-            letter-spacing: 0.5px;
-            backdrop-filter: blur(5px);
-        }
-
-        /* Floating particles effect */
-        .realtime-banner::after {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-image: 
-                radial-gradient(circle at 20% 30%, rgba(255, 255, 255, 0.2) 0px, transparent 2px),
-                radial-gradient(circle at 80% 70%, rgba(255, 255, 255, 0.2) 0px, transparent 2px),
-                radial-gradient(circle at 40% 60%, rgba(255, 255, 255, 0.15) 0px, transparent 3px),
-                radial-gradient(circle at 70% 20%, rgba(255, 255, 255, 0.15) 0px, transparent 3px);
-            background-size: 100px 100px;
-            opacity: 0.3;
-            pointer-events: none;
-        }
-
-        /* Main Content Layout */
-        .main-content {
-            display: grid;
-            grid-template-columns: 400px 1fr;
-            gap: 30px;
-        }
-
-        /* Enhanced Sidebar */
-        .task-sidebar {
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(10px);
-            border-radius: var(--radius);
-            padding: 30px;
-            box-shadow: var(--shadow-lg);
-            height: fit-content;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .task-sidebar::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            right: 0;
-            width: 150px;
-            height: 150px;
-            background: radial-gradient(circle, rgba(99,102,241,0.1) 0%, transparent 70%);
-            border-radius: 50%;
-        }
-
-        .sidebar-title {
-            font-size: 22px;
-            font-weight: 700;
-            color: var(--dark);
-            margin-bottom: 25px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .sidebar-title i {
-            color: var(--primary);
-            background: rgba(99, 102, 241, 0.1);
-            padding: 10px;
-            border-radius: 12px;
-        }
-
-        .ai-suggestion {
-            background: linear-gradient(135deg, rgba(99, 102, 241, 0.05), rgba(139, 92, 246, 0.05));
-            border-radius: var(--radius-sm);
-            padding: 15px;
-            margin-bottom: 25px;
-            border-left: 4px solid var(--primary);
-        }
-
-        .ai-suggestion p {
-            color: var(--gray);
-            font-size: 13px;
-            margin-bottom: 10px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .ai-suggestion p i {
-            color: var(--primary);
-        }
-
-        .suggestion-badges {
-            display: flex;
-            gap: 10px;
-            flex-wrap: wrap;
-        }
-
-        .suggestion-badge {
-            padding: 5px 12px;
-            background: white;
-            border-radius: 20px;
-            font-size: 12px;
-            color: var(--primary);
-            border: 1px solid rgba(99, 102, 241, 0.2);
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-
-        .suggestion-badge:hover {
-            background: var(--gradient);
-            color: white;
-            border-color: transparent;
-        }
-
-        .form-group {
-            margin-bottom: 20px;
-            position: relative;
-        }
-
-        .form-group label {
-            display: block;
-            margin-bottom: 8px;
-            font-weight: 600;
-            color: var(--dark);
-            font-size: 14px;
-        }
-
-        .form-group label i {
-            color: var(--primary);
-            margin-right: 8px;
-        }
-
-        .form-control {
-            width: 100%;
-            padding: 14px 18px;
-            border: 2px solid var(--gray-light);
-            border-radius: 12px;
-            font-size: 14px;
-            transition: all 0.3s;
-            background: white;
-        }
-
-        .form-control:focus {
-            outline: none;
-            border-color: var(--primary);
-            box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.1);
-        }
-
-        .priority-selector {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 10px;
-        }
-
-        .priority-option {
-            padding: 12px;
-            text-align: center;
-            border: 2px solid var(--gray-light);
-            border-radius: 10px;
-            cursor: pointer;
-            transition: all 0.3s;
-            font-size: 14px;
-            font-weight: 600;
-        }
-
-        .priority-option.low:hover,
-        .priority-option.low.active {
-            background: var(--gradient-success);
-            border-color: var(--success);
-            color: white;
-        }
-
-        .priority-option.medium:hover,
-        .priority-option.medium.active {
-            background: var(--gradient-warning);
-            border-color: var(--warning);
-            color: white;
-        }
-
-        .priority-option.high:hover,
-        .priority-option.high.active {
-            background: var(--gradient-danger);
-            border-color: var(--danger);
-            color: white;
-        }
-
-        .btn {
-            padding: 16px 28px;
             border: none;
-            border-radius: 12px;
+            border-radius: 40px;
+            background: linear-gradient(135deg, rgba(99,102,241,0.1), rgba(139,92,246,0.1));
+            color: var(--primary);
             font-weight: 600;
-            font-size: 15px;
+            font-size: 14px;
             cursor: pointer;
             transition: all 0.3s;
-            display: inline-flex;
+            display: flex;
             align-items: center;
-            justify-content: center;
             gap: 10px;
+            border: 1px solid rgba(99,102,241,0.2);
             position: relative;
             overflow: hidden;
         }
 
-        .btn::before {
+        .quantum-btn::before {
             content: '';
             position: absolute;
             top: 50%;
@@ -854,180 +427,640 @@
             width: 0;
             height: 0;
             border-radius: 50%;
-            background: rgba(255, 255, 255, 0.3);
+            background: rgba(255,255,255,0.5);
             transform: translate(-50%, -50%);
             transition: width 0.6s, height 0.6s;
         }
 
-        .btn:hover::before {
+        .quantum-btn:hover::before {
             width: 300px;
             height: 300px;
         }
 
-        .btn-primary {
-            background: var(--gradient);
+        .quantum-btn:hover {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
             color: white;
-            width: 100%;
+            transform: translateY(-3px) scale(1.05);
+            box-shadow: 0 15px 30px rgba(99,102,241,0.4);
         }
 
-        .btn-primary:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 15px 30px rgba(99, 102, 241, 0.4);
+        /* Holographic Stats Grid */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 25px;
+            margin-bottom: 30px;
         }
 
-        /* Tasks Area */
-        .tasks-area {
-            background: rgba(255, 255, 255, 0.95);
+        .hologram-card {
+            background: rgba(255,255,255,0.9);
             backdrop-filter: blur(10px);
-            border-radius: var(--radius);
+            border-radius: var(--radius-xl);
             padding: 30px;
+            border: var(--glass-border);
             box-shadow: var(--shadow-lg);
-            border: 1px solid rgba(255, 255, 255, 0.2);
+            display: flex;
+            align-items: center;
+            gap: 25px;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
 
-        .tasks-header {
+        .hologram-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.3) 0%, transparent 70%);
+            opacity: 0;
+            transition: opacity 0.4s;
+        }
+
+        .hologram-card:hover::before {
+            opacity: 0.3;
+        }
+
+        .hologram-card:hover {
+            transform: translateY(-10px) scale(1.02);
+            box-shadow: 0 30px 60px rgba(99,102,241,0.3);
+        }
+
+        .hologram-icon {
+            width: 80px;
+            height: 80px;
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 35px;
+            position: relative;
+            animation: iconFloat 3s infinite ease-in-out;
+        }
+
+        @keyframes iconFloat {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .hologram-icon.total { background: linear-gradient(135deg, var(--primary), var(--secondary)); }
+        .hologram-icon.completed { background: linear-gradient(135deg, var(--success), var(--success-dark)); }
+        .hologram-icon.pending { background: linear-gradient(135deg, var(--warning), var(--warning-dark)); }
+        .hologram-icon.overdue { background: linear-gradient(135deg, var(--danger), var(--danger-dark)); }
+
+        .hologram-content h3 {
+            font-size: 42px;
+            font-weight: 800;
+            color: var(--dark);
+            line-height: 1.2;
+            margin-bottom: 5px;
+            font-family: var(--font-display);
+        }
+
+        .quantum-insight {
+            font-size: 12px;
+            background: rgba(99,102,241,0.1);
+            padding: 5px 12px;
+            border-radius: 30px;
+            color: var(--primary);
+            font-weight: 600;
+            margin-top: 10px;
+            display: inline-block;
+            border: 1px solid rgba(99,102,241,0.2);
+        }
+
+        /* Neural Real-time Banner */
+        .neural-banner {
+            background: linear-gradient(135deg, rgba(99,102,241,0.95), rgba(139,92,246,0.95));
+            backdrop-filter: blur(20px);
+            border-radius: var(--radius-xl);
+            padding: 30px 40px;
+            margin-bottom: 30px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 25px;
             flex-wrap: wrap;
-            gap: 15px;
+            gap: 30px;
+            border: 1px solid rgba(255,255,255,0.2);
+            box-shadow: 0 20px 50px rgba(99,102,241,0.4);
+            position: relative;
+            overflow: hidden;
         }
 
-        .tasks-header h2 {
-            font-size: 24px;
-            color: var(--dark);
+        .neural-network-animation {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+        }
+
+        .neural-node {
+            position: absolute;
+            width: 6px;
+            height: 6px;
+            background: white;
+            border-radius: 50%;
+            opacity: 0.6;
+            animation: nodePulse 2s infinite;
+        }
+
+        @keyframes nodePulse {
+            0%, 100% { transform: scale(1); opacity: 0.6; }
+            50% { transform: scale(2); opacity: 1; }
+        }
+
+        .neural-connection {
+            position: absolute;
+            height: 2px;
+            background: linear-gradient(90deg, rgba(255,255,255,0.2), rgba(255,255,255,0.8), rgba(255,255,255,0.2));
+            transform-origin: left center;
+            animation: connectionPulse 3s infinite;
+        }
+
+        @keyframes connectionPulse {
+            0%, 100% { opacity: 0.3; }
+            50% { opacity: 1; }
+        }
+
+        .banner-left {
+            display: flex;
+            align-items: center;
+            gap: 25px;
+            z-index: 2;
+        }
+
+        .quantum-pulse {
+            width: 80px;
+            height: 80px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            border: 1px solid rgba(255,255,255,0.3);
+        }
+
+        .pulse-ring {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            border: 2px solid rgba(255,255,255,0.5);
+            border-radius: 20px;
+            animation: quantumPulse 2s ease-out infinite;
+        }
+
+        @keyframes quantumPulse {
+            0%, 100% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.3); opacity: 0; }
+        }
+
+        .quantum-pulse i {
+            font-size: 35px;
+            color: white;
+            filter: drop-shadow(0 0 20px rgba(255,255,255,0.5));
+            animation: quantumSpin 10s linear infinite;
+        }
+
+        @keyframes quantumSpin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .banner-content h2 {
+            font-size: 28px;
+            font-weight: 800;
+            color: white;
+            font-family: var(--font-display);
+            margin-bottom: 8px;
+        }
+
+        .banner-content p {
+            font-size: 16px;
+            color: rgba(255,255,255,0.9);
             display: flex;
             align-items: center;
             gap: 10px;
         }
 
-        .tasks-header h2 i {
-            color: var(--primary);
+        .banner-right {
+            display: flex;
+            align-items: center;
+            gap: 30px;
+            background: rgba(0,0,0,0.2);
+            padding: 15px 30px;
+            border-radius: 60px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.2);
         }
 
-        .filter-options {
+        .live-indicator-3d {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 8px 20px;
+            background: rgba(239,68,68,0.2);
+            border-radius: 40px;
+            border: 1px solid rgba(239,68,68,0.3);
+        }
+
+        .pulse-3d {
+            width: 12px;
+            height: 12px;
+            background: #ef4444;
+            border-radius: 50%;
+            box-shadow: 0 0 20px #ef4444;
+            animation: livePulse 1.5s ease-in-out infinite;
+        }
+
+        @keyframes livePulse {
+            0%, 100% { transform: scale(1); box-shadow: 0 0 20px #ef4444; }
+            50% { transform: scale(1.5); box-shadow: 0 0 40px #ef4444; }
+        }
+
+        .quantum-time {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .time-display {
+            font-size: 32px;
+            font-weight: 800;
+            font-family: 'Courier New', monospace;
+            color: white;
+            text-shadow: 0 0 20px rgba(255,255,255,0.5);
+        }
+
+        /* Main Layout */
+        .main-layout {
+            display: grid;
+            grid-template-columns: 400px 1fr;
+            gap: 30px;
+        }
+
+        /* Quantum Sidebar */
+        .quantum-sidebar {
+            background: rgba(255,255,255,0.9);
+            backdrop-filter: blur(20px);
+            border-radius: var(--radius-xl);
+            padding: 35px;
+            border: var(--glass-border);
+            box-shadow: var(--shadow-xl);
+            height: fit-content;
+        }
+
+        .sidebar-title {
+            font-size: 24px;
+            font-weight: 800;
+            color: var(--dark);
+            margin-bottom: 25px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            font-family: var(--font-display);
+        }
+
+        .sidebar-title i {
+            color: var(--primary);
+            background: linear-gradient(135deg, rgba(99,102,241,0.1), rgba(139,92,246,0.1));
+            padding: 12px;
+            border-radius: 15px;
+        }
+
+        .ai-suggestion-premium {
+            background: linear-gradient(135deg, rgba(99,102,241,0.1), rgba(139,92,246,0.1));
+            border-radius: var(--radius-lg);
+            padding: 20px;
+            margin-bottom: 30px;
+            border-left: 4px solid var(--primary);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .suggestion-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 15px;
+            color: var(--primary);
+            font-weight: 600;
+        }
+
+        .suggestion-badge-group {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-top: 15px;
+        }
+
+        .suggestion-badge-premium {
+            padding: 8px 18px;
+            background: white;
+            border-radius: 30px;
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--primary);
+            border: 1px solid rgba(99,102,241,0.2);
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .suggestion-badge-premium:hover {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            transform: translateY(-3px) scale(1.05);
+            box-shadow: 0 10px 25px rgba(99,102,241,0.3);
+        }
+
+        .form-group-premium {
+            margin-bottom: 25px;
+        }
+
+        .form-group-premium label {
+            display: block;
+            margin-bottom: 10px;
+            font-weight: 600;
+            color: var(--dark);
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .input-premium {
+            width: 100%;
+            padding: 16px 20px;
+            border: 2px solid var(--light-200);
+            border-radius: 15px;
+            font-size: 15px;
+            transition: all 0.3s;
+            background: white;
+            font-family: var(--font-primary);
+        }
+
+        .input-premium:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 5px rgba(99,102,241,0.1);
+        }
+
+        .priority-selector-premium {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+        }
+
+        .priority-option-premium {
+            padding: 15px;
+            text-align: center;
+            border: 2px solid var(--light-200);
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        .priority-option-premium.low.active,
+        .priority-option-premium.low:hover {
+            background: linear-gradient(135deg, var(--success), var(--success-dark));
+            border-color: var(--success);
+            color: white;
+        }
+
+        .priority-option-premium.medium.active,
+        .priority-option-premium.medium:hover {
+            background: linear-gradient(135deg, var(--warning), var(--warning-dark));
+            border-color: var(--warning);
+            color: white;
+        }
+
+        .priority-option-premium.high.active,
+        .priority-option-premium.high:hover {
+            background: linear-gradient(135deg, var(--danger), var(--danger-dark));
+            border-color: var(--danger);
+            color: white;
+        }
+
+        .btn-quantum {
+            width: 100%;
+            padding: 18px 30px;
+            border: none;
+            border-radius: 15px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            font-weight: 700;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-quantum::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, 
+                transparent, 
+                rgba(255,255,255,0.3), 
+                transparent);
+            transform: rotate(45deg);
+            animation: btnShine 6s infinite;
+        }
+
+        @keyframes btnShine {
+            from { transform: translateX(-100%) translateY(-100%) rotate(45deg); }
+            to { transform: translateX(100%) translateY(100%) rotate(45deg); }
+        }
+
+        .btn-quantum:hover {
+            transform: translateY(-5px) scale(1.02);
+            box-shadow: 0 20px 40px rgba(99,102,241,0.4);
+        }
+
+        /* Tasks Area */
+        .quantum-tasks-area {
+            background: rgba(255,255,255,0.9);
+            backdrop-filter: blur(20px);
+            border-radius: var(--radius-xl);
+            padding: 35px;
+            border: var(--glass-border);
+            box-shadow: var(--shadow-xl);
+        }
+
+        .tasks-header-premium {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .tasks-header-premium h2 {
+            font-size: 28px;
+            font-weight: 800;
+            color: var(--dark);
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            font-family: var(--font-display);
+        }
+
+        .tasks-header-premium h2 i {
+            color: var(--primary);
+            background: linear-gradient(135deg, rgba(99,102,241,0.1), rgba(139,92,246,0.1));
+            padding: 12px;
+            border-radius: 15px;
+        }
+
+        .filter-group-premium {
             display: flex;
             gap: 10px;
             flex-wrap: wrap;
         }
 
-        .filter-btn {
-            padding: 10px 18px;
-            border: 2px solid var(--gray-light);
-            border-radius: 30px;
+        .filter-btn-premium {
+            padding: 12px 22px;
+            border: 2px solid var(--light-200);
+            border-radius: 40px;
             background: none;
             cursor: pointer;
             font-weight: 600;
             transition: all 0.3s;
-            font-size: 13px;
+            font-size: 14px;
         }
 
-        .filter-btn:hover,
-        .filter-btn.active {
-            background: var(--gradient);
+        .filter-btn-premium:hover,
+        .filter-btn-premium.active {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
             border-color: transparent;
             color: white;
-            transform: translateY(-2px);
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(99,102,241,0.3);
         }
 
-        /* Tasks Board */
-        .tasks-board {
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-            min-height: 500px;
+        .tasks-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 25px;
+            max-height: 800px;
+            overflow-y: auto;
+            padding: 10px;
         }
 
-        .task-card {
+        .task-card-premium {
             background: white;
-            border-radius: 16px;
+            border-radius: 20px;
             padding: 25px;
-            border-left: 6px solid transparent;
             cursor: move;
-            transition: all 0.3s;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             position: relative;
-            animation: slideIn 0.3s ease;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
-            border: 1px solid rgba(0, 0, 0, 0.05);
+            overflow: hidden;
+            border: 1px solid rgba(0,0,0,0.05);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+            animation: cardAppear 0.5s ease-out;
         }
 
-        .task-card:hover {
-            transform: translateY(-3px) scale(1.02);
-            box-shadow: 0 20px 40px rgba(99, 102, 241, 0.15);
-        }
-
-        @keyframes slideIn {
+        @keyframes cardAppear {
             from {
                 opacity: 0;
-                transform: translateY(30px);
+                transform: translateY(50px) scale(0.9);
             }
             to {
                 opacity: 1;
-                transform: translateY(0);
+                transform: translateY(0) scale(1);
             }
         }
 
-        .task-card.dragging {
+        .task-card-premium::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 6px;
+            height: 100%;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+        }
+
+        .task-card-premium.priority-low::before { background: linear-gradient(135deg, var(--success), var(--success-dark)); }
+        .task-card-premium.priority-medium::before { background: linear-gradient(135deg, var(--warning), var(--warning-dark)); }
+        .task-card-premium.priority-high::before { background: linear-gradient(135deg, var(--danger), var(--danger-dark)); }
+
+        .task-card-premium:hover {
+            transform: translateY(-10px) scale(1.02);
+            box-shadow: 0 30px 50px rgba(99,102,241,0.2);
+        }
+
+        .task-card-premium.dragging {
             opacity: 0.5;
-            transform: scale(0.98) rotate(1deg);
+            transform: scale(0.98) rotate(2deg);
             box-shadow: 0 30px 60px rgba(0,0,0,0.2);
         }
 
-        .task-card.priority-low { border-left-color: var(--success); }
-        .task-card.priority-medium { border-left-color: var(--warning); }
-        .task-card.priority-high { border-left-color: var(--danger); }
-
-        .task-header {
+        .task-header-premium {
             display: flex;
             justify-content: space-between;
             align-items: flex-start;
             margin-bottom: 15px;
         }
 
-        .task-title {
+        .task-title-premium {
+            font-size: 18px;
             font-weight: 700;
             color: var(--dark);
-            font-size: 18px;
         }
 
-        .task-priority {
+        .priority-badge-premium {
             font-size: 12px;
-            padding: 6px 14px;
+            padding: 6px 15px;
             border-radius: 30px;
             font-weight: 600;
         }
 
-        .priority-low .task-priority {
-            background: rgba(16, 185, 129, 0.15);
+        .priority-badge-premium.low {
+            background: rgba(16,185,129,0.15);
             color: var(--success);
         }
 
-        .priority-medium .task-priority {
-            background: rgba(245, 158, 11, 0.15);
+        .priority-badge-premium.medium {
+            background: rgba(245,158,11,0.15);
             color: var(--warning);
         }
 
-        .priority-high .task-priority {
-            background: rgba(239, 68, 68, 0.15);
+        .priority-badge-premium.high {
+            background: rgba(239,68,68,0.15);
             color: var(--danger);
         }
 
-        .task-description {
+        .task-description-premium {
             color: var(--gray);
             font-size: 14px;
             margin-bottom: 20px;
             line-height: 1.6;
         }
 
-        .task-meta {
+        .task-meta-premium {
             display: flex;
-            gap: 25px;
+            gap: 20px;
             margin-bottom: 20px;
             flex-wrap: wrap;
         }
 
-        .task-meta-item {
+        .meta-item-premium {
             display: flex;
             align-items: center;
             gap: 8px;
@@ -1035,340 +1068,202 @@
             color: var(--gray);
         }
 
-        .task-meta-item i {
+        .meta-item-premium i {
             color: var(--primary);
             width: 16px;
         }
 
-        .task-deadline.overdue {
-            color: var(--danger);
-            font-weight: 600;
-            animation: shake 0.5s ease-in-out infinite;
-        }
-
-        @keyframes shake {
-            0%, 100% { transform: translateX(0); }
-            25% { transform: translateX(-2px); }
-            75% { transform: translateX(2px); }
-        }
-
-        .task-footer {
+        .task-footer-premium {
             display: flex;
             justify-content: space-between;
             align-items: center;
         }
 
-        .task-status {
+        .ai-score {
             display: flex;
-            gap: 10px;
-        }
-
-        .status-badge {
-            font-size: 12px;
-            padding: 6px 14px;
-            border-radius: 30px;
-            background: rgba(99, 102, 241, 0.1);
-            color: var(--primary);
+            align-items: center;
+            gap: 8px;
+            font-size: 13px;
             font-weight: 600;
         }
 
-        .task-actions {
-            display: flex;
-            gap: 10px;
+        .ai-score-bar {
+            width: 60px;
+            height: 6px;
+            background: var(--light-200);
+            border-radius: 3px;
+            overflow: hidden;
         }
 
-        .task-action {
-            width: 38px;
-            height: 38px;
+        .ai-score-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--success), var(--primary));
+            border-radius: 3px;
+            transition: width 1s ease;
+        }
+
+        .task-actions-premium {
+            display: flex;
+            gap: 8px;
+        }
+
+        .action-btn-premium {
+            width: 40px;
+            height: 40px;
             border-radius: 10px;
             border: none;
-            background: var(--bg);
+            background: var(--light);
             cursor: pointer;
             transition: all 0.3s;
             color: var(--gray);
             font-size: 16px;
-            position: relative;
-            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
-        .task-action::before {
-            content: '';
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            width: 0;
-            height: 0;
-            border-radius: 50%;
-            background: rgba(255, 255, 255, 0.5);
-            transform: translate(-50%, -50%);
-            transition: width 0.3s, height 0.3s;
-        }
-
-        .task-action:hover::before {
-            width: 60px;
-            height: 60px;
-        }
-
-        .task-action:hover {
-            transform: translateY(-2px);
-        }
-
-        .task-action.complete:hover {
-            background: var(--success);
+        .action-btn-premium.ai:hover {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
             color: white;
+            transform: translateY(-3px);
         }
 
-        .task-action.delete:hover {
-            background: var(--danger);
+        .action-btn-premium.complete:hover {
+            background: linear-gradient(135deg, var(--success), var(--success-dark));
             color: white;
+            transform: translateY(-3px);
         }
 
-        .task-action.ai:hover {
-            background: var(--primary);
+        .action-btn-premium.delete:hover {
+            background: linear-gradient(135deg, var(--danger), var(--danger-dark));
             color: white;
+            transform: translateY(-3px);
         }
 
-        /* AI Modals */
-        .modal-overlay {
+        /* Quantum Modal */
+        .quantum-modal {
             display: none;
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0, 0, 0, 0.7);
-            backdrop-filter: blur(10px);
+            background: rgba(0,0,0,0.8);
+            backdrop-filter: blur(20px);
             z-index: 2000;
             align-items: center;
             justify-content: center;
-            animation: fadeIn 0.3s ease;
         }
 
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
-
-        .modal-overlay.active {
+        .quantum-modal.active {
             display: flex;
         }
 
-        .ai-modal {
+        .modal-content-quantum {
             background: white;
-            border-radius: var(--radius);
+            border-radius: var(--radius-xl);
             width: 90%;
-            max-width: 600px;
-            max-height: 80vh;
+            max-width: 700px;
+            max-height: 85vh;
             overflow-y: auto;
-            box-shadow: var(--shadow-lg);
-            transform: scale(0.9);
-            animation: modalIn 0.3s ease forwards;
-            border: 1px solid rgba(99, 102, 241, 0.2);
+            box-shadow: var(--shadow-xl);
+            animation: modalFloat 0.5s ease-out;
         }
 
-        @keyframes modalIn {
-            to { transform: scale(1); }
+        @keyframes modalFloat {
+            from {
+                opacity: 0;
+                transform: translateY(50px) scale(0.9);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
         }
 
-        .modal-header {
-            background: var(--gradient);
-            padding: 25px 30px;
-            border-radius: var(--radius) var(--radius) 0 0;
+        .modal-header-quantum {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            padding: 30px;
+            border-radius: var(--radius-xl) var(--radius-xl) 0 0;
             display: flex;
             justify-content: space-between;
             align-items: center;
             color: white;
-            position: relative;
-            overflow: hidden;
         }
 
-        .modal-header::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: linear-gradient(45deg, transparent, rgba(255,255,255,0.2), transparent);
-            transform: rotate(45deg);
-            animation: shine 3s infinite;
-        }
-
-        .modal-header h3 {
+        .modal-header-quantum h3 {
             font-size: 24px;
             display: flex;
             align-items: center;
             gap: 15px;
+            font-family: var(--font-display);
         }
 
-        .modal-header h3 i {
-            font-size: 28px;
-        }
-
-        .modal-close {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            background: rgba(255, 255, 255, 0.2);
+        .modal-close-quantum {
+            width: 45px;
+            height: 45px;
+            border-radius: 12px;
+            background: rgba(255,255,255,0.2);
             border: none;
             color: white;
             font-size: 20px;
             cursor: pointer;
             transition: all 0.3s;
-            display: flex;
-            align-items: center;
-            justify-content: center;
         }
 
-        .modal-close:hover {
-            background: rgba(255, 255, 255, 0.3);
+        .modal-close-quantum:hover {
+            background: rgba(255,255,255,0.3);
             transform: rotate(90deg);
         }
 
-        .modal-body {
-            padding: 30px;
+        .modal-body-quantum {
+            padding: 35px;
         }
 
-        .ai-analysis {
-            background: linear-gradient(135deg, rgba(99, 102, 241, 0.05), rgba(139, 92, 246, 0.05));
-            border-radius: 16px;
-            padding: 20px;
+        .ai-matrix {
+            background: linear-gradient(135deg, rgba(99,102,241,0.05), rgba(139,92,246,0.05));
+            border-radius: 20px;
+            padding: 25px;
             margin-bottom: 25px;
-            border: 1px solid rgba(99, 102, 241, 0.2);
+            border: 1px solid rgba(99,102,241,0.2);
         }
 
-        .analysis-item {
+        .matrix-item {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 12px 0;
+            padding: 15px 0;
             border-bottom: 1px solid rgba(0,0,0,0.05);
         }
 
-        .analysis-item:last-child {
+        .matrix-item:last-child {
             border-bottom: none;
         }
 
-        .analysis-label {
-            color: var(--gray);
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .analysis-value {
-            font-weight: 700;
-            color: var(--dark);
-        }
-
-        .analysis-value.high {
-            color: var(--danger);
-        }
-
-        .analysis-value.medium {
-            color: var(--warning);
-        }
-
-        .analysis-value.low {
-            color: var(--success);
-        }
-
-        .progress-bar {
+        .progress-quantum {
             width: 100%;
-            height: 8px;
-            background: var(--gray-light);
-            border-radius: 4px;
+            height: 10px;
+            background: var(--light-200);
+            border-radius: 5px;
             margin: 15px 0;
             overflow: hidden;
         }
 
-        .progress-fill {
+        .progress-fill-quantum {
             height: 100%;
-            background: var(--gradient);
-            border-radius: 4px;
-            transition: width 1s ease;
-        }
-
-        .ai-suggestions-list {
-            list-style: none;
-            margin-top: 20px;
-        }
-
-        .ai-suggestions-list li {
-            padding: 12px;
-            background: rgba(99, 102, 241, 0.05);
-            border-radius: 10px;
-            margin-bottom: 10px;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            border: 1px solid rgba(99, 102, 241, 0.1);
-            transition: all 0.3s;
-        }
-
-        .ai-suggestions-list li:hover {
-            transform: translateX(5px);
-            background: rgba(99, 102, 241, 0.1);
-        }
-
-        .ai-suggestions-list li i {
-            color: var(--primary);
-            font-size: 18px;
-        }
-
-        /* Productivity Chart */
-        .chart-container {
-            background: white;
-            border-radius: 16px;
-            padding: 20px;
-            margin-top: 30px;
-            box-shadow: var(--shadow);
-        }
-
-        /* Empty State */
-        .empty-state {
-            text-align: center;
-            padding: 80px 20px;
-            color: var(--gray);
-        }
-
-        .empty-state i {
-            font-size: 80px;
-            margin-bottom: 20px;
-            color: var(--primary);
-            opacity: 0.5;
-        }
-
-        .empty-state h3 {
-            color: var(--dark);
-            margin-bottom: 10px;
-            font-size: 24px;
-        }
-
-        .empty-state p {
-            color: var(--gray);
-        }
-
-        /* Time update animation */
-        .time-update {
-            animation: timePulse 0.3s ease-in-out;
-        }
-
-        @keyframes timePulse {
-            0%, 100% {
-                transform: scale(1);
-                filter: brightness(1);
-            }
-            50% {
-                transform: scale(1.05);
-                filter: brightness(1.3);
-            }
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            border-radius: 5px;
+            transition: width 1s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         /* Responsive */
-        @media (max-width: 1024px) {
-            .main-content {
+        @media (max-width: 1200px) {
+            .main-layout {
                 grid-template-columns: 1fr;
+            }
+            
+            .tasks-grid {
+                grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
             }
         }
 
@@ -1382,554 +1277,573 @@
                 grid-template-columns: 1fr;
             }
             
-            .tasks-header {
-                flex-direction: column;
-            }
-            
-            .filter-options {
-                width: 100%;
-                justify-content: center;
-            }
-            
-            .ai-tools-bar {
-                flex-direction: column;
-                text-align: center;
-            }
-            
-            .ai-tools-grid {
-                justify-content: center;
-            }
-
-            .realtime-banner {
-                flex-direction: column;
-                text-align: center;
-                padding: 20px;
-            }
-            
-            .banner-left {
-                flex-direction: column;
-                text-align: center;
+            .tasks-grid {
+                grid-template-columns: 1fr;
             }
             
             .banner-right {
-                width: 100%;
-                justify-content: center;
-            }
-        }
-
-        @media (max-width: 480px) {
-            .banner-right {
                 flex-direction: column;
-                gap: 15px;
+                width: 100%;
             }
             
-            .timestamp-container {
+            .quantum-time {
                 flex-wrap: wrap;
                 justify-content: center;
-            }
-
-            .timestamp-container .time {
-                font-size: 18px;
             }
         }
     </style>
 </head>
 <body>
-    <!-- AI Background Animation -->
-    <div class="ai-background" id="aiBackground"></div>
+    <!-- Quantum Background -->
+    <div class="ai-background">
+        <div class="floating-shapes">
+            <div class="shape"></div>
+            <div class="shape"></div>
+            <div class="shape"></div>
+        </div>
+        <div class="neural-network"></div>
+    </div>
 
     <div class="app-container">
-        <!-- Header with AI Tools -->
+        <!-- Premium Header -->
         <div class="app-header">
             <div class="logo-area">
-                <div class="logo-icon">
-                    <i class="fas fa-robot"></i>
+                <div class="logo-3d">
+                    <div class="logo-face"><i class="fas fa-robot"></i></div>
+                    <div class="logo-face"><i class="fas fa-microchip"></i></div>
+                    <div class="logo-face"><i class="fas fa-brain"></i></div>
+                    <div class="logo-face"><i class="fas fa-cloud"></i></div>
+                    <div class="logo-face"><i class="fas fa-network-wired"></i></div>
+                    <div class="logo-face"><i class="fas fa-cpu"></i></div>
                 </div>
                 <div class="logo-text">
-                    <h1>TaskFlow AI</h1>
-                    <p>
-                        <i class="fas fa-microchip"></i>
-                        Powered by Advanced AI
-                        <span class="ai-badge">v2.0</span>
-                    </p>
+                    <h1>TaskFlow AI Pro</h1>
+                    <div class="ai-badge-group">
+                        <span class="premium-badge"><i class="fas fa-crown"></i> ENTERPRISE</span>
+                        <span class="quantum-badge"><i class="fas fa-infinity"></i> QUANTUM AI</span>
+                    </div>
                 </div>
             </div>
             
             <div class="user-profile">
-                <div class="user-avatar">
-                    <i class="fas fa-user"></i>
+                <div class="hologram-avatar">
+                    <div class="avatar-ring"></div>
+                    <div class="user-avatar">RS</div>
+                    <div class="user-status"></div>
                 </div>
                 <div class="user-info">
-                    <div class="name">Raheel Shakeel</div>
-                    <div class="role">AI-Powered Workspace</div>
+                    <div style="font-weight: 700; font-size: 18px;">Raheel Shakeel</div>
+                    <div style="color: var(--gray); font-size: 13px;">Quantum Administrator</div>
                 </div>
                 <i class="fas fa-chevron-down" style="color: var(--gray);"></i>
             </div>
         </div>
 
-        <!-- AI Tools Bar -->
-        <div class="ai-tools-bar">
-            <div class="ai-tools-title">
-                <i class="fas fa-brain"></i>
-                <span>AI Intelligence Hub</span>
+        <!-- Quantum AI Tools Bar -->
+        <div class="quantum-ai-bar">
+            <div class="quantum-title">
+                <div class="quantum-icon">
+                    <i class="fas fa-microchip"></i>
+                </div>
+                <div>
+                    <div style="font-weight: 700; font-size: 20px; color: var(--dark);">Quantum Intelligence Core</div>
+                    <div style="color: var(--gray); font-size: 13px;">v4.0 • 100+ Neural Networks Active</div>
+                </div>
             </div>
-            <div class="ai-tools-grid">
-                <button class="ai-tool-btn" onclick="openModal('productivityModal')">
-                    <i class="fas fa-chart-line"></i> Productivity Analysis
+            <div class="quantum-tools">
+                <button class="quantum-btn" onclick="openQuantumModal('productivityModal')">
+                    <i class="fas fa-chart-network"></i> Deep Analytics
                 </button>
-                <button class="ai-tool-btn" onclick="openModal('smartScheduleModal')">
-                    <i class="fas fa-clock"></i> Smart Schedule
+                <button class="quantum-btn" onclick="openQuantumModal('smartScheduleModal')">
+                    <i class="fas fa-clock"></i> Temporal Optimizer
                 </button>
-                <button class="ai-tool-btn" onclick="openModal('taskPrioritizerModal')">
-                    <i class="fas fa-tasks"></i> Task Prioritizer
+                <button class="quantum-btn" onclick="openQuantumModal('prioritizerModal')">
+                    <i class="fas fa-sort-amount-down"></i> Quantum Prioritizer
                 </button>
-                <button class="ai-tool-btn" onclick="openModal('insightsModal')">
-                    <i class="fas fa-lightbulb"></i> AI Insights
+                <button class="quantum-btn" onclick="openQuantumModal('insightsModal')">
+                    <i class="fas fa-lightbulb"></i> Neural Insights
+                </button>
+                <button class="quantum-btn" onclick="openQuantumModal('predictorModal')">
+                    <i class="fas fa-chart-line"></i> Task Predictor
                 </button>
             </div>
         </div>
 
-        <!-- Stats Grid with AI Insights -->
+        <!-- Holographic Stats -->
         <div class="stats-grid">
-            <div class="stat-card">
-                <div class="stat-icon total">
+            <div class="hologram-card">
+                <div class="hologram-icon total">
                     <i class="fas fa-tasks"></i>
                 </div>
-                <div class="stat-info">
+                <div class="hologram-content">
                     <h3 id="totalTasks">0</h3>
-                    <p>
-                        Total Tasks
-                        <span class="ai-insight">
-                            <i class="fas fa-robot"></i> +12% vs last week
-                        </span>
-                    </p>
+                    <p style="color: var(--gray);">Total Quantum Tasks</p>
+                    <span class="quantum-insight">
+                        <i class="fas fa-chart-line"></i> +24% vs last week
+                    </span>
                 </div>
             </div>
             
-            <div class="stat-card">
-                <div class="stat-icon completed">
+            <div class="hologram-card">
+                <div class="hologram-icon completed">
                     <i class="fas fa-check-circle"></i>
                 </div>
-                <div class="stat-info">
+                <div class="hologram-content">
                     <h3 id="completedTasks">0</h3>
-                    <p>
-                        Completed
-                        <span class="ai-insight">
-                            <i class="fas fa-trophy"></i> 85% success rate
-                        </span>
-                    </p>
+                    <p style="color: var(--gray);">Completed</p>
+                    <span class="quantum-insight">
+                        <i class="fas fa-trophy"></i> 92% success rate
+                    </span>
                 </div>
             </div>
             
-            <div class="stat-card">
-                <div class="stat-icon pending">
+            <div class="hologram-card">
+                <div class="hologram-icon pending">
                     <i class="fas fa-clock"></i>
                 </div>
-                <div class="stat-info">
+                <div class="hologram-content">
                     <h3 id="pendingTasks">0</h3>
-                    <p>
-                        In Progress
-                        <span class="ai-insight">
-                            <i class="fas fa-hourglass-half"></i> 3 due today
-                        </span>
-                    </p>
+                    <p style="color: var(--gray);">In Progress</p>
+                    <span class="quantum-insight">
+                        <i class="fas fa-hourglass-half"></i> 15 due today
+                    </span>
                 </div>
             </div>
             
-            <div class="stat-card">
-                <div class="stat-icon overdue">
+            <div class="hologram-card">
+                <div class="hologram-icon overdue">
                     <i class="fas fa-exclamation-triangle"></i>
                 </div>
-                <div class="stat-info">
+                <div class="hologram-content">
                     <h3 id="overdueTasks">0</h3>
-                    <p>
-                        Overdue
-                        <span class="ai-insight">
-                            <i class="fas fa-exclamation"></i> Needs attention
-                        </span>
-                    </p>
+                    <p style="color: var(--gray);">Overdue</p>
+                    <span class="quantum-insight">
+                        <i class="fas fa-exclamation"></i> Immediate attention
+                    </span>
                 </div>
             </div>
         </div>
 
-        <!-- Real-time Updates Banner - Enhanced Version -->
-        <div class="realtime-banner">
+        <!-- Neural Real-time Banner -->
+        <div class="neural-banner">
+            <div class="neural-network-animation" id="neuralNetwork"></div>
             <div class="banner-left">
-                <div class="ai-pulse">
+                <div class="quantum-pulse">
+                    <div class="pulse-ring"></div>
                     <i class="fas fa-microchip"></i>
                 </div>
                 <div class="banner-content">
-                    <span class="banner-title">
-                        <i class="fas fa-robot"></i> 
-                        AI-Powered Neural Sync
-                    </span>
-                    <span class="banner-subtitle" id="aiStatusMessage">
-                        Neural network actively learning
-                    </span>
+                    <h2><i class="fas fa-brain"></i> Quantum Neural Network</h2>
+                    <p id="aiStatusMessage">
+                        <i class="fas fa-circle" style="font-size: 8px; color: var(--success);"></i>
+                        128 Neural Cores • Active Learning • Predictive Analytics
+                    </p>
                 </div>
             </div>
-            
             <div class="banner-right">
-                <div class="live-indicator">
-                    <span class="pulse-dot"></span>
-                    <span class="live-text">LIVE</span>
+                <div class="live-indicator-3d">
+                    <span class="pulse-3d"></span>
+                    <span style="color: white; font-weight: 700;">QUANTUM LIVE</span>
                 </div>
-                <div class="timestamp-container" id="liveTimestamp">
-                    <i class="fas fa-clock"></i>
-                    <span class="time">9:46:01 AM</span>
-                    <span class="timezone">PKT</span>
+                <div class="quantum-time">
+                    <i class="fas fa-clock" style="color: white; font-size: 24px;"></i>
+                    <span class="time-display" id="liveTime">00:00:00</span>
+                    <span style="color: white; background: rgba(255,255,255,0.2); padding: 5px 12px; border-radius: 30px;">QST</span>
                 </div>
             </div>
         </div>
 
-        <!-- Main Content -->
-        <div class="main-content">
-            <!-- Task Creation Sidebar with AI Suggestions -->
-            <div class="task-sidebar">
+        <!-- Main Layout -->
+        <div class="main-layout">
+            <!-- Quantum Sidebar -->
+            <div class="quantum-sidebar">
                 <div class="sidebar-title">
-                    <i class="fas fa-magic"></i>
-                    AI Task Assistant
+                    <i class="fas fa-robot"></i>
+                    Quantum Task Creator
                 </div>
                 
-                <div class="ai-suggestion">
-                    <p>
+                <div class="ai-suggestion-premium">
+                    <div class="suggestion-header">
                         <i class="fas fa-lightbulb"></i>
-                        <strong>AI Suggestion:</strong> Based on your productivity pattern, now is the optimal time to create high-priority tasks.
+                        <span>Neural Recommendation</span>
+                    </div>
+                    <p style="color: var(--gray); font-size: 14px; margin-bottom: 15px;">
+                        Based on your productivity matrix, now is optimal for high-priority tasks. Your quantum coherence is at 94%.
                     </p>
-                    <div class="suggestion-badges">
-                        <span class="suggestion-badge" onclick="fillTaskSuggestion('Complete project documentation')">
-                            <i class="fas fa-file"></i> Documentation
+                    <div class="suggestion-badge-group">
+                        <span class="suggestion-badge-premium" onclick="fillQuantumTask('Implement quantum algorithm')">
+                            <i class="fas fa-microchip"></i> Quantum Algorithm
                         </span>
-                        <span class="suggestion-badge" onclick="fillTaskSuggestion('Review pull requests')">
-                            <i class="fas fa-code-branch"></i> Code Review
+                        <span class="suggestion-badge-premium" onclick="fillQuantumTask('Optimize neural network')">
+                            <i class="fas fa-brain"></i> Neural Network
                         </span>
-                        <span class="suggestion-badge" onclick="fillTaskSuggestion('Team meeting prep')">
-                            <i class="fas fa-users"></i> Meeting
+                        <span class="suggestion-badge-premium" onclick="fillQuantumTask('Deploy AI model')">
+                            <i class="fas fa-cloud"></i> AI Deployment
                         </span>
                     </div>
                 </div>
                 
-                <form id="taskForm">
-                    <div class="form-group">
-                        <label><i class="fas fa-heading"></i> Task Title</label>
-                        <input type="text" class="form-control" id="taskTitle" placeholder="e.g., Implement AI feature..." required>
+                <form id="quantumTaskForm">
+                    <div class="form-group-premium">
+                        <label><i class="fas fa-microchip"></i> Quantum Task Title</label>
+                        <input type="text" class="input-premium" id="taskTitle" placeholder="e.g., Implement quantum computing..." required>
                     </div>
                     
-                    <div class="form-group">
-                        <label><i class="fas fa-align-left"></i> Description</label>
-                        <textarea class="form-control" id="taskDesc" rows="3" placeholder="Add details..."></textarea>
+                    <div class="form-group-premium">
+                        <label><i class="fas fa-code"></i> Neural Description</label>
+                        <textarea class="input-premium" id="taskDesc" rows="3" placeholder="Add quantum details..."></textarea>
                     </div>
                     
-                    <div class="form-group">
-                        <label><i class="fas fa-flag"></i> Priority (AI Recommended)</label>
-                        <div class="priority-selector" id="prioritySelector">
-                            <div class="priority-option low" data-priority="low">Low</div>
-                            <div class="priority-option medium" data-priority="medium">Medium</div>
-                            <div class="priority-option high" data-priority="high">High</div>
+                    <div class="form-group-premium">
+                        <label><i class="fas fa-flag"></i> Quantum Priority</label>
+                        <div class="priority-selector-premium" id="prioritySelector">
+                            <div class="priority-option-premium low" data-priority="low">Level 1</div>
+                            <div class="priority-option-premium medium" data-priority="medium">Level 2</div>
+                            <div class="priority-option-premium high" data-priority="high">Level 3</div>
                         </div>
                         <input type="hidden" id="taskPriority" value="medium">
                     </div>
                     
-                    <div class="form-group">
-                        <label><i class="fas fa-calendar"></i> Smart Deadline</label>
-                        <input type="text" class="form-control" id="taskDeadline" placeholder="Select date & time...">
+                    <div class="form-group-premium">
+                        <label><i class="fas fa-calendar"></i> Temporal Deadline</label>
+                        <input type="text" class="input-premium" id="taskDeadline" placeholder="Select quantum timeline...">
                     </div>
                     
-                    <div class="form-group">
-                        <label><i class="fas fa-tag"></i> Category</label>
-                        <select class="form-control" id="taskCategory">
-                            <option value="work">Work</option>
-                            <option value="personal">Personal</option>
-                            <option value="shopping">Shopping</option>
-                            <option value="health">Health</option>
-                            <option value="ai-project">AI Project</option>
+                    <div class="form-group-premium">
+                        <label><i class="fas fa-tag"></i> Quantum Category</label>
+                        <select class="input-premium" id="taskCategory">
+                            <option value="quantum-computing">Quantum Computing</option>
+                            <option value="neural-networks">Neural Networks</option>
+                            <option value="machine-learning">Machine Learning</option>
+                            <option value="deep-learning">Deep Learning</option>
+                            <option value="ai-research">AI Research</option>
+                            <option value="data-science">Data Science</option>
                         </select>
                     </div>
                     
-                    <button type="submit" class="btn btn-primary">
-                        <i class="fas fa-robot"></i> Create with AI
+                    <button type="submit" class="btn-quantum">
+                        <i class="fas fa-microchip"></i>
+                        <span>Create Quantum Task</span>
+                        <i class="fas fa-infinity"></i>
                     </button>
                 </form>
             </div>
             
-            <!-- Tasks Area -->
-            <div class="tasks-area">
-                <div class="tasks-header">
-                    <h2><i class="fas fa-list"></i> AI-Optimized Tasks</h2>
+            <!-- Quantum Tasks Area -->
+            <div class="quantum-tasks-area">
+                <div class="tasks-header-premium">
+                    <h2>
+                        <i class="fas fa-list"></i>
+                        Quantum Task Matrix (150+ Tasks)
+                    </h2>
                     
-                    <div class="filter-options">
-                        <button class="filter-btn active" data-filter="all">All</button>
-                        <button class="filter-btn" data-filter="low">Low</button>
-                        <button class="filter-btn" data-filter="medium">Medium</button>
-                        <button class="filter-btn" data-filter="high">High</button>
-                        <button class="filter-btn" data-filter="completed">Completed</button>
+                    <div class="filter-group-premium">
+                        <button class="filter-btn-premium active" data-filter="all">All</button>
+                        <button class="filter-btn-premium" data-filter="low">Level 1</button>
+                        <button class="filter-btn-premium" data-filter="medium">Level 2</button>
+                        <button class="filter-btn-premium" data-filter="high">Level 3</button>
+                        <button class="filter-btn-premium" data-filter="completed">Completed</button>
                     </div>
                 </div>
                 
-                <div class="tasks-board" id="tasksBoard">
+                <div class="tasks-grid" id="tasksGrid">
                     <!-- Tasks will be dynamically added here -->
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- AI Productivity Analysis Modal -->
-    <div class="modal-overlay" id="productivityModal">
-        <div class="ai-modal">
-            <div class="modal-header">
-                <h3>
-                    <i class="fas fa-chart-line"></i>
-                    AI Productivity Analysis
-                </h3>
-                <button class="modal-close" onclick="closeModal('productivityModal')">
+    <!-- Quantum Modals -->
+    <div class="quantum-modal" id="productivityModal">
+        <div class="modal-content-quantum">
+            <div class="modal-header-quantum">
+                <h3><i class="fas fa-chart-network"></i> Quantum Analytics Engine</h3>
+                <button class="modal-close-quantum" onclick="closeQuantumModal('productivityModal')">
                     <i class="fas fa-times"></i>
                 </button>
             </div>
-            <div class="modal-body">
-                <div class="ai-analysis">
-                    <div class="analysis-item">
-                        <span class="analysis-label">
-                            <i class="fas fa-clock"></i> Peak Productivity Time
-                        </span>
-                        <span class="analysis-value">9:00 AM - 11:00 AM</span>
+            <div class="modal-body-quantum">
+                <div class="ai-matrix">
+                    <div class="matrix-item">
+                        <span><i class="fas fa-clock"></i> Peak Coherence Time</span>
+                        <span style="font-weight: 700; color: var(--primary);">09:00 - 11:00 QST</span>
                     </div>
-                    <div class="analysis-item">
-                        <span class="analysis-label">
-                            <i class="fas fa-tachometer-alt"></i> Completion Rate
-                        </span>
-                        <span class="analysis-value high">87%</span>
+                    <div class="matrix-item">
+                        <span><i class="fas fa-tachometer-alt"></i> Quantum Efficiency</span>
+                        <span style="font-weight: 700; color: var(--success);">94.7%</span>
                     </div>
-                    <div class="analysis-item">
-                        <span class="analysis-label">
-                            <i class="fas fa-hourglass-half"></i> Avg Task Duration
-                        </span>
-                        <span class="analysis-value">2.5 hours</span>
+                    <div class="matrix-item">
+                        <span><i class="fas fa-microchip"></i> Neural Core Usage</span>
+                        <span style="font-weight: 700; color: var(--primary);">128/128 Cores</span>
                     </div>
                 </div>
                 
-                <div class="chart-container">
-                    <canvas id="productivityChart"></canvas>
-                </div>
+                <div id="productivityChart" style="height: 300px;"></div>
                 
-                <ul class="ai-suggestions-list">
-                    <li>
-                        <i class="fas fa-robot"></i>
-                        <span>Schedule complex tasks during peak hours for 45% better efficiency</span>
-                    </li>
-                    <li>
-                        <i class="fas fa-robot"></i>
-                        <span>You complete 67% more tasks on Tuesdays and Thursdays</span>
-                    </li>
-                    <li>
-                        <i class="fas fa-robot"></i>
-                        <span>Take 5-minute breaks every 90 minutes to maintain focus</span>
-                    </li>
-                </ul>
+                <div class="ai-suggestions-list" style="margin-top: 25px;">
+                    <h4 style="margin-bottom: 15px;">Neural Recommendations</h4>
+                    <ul style="list-style: none;">
+                        <li style="padding: 15px; background: rgba(99,102,241,0.05); border-radius: 12px; margin-bottom: 10px;">
+                            <i class="fas fa-microchip" style="color: var(--primary); margin-right: 10px;"></i>
+                            Quantum coherence peaks at 09:00 - schedule complex tasks then
+                        </li>
+                        <li style="padding: 15px; background: rgba(99,102,241,0.05); border-radius: 12px; margin-bottom: 10px;">
+                            <i class="fas fa-microchip" style="color: var(--primary); margin-right: 10px;"></i>
+                            94% task completion rate on Tuesdays - optimal for deadlines
+                        </li>
+                        <li style="padding: 15px; background: rgba(99,102,241,0.05); border-radius: 12px; margin-bottom: 10px;">
+                            <i class="fas fa-microchip" style="color: var(--primary); margin-right: 10px;"></i>
+                            Neural networks suggest 25-minute quantum sprints
+                        </li>
+                    </ul>
+                </div>
             </div>
         </div>
     </div>
 
-    <!-- AI Smart Schedule Modal -->
-    <div class="modal-overlay" id="smartScheduleModal">
-        <div class="ai-modal">
-            <div class="modal-header">
-                <h3>
-                    <i class="fas fa-clock"></i>
-                    AI Smart Schedule
-                </h3>
-                <button class="modal-close" onclick="closeModal('smartScheduleModal')">
+    <div class="quantum-modal" id="smartScheduleModal">
+        <div class="modal-content-quantum">
+            <div class="modal-header-quantum">
+                <h3><i class="fas fa-clock"></i> Temporal Optimizer</h3>
+                <button class="modal-close-quantum" onclick="closeQuantumModal('smartScheduleModal')">
                     <i class="fas fa-times"></i>
                 </button>
             </div>
-            <div class="modal-body">
-                <div class="ai-analysis">
-                    <h4 style="margin-bottom: 15px;">Today's Optimized Schedule</h4>
+            <div class="modal-body-quantum">
+                <div class="ai-matrix">
+                    <h4 style="margin-bottom: 20px;">Today's Quantum Timeline</h4>
                     
-                    <div class="analysis-item">
-                        <span class="analysis-label">
-                            <i class="fas fa-tasks"></i> Priority 1 (High)
-                        </span>
-                        <span class="analysis-value">9:00 AM - 11:00 AM</span>
+                    <div class="matrix-item">
+                        <span><i class="fas fa-tasks"></i> Level 3 Tasks (Priority)</span>
+                        <span>09:00 - 11:30</span>
                     </div>
-                    <div class="progress-bar">
-                        <div class="progress-fill" style="width: 0%" id="scheduleProgress1"></div>
+                    <div class="progress-quantum">
+                        <div class="progress-fill-quantum" style="width: 0%" id="scheduleProgress1"></div>
                     </div>
                     
-                    <div class="analysis-item">
-                        <span class="analysis-label">
-                            <i class="fas fa-tasks"></i> Priority 2 (Medium)
-                        </span>
-                        <span class="analysis-value">11:30 AM - 1:00 PM</span>
+                    <div class="matrix-item">
+                        <span><i class="fas fa-tasks"></i> Level 2 Tasks</span>
+                        <span>12:00 - 14:30</span>
                     </div>
-                    <div class="progress-bar">
-                        <div class="progress-fill" style="width: 0%" id="scheduleProgress2"></div>
+                    <div class="progress-quantum">
+                        <div class="progress-fill-quantum" style="width: 0%" id="scheduleProgress2"></div>
                     </div>
                     
-                    <div class="analysis-item">
-                        <span class="analysis-label">
-                            <i class="fas fa-tasks"></i> Priority 3 (Low)
-                        </span>
-                        <span class="analysis-value">2:00 PM - 4:00 PM</span>
+                    <div class="matrix-item">
+                        <span><i class="fas fa-tasks"></i> Level 1 Tasks</span>
+                        <span>15:00 - 17:00</span>
                     </div>
-                    <div class="progress-bar">
-                        <div class="progress-fill" style="width: 0%" id="scheduleProgress3"></div>
+                    <div class="progress-quantum">
+                        <div class="progress-fill-quantum" style="width: 0%" id="scheduleProgress3"></div>
                     </div>
                 </div>
                 
-                <ul class="ai-suggestions-list">
-                    <li>
-                        <i class="fas fa-robot"></i>
-                        <span>AI has rescheduled 2 tasks for optimal energy levels</span>
-                    </li>
-                    <li>
-                        <i class="fas fa-robot"></i>
-                        <span>Your most productive window: Morning hours - focus on complex tasks</span>
-                    </li>
-                    <li>
-                        <i class="fas fa-robot"></i>
-                        <span>Blocked 1 hour for deep work at 9 AM (your peak time)</span>
-                    </li>
-                </ul>
+                <div id="scheduleChart" style="height: 250px;"></div>
             </div>
         </div>
     </div>
 
-    <!-- AI Task Prioritizer Modal -->
-    <div class="modal-overlay" id="taskPrioritizerModal">
-        <div class="ai-modal">
-            <div class="modal-header">
-                <h3>
-                    <i class="fas fa-sort-amount-down"></i>
-                    AI Task Prioritizer
-                </h3>
-                <button class="modal-close" onclick="closeModal('taskPrioritizerModal')">
+    <div class="quantum-modal" id="prioritizerModal">
+        <div class="modal-content-quantum">
+            <div class="modal-header-quantum">
+                <h3><i class="fas fa-sort-amount-down"></i> Quantum Prioritizer</h3>
+                <button class="modal-close-quantum" onclick="closeQuantumModal('prioritizerModal')">
                     <i class="fas fa-times"></i>
                 </button>
             </div>
-            <div class="modal-body">
-                <div class="ai-analysis">
-                    <div class="analysis-item">
-                        <span class="analysis-label">
-                            <i class="fas fa-exclamation-triangle"></i> Urgent & Important
-                        </span>
-                        <span class="analysis-value high" id="urgentCount">0 tasks</span>
+            <div class="modal-body-quantum">
+                <div class="ai-matrix">
+                    <div class="matrix-item">
+                        <span><i class="fas fa-exclamation-triangle" style="color: var(--danger);"></i> Level 3 (Critical)</span>
+                        <span class="high" id="urgentCount">0 tasks</span>
                     </div>
-                    <div class="analysis-item">
-                        <span class="analysis-label">
-                            <i class="fas fa-calendar"></i> Important but Not Urgent
-                        </span>
-                        <span class="analysis-value medium" id="importantCount">0 tasks</span>
+                    <div class="matrix-item">
+                        <span><i class="fas fa-exclamation" style="color: var(--warning);"></i> Level 2 (Important)</span>
+                        <span class="medium" id="importantCount">0 tasks</span>
                     </div>
-                    <div class="analysis-item">
-                        <span class="analysis-label">
-                            <i class="fas fa-clock"></i> Urgent but Not Important
-                        </span>
-                        <span class="analysis-value low" id="urgentNotImportantCount">0 tasks</span>
-                    </div>
-                    <div class="analysis-item">
-                        <span class="analysis-label">
-                            <i class="fas fa-minus-circle"></i> Neither
-                        </span>
-                        <span class="analysis-value" id="neitherCount">0 tasks</span>
+                    <div class="matrix-item">
+                        <span><i class="fas fa-minus-circle" style="color: var(--success);"></i> Level 1 (Normal)</span>
+                        <span class="low" id="lowCount">0 tasks</span>
                     </div>
                 </div>
                 
-                <h4 style="margin: 20px 0 15px;">AI Recommendations</h4>
-                <ul class="ai-suggestions-list" id="prioritizerList">
-                    <li>Loading AI analysis...</li>
-                </ul>
+                <div id="priorityChart" style="height: 300px;"></div>
             </div>
         </div>
     </div>
 
-    <!-- AI Insights Modal -->
-    <div class="modal-overlay" id="insightsModal">
-        <div class="ai-modal">
-            <div class="modal-header">
-                <h3>
-                    <i class="fas fa-lightbulb"></i>
-                    AI Insights & Recommendations
-                </h3>
-                <button class="modal-close" onclick="closeModal('insightsModal')">
+    <div class="quantum-modal" id="insightsModal">
+        <div class="modal-content-quantum">
+            <div class="modal-header-quantum">
+                <h3><i class="fas fa-lightbulb"></i> Neural Insights Engine</h3>
+                <button class="modal-close-quantum" onclick="closeQuantumModal('insightsModal')">
                     <i class="fas fa-times"></i>
                 </button>
             </div>
-            <div class="modal-body">
-                <div class="ai-analysis">
-                    <h4>Weekly Performance</h4>
-                    <div class="progress-bar">
-                        <div class="progress-fill" style="width: 78%" id="weeklyProgress"></div>
-                    </div>
-                    <p style="margin-top: 10px; color: var(--gray);">78% of weekly goals achieved</p>
-                </div>
+            <div class="modal-body-quantum">
+                <div id="insightsChart" style="height: 300px;"></div>
                 
-                <ul class="ai-suggestions-list" id="insightsList">
-                    <li>
-                        <i class="fas fa-robot"></i>
-                        <span><strong>Pattern Detected:</strong> You're most productive on Tuesday mornings</span>
-                    </li>
-                    <li>
-                        <i class="fas fa-robot"></i>
-                        <span><strong>Time Saver:</strong> Group similar tasks to save ~2 hours weekly</span>
-                    </li>
-                    <li>
-                        <i class="fas fa-robot"></i>
-                        <span><strong>Focus Alert:</strong> Reduce meeting time by 15% to increase deep work</span>
-                    </li>
-                    <li>
-                        <i class="fas fa-robot"></i>
-                        <span><strong>Goal Tracking:</strong> On track to complete monthly targets by 25th</span>
-                    </li>
-                </ul>
-                
-                <div class="chart-container">
-                    <canvas id="insightsChart"></canvas>
+                <div class="ai-suggestions-list" style="margin-top: 25px;">
+                    <h4>Pattern Recognition Results</h4>
+                    <ul style="list-style: none;">
+                        <li style="padding: 12px; background: rgba(99,102,241,0.05); border-radius: 10px; margin-bottom: 10px;">
+                            <i class="fas fa-microchip"></i> 94% of Level 3 tasks completed within 24 hours
+                        </li>
+                        <li style="padding: 12px; background: rgba(99,102,241,0.05); border-radius: 10px; margin-bottom: 10px;">
+                            <i class="fas fa-microchip"></i> Optimal task grouping detected - save 3.5 hours daily
+                        </li>
+                        <li style="padding: 12px; background: rgba(99,102,241,0.05); border-radius: 10px; margin-bottom: 10px;">
+                            <i class="fas fa-microchip"></i> Quantum coherence peaks at 09:00 and 15:00
+                        </li>
+                    </ul>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Scripts -->
-    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <div class="quantum-modal" id="predictorModal">
+        <div class="modal-content-quantum">
+            <div class="modal-header-quantum">
+                <h3><i class="fas fa-chart-line"></i> Quantum Predictor</h3>
+                <button class="modal-close-quantum" onclick="closeQuantumModal('predictorModal')">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body-quantum">
+                <div class="ai-matrix">
+                    <h4>7-Day Quantum Forecast</h4>
+                    <div class="matrix-item">
+                        <span>Tomorrow's Tasks</span>
+                        <span style="font-weight: 700; color: var(--primary);" id="predictTomorrow">24 tasks</span>
+                    </div>
+                    <div class="matrix-item">
+                        <span>This Week's Total</span>
+                        <span style="font-weight: 700; color: var(--primary);" id="predictWeek">156 tasks</span>
+                    </div>
+                    <div class="matrix-item">
+                        <span>Completion Probability</span>
+                        <span style="font-weight: 700; color: var(--success);">94%</span>
+                    </div>
+                </div>
+                
+                <div id="predictorChart" style="height: 300px;"></div>
+            </div>
+        </div>
+    </div>
+
     <script>
-        // Task Management Application with AI Features
-        class TaskManager {
+        // Quantum Task Manager Class
+        class QuantumTaskManager {
             constructor() {
                 this.tasks = [];
                 this.currentFilter = 'all';
                 this.draggedItem = null;
                 this.charts = {};
-                this.statusMessages = [
-                    'Neural network actively learning',
-                    'Deep learning models engaged',
-                    'Pattern recognition active',
-                    'Predictive analytics online',
-                    'Machine learning core running',
-                    'AI optimization in progress',
-                    'Smart scheduling enabled',
-                    'Analyzing productivity patterns',
-                    'Learning your work habits',
-                    'Optimizing task prioritization'
+                this.quantumStatus = [
+                    '128 Neural cores active',
+                    'Quantum coherence at 94%',
+                    'Pattern recognition online',
+                    'Predictive matrix stable',
+                    'Learning algorithms engaged',
+                    'Quantum entanglement stable',
+                    'Neural pathways optimized',
+                    'Temporal sync active'
                 ];
                 
+                this.initializeQuantumTasks();
                 this.initializeEventListeners();
-                this.loadTasks();
                 this.updateStats();
-                this.startRealTimeUpdates();
-                this.createAIBackground();
                 this.initializeCharts();
-                this.startAIStatusRotation();
+                this.startQuantumTime();
+                this.rotateQuantumStatus();
+                this.createNeuralNetwork();
             }
-            
+
+            initializeQuantumTasks() {
+                // Generate 150+ diverse tasks
+                const categories = ['quantum-computing', 'neural-networks', 'machine-learning', 'deep-learning', 'ai-research', 'data-science'];
+                const priorities = ['low', 'medium', 'high'];
+                const statuses = ['pending', 'completed'];
+                const titles = [
+                    'Implement quantum circuit', 'Optimize neural architecture', 'Train deep learning model',
+                    'Deploy AI microservice', 'Analyze quantum data', 'Build recommendation system',
+                    'Create neural interface', 'Design quantum algorithm', 'Optimize ML pipeline',
+                    'Develop AI assistant', 'Research quantum supremacy', 'Build computer vision model',
+                    'Implement NLP system', 'Create generative AI', 'Design reinforcement learning',
+                    'Build predictive model', 'Optimize tensor operations', 'Create quantum simulation',
+                    'Develop edge AI', 'Implement federated learning', 'Build transformer model',
+                    'Create GAN architecture', 'Design CNN network', 'Implement RNN/LSTM',
+                    'Build autoencoder', 'Create attention mechanism', 'Optimize gradient descent',
+                    'Implement backpropagation', 'Design activation functions', 'Build loss functions',
+                    'Create optimizer algorithms', 'Implement data preprocessing', 'Build feature engineering',
+                    'Design model evaluation', 'Create cross-validation', 'Implement hyperparameter tuning',
+                    'Build ensemble methods', 'Create random forest', 'Implement gradient boosting',
+                    'Design XGBoost model', 'Build catboost algorithm', 'Create lightGBM model',
+                    'Implement stacking ensemble', 'Design blending methods', 'Build bagging algorithms',
+                    'Create voting classifiers', 'Implement AdaBoost', 'Design gradient boosting machines',
+                    'Build deep neural networks', 'Create convolutional networks', 'Implement residual networks',
+                    'Design dense networks', 'Build recurrent networks', 'Create attention networks',
+                    'Implement transformers', 'Design BERT models', 'Build GPT architectures',
+                    'Create T5 models', 'Implement XLNet', 'Design RoBERTa models',
+                    'Build ELECTRA models', 'Create ALBERT models', 'Implement DistilBERT',
+                    'Design MobileBERT', 'Build TinyBERT', 'Create quantum BERT',
+                    'Implement quantum CNN', 'Design quantum RNN', 'Build quantum GAN',
+                    'Create quantum VAE', 'Implement quantum autoencoder', 'Design quantum classifier',
+                    'Build quantum regressor', 'Create quantum clustering', 'Implement quantum PCA',
+                    'Design quantum SVM', 'Build quantum kernel', 'Create quantum feature map',
+                    'Implement quantum circuit learning', 'Design quantum neural networks', 'Build quantum ML',
+                    'Create quantum deep learning', 'Implement quantum transfer learning', 'Design quantum meta-learning',
+                    'Build quantum few-shot learning', 'Create quantum zero-shot learning', 'Implement quantum self-supervised',
+                    'Design quantum semi-supervised', 'Build quantum active learning', 'Create quantum online learning',
+                    'Implement quantum reinforcement', 'Design quantum multi-agent', 'Build quantum evolutionary',
+                    'Create quantum genetic algorithms', 'Implement quantum swarm intelligence', 'Design quantum ant colony',
+                    'Build quantum particle swarm', 'Create quantum bee algorithm', 'Implement quantum firefly',
+                    'Design quantum cuckoo search', 'Build quantum bat algorithm', 'Create quantum wolf optimization',
+                    'Implement quantum whale optimization', 'Design quantum butterfly optimization', 'Build quantum moth-flame'
+                ];
+
+                for (let i = 0; i < 150; i++) {
+                    const randomTitle = titles[Math.floor(Math.random() * titles.length)];
+                    const randomCategory = categories[Math.floor(Math.random() * categories.length)];
+                    const randomPriority = priorities[Math.floor(Math.random() * priorities.length)];
+                    const randomStatus = Math.random() > 0.3 ? 'pending' : 'completed'; // 70% pending, 30% completed
+                    
+                    // Generate random deadline within next 7 days
+                    const deadline = new Date();
+                    deadline.setDate(deadline.getDate() + Math.floor(Math.random() * 7) + 1);
+                    deadline.setHours(Math.floor(Math.random() * 24), Math.floor(Math.random() * 60));
+                    
+                    this.tasks.push({
+                        id: `quantum-${i + 1}-${Date.now()}-${Math.random()}`,
+                        title: `${randomTitle} v${Math.floor(Math.random() * 10)}.${Math.floor(Math.random() * 10)}`,
+                        description: `Quantum task with priority level ${randomPriority}. Neural coherence at ${Math.floor(Math.random() * 30 + 70)}%.`,
+                        priority: randomPriority,
+                        deadline: deadline.toISOString().slice(0, 16),
+                        category: randomCategory,
+                        status: randomStatus,
+                        completed: randomStatus === 'completed',
+                        createdAt: new Date().toISOString(),
+                        aiScore: Math.floor(Math.random() * 30 + 70),
+                        quantumCoherence: Math.floor(Math.random() * 20 + 80),
+                        neuralCores: Math.floor(Math.random() * 32 + 96)
+                    });
+                }
+
+                // Sort by creation date (newest first)
+                this.tasks.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+                this.saveTasks();
+                this.renderTasks();
+            }
+
             initializeEventListeners() {
                 // Task form submission
-                document.getElementById('taskForm').addEventListener('submit', (e) => {
+                document.getElementById('quantumTaskForm').addEventListener('submit', (e) => {
                     e.preventDefault();
-                    this.addTask();
+                    this.addQuantumTask();
                 });
-                
+
                 // Priority selector
-                const priorityOptions = document.querySelectorAll('.priority-option');
+                const priorityOptions = document.querySelectorAll('.priority-option-premium');
                 priorityOptions.forEach(option => {
                     option.addEventListener('click', () => {
                         priorityOptions.forEach(opt => opt.classList.remove('active'));
@@ -1937,10 +1851,10 @@
                         document.getElementById('taskPriority').value = option.dataset.priority;
                     });
                 });
-                
+
                 // Set default priority
-                document.querySelector('.priority-option.medium').classList.add('active');
-                
+                document.querySelector('.priority-option-premium.medium').classList.add('active');
+
                 // Initialize date picker
                 flatpickr("#taskDeadline", {
                     enableTime: true,
@@ -1949,116 +1863,57 @@
                     defaultDate: new Date().fp_incr(1),
                     time_24hr: true
                 });
-                
+
                 // Filter buttons
-                document.querySelectorAll('.filter-btn').forEach(btn => {
+                document.querySelectorAll('.filter-btn-premium').forEach(btn => {
                     btn.addEventListener('click', () => {
-                        document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+                        document.querySelectorAll('.filter-btn-premium').forEach(b => b.classList.remove('active'));
                         btn.classList.add('active');
                         this.currentFilter = btn.dataset.filter;
                         this.renderTasks();
                     });
                 });
             }
-            
-            initializeCharts() {
-                // Productivity Chart
-                const ctx = document.getElementById('productivityChart')?.getContext('2d');
-                if (ctx) {
-                    this.charts.productivity = new Chart(ctx, {
-                        type: 'line',
-                        data: {
-                            labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
-                            datasets: [{
-                                label: 'Tasks Completed',
-                                data: [5, 8, 6, 9, 7, 4, 3],
-                                borderColor: '#6366f1',
-                                backgroundColor: 'rgba(99, 102, 241, 0.1)',
-                                tension: 0.4,
-                                fill: true
-                            }]
-                        },
-                        options: {
-                            responsive: true,
-                            plugins: {
-                                legend: { display: false }
-                            }
-                        }
-                    });
-                }
-                
-                // Insights Chart
-                const insightsCtx = document.getElementById('insightsChart')?.getContext('2d');
-                if (insightsCtx) {
-                    this.charts.insights = new Chart(insightsCtx, {
-                        type: 'doughnut',
-                        data: {
-                            labels: ['High Priority', 'Medium Priority', 'Low Priority', 'Completed'],
-                            datasets: [{
-                                data: [30, 45, 15, 10],
-                                backgroundColor: ['#ef4444', '#f59e0b', '#10b981', '#6366f1'],
-                                borderWidth: 0
-                            }]
-                        },
-                        options: {
-                            responsive: true,
-                            plugins: {
-                                legend: { position: 'bottom' }
-                            }
-                        }
-                    });
-                }
-            }
-            
-            createAIBackground() {
-                const bg = document.getElementById('aiBackground');
-                for (let i = 0; i < 20; i++) {
-                    const span = document.createElement('span');
-                    span.innerHTML = ['🤖', '🧠', '⚡', '💡', '🔮', '📊'][Math.floor(Math.random() * 6)];
-                    span.style.left = Math.random() * 100 + '%';
-                    span.style.animationDelay = Math.random() * 20 + 's';
-                    span.style.fontSize = (Math.random() * 20 + 20) + 'px';
-                    bg.appendChild(span);
-                }
-            }
-            
-            addTask() {
+
+            addQuantumTask() {
                 const title = document.getElementById('taskTitle').value;
                 const description = document.getElementById('taskDesc').value;
                 const priority = document.getElementById('taskPriority').value;
                 const deadline = document.getElementById('taskDeadline').value;
                 const category = document.getElementById('taskCategory').value;
-                
+
                 if (!title || !deadline) {
-                    this.showNotification('Please fill in all required fields', 'error');
+                    this.showQuantumNotification('Please complete quantum fields', 'error');
                     return;
                 }
-                
+
                 const task = {
-                    id: Date.now().toString(),
+                    id: `quantum-${Date.now()}-${Math.random()}`,
                     title,
-                    description,
+                    description: description || 'No description provided',
                     priority,
                     deadline,
                     category,
                     status: 'pending',
-                    createdAt: new Date().toISOString(),
                     completed: false,
-                    aiScore: Math.floor(Math.random() * 30 + 70) // Simulated AI score
+                    createdAt: new Date().toISOString(),
+                    aiScore: Math.floor(Math.random() * 30 + 70),
+                    quantumCoherence: Math.floor(Math.random() * 20 + 80),
+                    neuralCores: 128
                 };
-                
+
                 this.tasks.unshift(task);
                 this.saveTasks();
                 this.renderTasks();
                 this.updateStats();
-                this.showNotification('Task created with AI optimization! ✨', 'success');
-                
+                this.showQuantumNotification('✨ Quantum task created successfully!', 'success');
+
                 // Clear form
-                document.getElementById('taskForm').reset();
-                document.querySelector('.priority-option.medium').classList.add('active');
+                document.getElementById('quantumTaskForm').reset();
+                document.querySelector('.priority-option-premium.medium').classList.add('active');
                 document.getElementById('taskPriority').value = 'medium';
             }
-            
+
             toggleTaskComplete(taskId) {
                 const task = this.tasks.find(t => t.id === taskId);
                 if (task) {
@@ -2069,102 +1924,102 @@
                     this.updateStats();
                     
                     if (task.completed) {
-                        this.showNotification('🎉 Task completed! Great job!', 'success');
-                        this.playConfetti();
+                        this.showQuantumNotification('🎯 Quantum task completed!', 'success');
+                        this.playQuantumEffect();
                     }
                 }
             }
-            
+
             deleteTask(taskId) {
-                if (confirm('Are you sure you want to delete this task?')) {
+                if (confirm('Delete this quantum task from the matrix?')) {
                     this.tasks = this.tasks.filter(t => t.id !== taskId);
                     this.saveTasks();
                     this.renderTasks();
                     this.updateStats();
-                    this.showNotification('Task deleted', 'info');
+                    this.showQuantumNotification('Task removed from quantum matrix', 'info');
                 }
             }
-            
+
             getFilteredTasks() {
-                switch(this.currentFilter) {
-                    case 'low':
-                        return this.tasks.filter(t => t.priority === 'low' && !t.completed);
-                    case 'medium':
-                        return this.tasks.filter(t => t.priority === 'medium' && !t.completed);
-                    case 'high':
-                        return this.tasks.filter(t => t.priority === 'high' && !t.completed);
-                    case 'completed':
-                        return this.tasks.filter(t => t.completed);
-                    default:
-                        return this.tasks.filter(t => !t.completed);
+                let filtered = this.tasks;
+                
+                // Apply status filter
+                if (this.currentFilter === 'completed') {
+                    filtered = filtered.filter(t => t.completed);
+                } else if (this.currentFilter !== 'all') {
+                    filtered = filtered.filter(t => !t.completed && t.priority === this.currentFilter);
+                } else {
+                    filtered = filtered.filter(t => !t.completed);
                 }
+                
+                return filtered;
             }
-            
+
             renderTasks() {
-                const board = document.getElementById('tasksBoard');
+                const grid = document.getElementById('tasksGrid');
                 const filteredTasks = this.getFilteredTasks();
                 
                 if (filteredTasks.length === 0) {
-                    board.innerHTML = `
-                        <div class="empty-state">
-                            <i class="fas fa-robot"></i>
-                            <h3>No tasks found</h3>
-                            <p>AI is waiting for you to create your first task!</p>
+                    grid.innerHTML = `
+                        <div style="grid-column: 1/-1; text-align: center; padding: 80px 20px;">
+                            <i class="fas fa-microchip" style="font-size: 80px; color: var(--primary); opacity: 0.3; margin-bottom: 20px;"></i>
+                            <h3 style="color: var(--dark); font-size: 24px; margin-bottom: 10px;">No Quantum Tasks Found</h3>
+                            <p style="color: var(--gray);">Neural network awaiting input</p>
                         </div>
                     `;
                     return;
                 }
                 
-                board.innerHTML = filteredTasks.map(task => this.createTaskCard(task)).join('');
+                grid.innerHTML = filteredTasks.map(task => this.createQuantumTaskCard(task)).join('');
                 this.initializeDragAndDrop();
             }
-            
-            createTaskCard(task) {
+
+            createQuantumTaskCard(task) {
                 const deadline = new Date(task.deadline);
                 const now = new Date();
                 const isOverdue = deadline < now && !task.completed;
                 const formattedDeadline = deadline.toLocaleString();
-                const aiScore = task.aiScore || Math.floor(Math.random() * 30 + 70);
                 
                 return `
-                    <div class="task-card priority-${task.priority} ${isOverdue ? 'overdue' : ''}" 
+                    <div class="task-card-premium priority-${task.priority}" 
                          draggable="true" 
                          data-id="${task.id}"
                          data-priority="${task.priority}">
-                        <div class="task-header">
-                            <span class="task-title">${task.title}</span>
-                            <span class="task-priority">${task.priority.toUpperCase()}</span>
+                        <div class="task-header-premium">
+                            <span class="task-title-premium">${task.title}</span>
+                            <span class="priority-badge-premium ${task.priority}">Level ${task.priority === 'high' ? '3' : task.priority === 'medium' ? '2' : '1'}</span>
                         </div>
-                        <div class="task-description">${task.description || 'No description'}</div>
-                        <div class="task-meta">
-                            <span class="task-meta-item">
+                        <div class="task-description-premium">${task.description}</div>
+                        <div class="task-meta-premium">
+                            <span class="meta-item-premium">
                                 <i class="fas fa-calendar"></i>
-                                <span class="${isOverdue ? 'overdue' : ''}">${formattedDeadline}</span>
+                                <span style="${isOverdue ? 'color: var(--danger); font-weight: 600;' : ''}">${formattedDeadline}</span>
                             </span>
-                            <span class="task-meta-item">
-                                <i class="fas fa-tag"></i>
+                            <span class="meta-item-premium">
+                                <i class="fas fa-microchip"></i>
                                 ${task.category}
                             </span>
-                            <span class="task-meta-item">
-                                <i class="fas fa-microchip"></i>
-                                AI Score: ${aiScore}%
+                            <span class="meta-item-premium">
+                                <i class="fas fa-brain"></i>
+                                ${task.neuralCores || 128} cores
                             </span>
                         </div>
-                        <div class="task-footer">
-                            <div class="task-status">
-                                <span class="status-badge">
-                                    <i class="fas fa-clock"></i>
-                                    ${task.completed ? 'Completed' : 'In Progress'}
-                                </span>
+                        <div class="task-footer-premium">
+                            <div class="ai-score">
+                                <i class="fas fa-chart-line" style="color: var(--primary);"></i>
+                                <span>${task.aiScore}%</span>
+                                <div class="ai-score-bar">
+                                    <div class="ai-score-fill" style="width: ${task.aiScore}%"></div>
+                                </div>
                             </div>
-                            <div class="task-actions">
-                                <button class="task-action ai" onclick="taskManager.analyzeTask('${task.id}')" title="AI Analysis">
-                                    <i class="fas fa-robot"></i>
+                            <div class="task-actions-premium">
+                                <button class="action-btn-premium ai" onclick="taskManager.quantumAnalyze('${task.id}')" title="Quantum Analysis">
+                                    <i class="fas fa-microchip"></i>
                                 </button>
-                                <button class="task-action complete" onclick="taskManager.toggleTaskComplete('${task.id}')" title="Toggle Complete">
+                                <button class="action-btn-premium complete" onclick="taskManager.toggleTaskComplete('${task.id}')" title="Toggle Complete">
                                     <i class="fas ${task.completed ? 'fa-undo' : 'fa-check'}"></i>
                                 </button>
-                                <button class="task-action delete" onclick="taskManager.deleteTask('${task.id}')" title="Delete">
+                                <button class="action-btn-premium delete" onclick="taskManager.deleteTask('${task.id}')" title="Delete">
                                     <i class="fas fa-trash"></i>
                                 </button>
                             </div>
@@ -2172,18 +2027,20 @@
                     </div>
                 `;
             }
-            
-            analyzeTask(taskId) {
+
+            quantumAnalyze(taskId) {
                 const task = this.tasks.find(t => t.id === taskId);
                 if (task) {
-                    alert(`🤖 AI Analysis for "${task.title}":\n\n` +
-                          `• Estimated completion time: 2.5 hours\n` +
-                          `• Best time to work: Morning (9 AM - 11 AM)\n` +
-                          `• Difficulty level: ${task.priority === 'high' ? 'Complex' : 'Moderate'}\n` +
-                          `• AI Suggestion: Break this into 3 smaller subtasks for better focus`);
+                    this.showQuantumNotification(`
+                        🔬 Quantum Analysis: ${task.title}\n
+                        • Coherence: ${task.quantumCoherence || 94}%\n
+                        • Neural Cores: ${task.neuralCores || 128}\n
+                        • Optimal Time: ${Math.floor(Math.random() * 12 + 8)}:00 QST\n
+                        • Complexity: ${task.priority === 'high' ? 'Quantum Level' : 'Standard'}
+                    `, 'info');
                 }
             }
-            
+
             updateStats() {
                 const total = this.tasks.length;
                 const completed = this.tasks.filter(t => t.completed).length;
@@ -2191,216 +2048,243 @@
                 const overdue = this.tasks.filter(t => {
                     return !t.completed && new Date(t.deadline) < new Date();
                 }).length;
-                
+
                 document.getElementById('totalTasks').textContent = total;
                 document.getElementById('completedTasks').textContent = completed;
                 document.getElementById('pendingTasks').textContent = pending;
                 document.getElementById('overdueTasks').textContent = overdue;
-                
-                // Update AI prioritizer counts
+
+                // Update priority counts
                 document.getElementById('urgentCount').textContent = 
                     this.tasks.filter(t => !t.completed && t.priority === 'high').length + ' tasks';
                 document.getElementById('importantCount').textContent = 
                     this.tasks.filter(t => !t.completed && t.priority === 'medium').length + ' tasks';
-                document.getElementById('urgentNotImportantCount').textContent = 
+                document.getElementById('lowCount').textContent = 
                     this.tasks.filter(t => !t.completed && t.priority === 'low').length + ' tasks';
-                document.getElementById('neitherCount').textContent = 
-                    this.tasks.filter(t => t.completed).length + ' tasks';
-                
-                // Update schedule progress bars
-                const highPriorityTasks = this.tasks.filter(t => !t.completed && t.priority === 'high').length;
-                const mediumPriorityTasks = this.tasks.filter(t => !t.completed && t.priority === 'medium').length;
-                const lowPriorityTasks = this.tasks.filter(t => !t.completed && t.priority === 'low').length;
-                
+
+                // Update schedule progress
+                const highCount = this.tasks.filter(t => !t.completed && t.priority === 'high').length;
+                const mediumCount = this.tasks.filter(t => !t.completed && t.priority === 'medium').length;
+                const lowCount = this.tasks.filter(t => !t.completed && t.priority === 'low').length;
+
                 document.getElementById('scheduleProgress1').style.width = 
-                    Math.min(100, highPriorityTasks * 20) + '%';
+                    Math.min(100, highCount * 5) + '%';
                 document.getElementById('scheduleProgress2').style.width = 
-                    Math.min(100, mediumPriorityTasks * 15) + '%';
+                    Math.min(100, mediumCount * 4) + '%';
                 document.getElementById('scheduleProgress3').style.width = 
-                    Math.min(100, lowPriorityTasks * 10) + '%';
-                
-                // Update weekly progress
-                document.getElementById('weeklyProgress').style.width = 
-                    Math.min(100, (completed / (total || 1)) * 100) + '%';
-                
-                // Update prioritizer list
-                const list = document.getElementById('prioritizerList');
-                if (list) {
-                    const highPriority = this.tasks.filter(t => !t.completed && t.priority === 'high');
-                    list.innerHTML = highPriority.slice(0, 3).map(t => `
-                        <li>
-                            <i class="fas fa-exclamation-circle" style="color: #ef4444;"></i>
-                            <span><strong>High Priority:</strong> ${t.title} (due ${new Date(t.deadline).toLocaleDateString()})</span>
-                        </li>
-                    `).join('') || '<li>No high priority tasks</li>';
-                }
+                    Math.min(100, lowCount * 3) + '%';
+
+                // Update predictors
+                document.getElementById('predictTomorrow').textContent = 
+                    Math.floor(total * 0.16) + ' tasks';
+                document.getElementById('predictWeek').textContent = 
+                    Math.floor(total * 1.04) + ' tasks';
+
+                this.updateCharts();
             }
-            
-            saveTasks() {
-                localStorage.setItem('tasks', JSON.stringify(this.tasks));
-            }
-            
-            loadTasks() {
-                const saved = localStorage.getItem('tasks');
-                if (saved) {
-                    this.tasks = JSON.parse(saved);
-                    this.renderTasks();
-                } else {
-                    // Add sample tasks
-                    this.tasks = [
-                        {
-                            id: '1',
-                            title: 'Implement AI task analysis',
-                            description: 'Add machine learning features to analyze task patterns',
-                            priority: 'high',
-                            deadline: new Date(Date.now() + 86400000).toISOString().slice(0, 16),
-                            category: 'ai-project',
-                            status: 'pending',
-                            completed: false,
-                            createdAt: new Date().toISOString(),
-                            aiScore: 95
-                        },
-                        {
-                            id: '2',
-                            title: 'Design neural network interface',
-                            description: 'Create UI for AI-powered recommendations',
-                            priority: 'medium',
-                            deadline: new Date(Date.now() + 172800000).toISOString().slice(0, 16),
-                            category: 'work',
-                            status: 'pending',
-                            completed: false,
-                            createdAt: new Date().toISOString(),
-                            aiScore: 82
-                        },
-                        {
-                            id: '3',
-                            title: 'Train productivity model',
-                            description: 'Feed user data to improve task predictions',
-                            priority: 'low',
-                            deadline: new Date(Date.now() + 259200000).toISOString().slice(0, 16),
-                            category: 'ai-project',
-                            status: 'pending',
-                            completed: false,
-                            createdAt: new Date().toISOString(),
-                            aiScore: 78
-                        }
-                    ];
-                    this.saveTasks();
-                    this.renderTasks();
-                }
-            }
-            
-            showNotification(message, type = 'info') {
-                const colors = {
-                    success: 'linear-gradient(135deg, #10b981, #059669)',
-                    error: 'linear-gradient(135deg, #ef4444, #dc2626)',
-                    info: 'linear-gradient(135deg, #6366f1, #8b5cf6)',
-                    warning: 'linear-gradient(135deg, #f59e0b, #d97706)'
+
+            initializeCharts() {
+                // Productivity Chart
+                const productivityOptions = {
+                    chart: { type: 'area', height: 300, background: 'transparent' },
+                    series: [{
+                        name: 'Quantum Tasks',
+                        data: [65, 78, 82, 94, 88, 92, 85]
+                    }],
+                    xaxis: { categories: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'] },
+                    colors: ['#6366f1'],
+                    stroke: { curve: 'smooth', width: 3 },
+                    fill: { type: 'gradient', gradient: { shadeIntensity: 1, opacityFrom: 0.7, opacityTo: 0.3 } }
                 };
                 
+                if (document.getElementById('productivityChart')) {
+                    this.charts.productivity = new ApexCharts(document.getElementById('productivityChart'), productivityOptions);
+                    this.charts.productivity.render();
+                }
+
+                // Schedule Chart
+                const scheduleOptions = {
+                    chart: { type: 'bar', height: 250 },
+                    series: [{
+                        name: 'Tasks',
+                        data: [12, 8, 5]
+                    }],
+                    xaxis: { categories: ['Level 3', 'Level 2', 'Level 1'] },
+                    colors: ['#ef4444', '#f59e0b', '#10b981']
+                };
+                
+                if (document.getElementById('scheduleChart')) {
+                    this.charts.schedule = new ApexCharts(document.getElementById('scheduleChart'), scheduleOptions);
+                    this.charts.schedule.render();
+                }
+
+                // Priority Chart
+                const priorityOptions = {
+                    chart: { type: 'donut', height: 300 },
+                    series: [
+                        this.tasks.filter(t => !t.completed && t.priority === 'high').length,
+                        this.tasks.filter(t => !t.completed && t.priority === 'medium').length,
+                        this.tasks.filter(t => !t.completed && t.priority === 'low').length
+                    ],
+                    labels: ['Level 3', 'Level 2', 'Level 1'],
+                    colors: ['#ef4444', '#f59e0b', '#10b981'],
+                    legend: { position: 'bottom' }
+                };
+                
+                if (document.getElementById('priorityChart')) {
+                    this.charts.priority = new ApexCharts(document.getElementById('priorityChart'), priorityOptions);
+                    this.charts.priority.render();
+                }
+
+                // Insights Chart
+                const insightsOptions = {
+                    chart: { type: 'radar', height: 300 },
+                    series: [{
+                        name: 'Performance',
+                        data: [94, 88, 92, 86, 90, 89]
+                    }],
+                    xaxis: { categories: ['Speed', 'Quality', 'Consistency', 'Innovation', 'Collaboration', 'Efficiency'] },
+                    colors: ['#6366f1']
+                };
+                
+                if (document.getElementById('insightsChart')) {
+                    this.charts.insights = new ApexCharts(document.getElementById('insightsChart'), insightsOptions);
+                    this.charts.insights.render();
+                }
+
+                // Predictor Chart
+                const predictorOptions = {
+                    chart: { type: 'line', height: 300 },
+                    series: [{
+                        name: 'Predicted Tasks',
+                        data: [24, 28, 32, 30, 26, 22, 18]
+                    }],
+                    xaxis: { categories: ['Day 1', 'Day 2', 'Day 3', 'Day 4', 'Day 5', 'Day 6', 'Day 7'] },
+                    colors: ['#8b5cf6']
+                };
+                
+                if (document.getElementById('predictorChart')) {
+                    this.charts.predictor = new ApexCharts(document.getElementById('predictorChart'), predictorOptions);
+                    this.charts.predictor.render();
+                }
+            }
+
+            updateCharts() {
+                if (this.charts.priority) {
+                    this.charts.priority.updateSeries([
+                        this.tasks.filter(t => !t.completed && t.priority === 'high').length,
+                        this.tasks.filter(t => !t.completed && t.priority === 'medium').length,
+                        this.tasks.filter(t => !t.completed && t.priority === 'low').length
+                    ]);
+                }
+            }
+
+            saveTasks() {
+                localStorage.setItem('quantumTasks', JSON.stringify(this.tasks));
+            }
+
+            showQuantumNotification(message, type = 'info') {
+                // Create floating notification
                 const notification = document.createElement('div');
                 notification.style.cssText = `
                     position: fixed;
                     bottom: 20px;
                     right: 20px;
-                    background: ${colors[type] || colors.info};
+                    background: linear-gradient(135deg, var(--primary), var(--secondary));
                     color: white;
                     padding: 15px 25px;
                     border-radius: 12px;
-                    box-shadow: 0 10px 40px rgba(0,0,0,0.2);
-                    animation: slideIn 0.3s ease;
-                    z-index: 3000;
-                    font-weight: 500;
+                    box-shadow: 0 10px 40px rgba(99,102,241,0.3);
+                    z-index: 9999;
+                    animation: notificationSlide 0.3s ease;
+                    border: 1px solid rgba(255,255,255,0.2);
+                    backdrop-filter: blur(10px);
+                    max-width: 400px;
+                    white-space: pre-line;
                 `;
-                notification.innerHTML = `<i class="fas ${type === 'success' ? 'fa-check-circle' : type === 'error' ? 'fa-exclamation-circle' : 'fa-info-circle'}"></i> ${message}`;
+                notification.innerHTML = message;
                 
                 document.body.appendChild(notification);
                 
                 setTimeout(() => {
-                    notification.style.animation = 'fadeOut 0.3s ease';
+                    notification.style.animation = 'notificationFade 0.3s ease';
                     setTimeout(() => notification.remove(), 300);
-                }, 3000);
-            }
-            
-            playConfetti() {
-                // Simple confetti effect
-                for (let i = 0; i < 50; i++) {
-                    const confetti = document.createElement('div');
-                    confetti.style.cssText = `
-                        position: fixed;
-                        top: -10px;
-                        left: ${Math.random() * 100}%;
-                        width: 10px;
-                        height: 10px;
-                        background: hsl(${Math.random() * 360}, 100%, 50%);
-                        border-radius: 50%;
-                        animation: confetti ${Math.random() * 3 + 2}s linear infinite;
-                        z-index: 9999;
-                    `;
-                    document.body.appendChild(confetti);
-                    
-                    setTimeout(() => confetti.remove(), 5000);
-                }
-            }
-            
-            startRealTimeUpdates() {
-                // Update timestamp every second
-                setInterval(() => {
-                    this.updateTimestamp();
-                }, 1000);
-            }
-            
-            updateTimestamp() {
-                const timestampElement = document.getElementById('liveTimestamp');
-                if (!timestampElement) return;
-                
-                const now = new Date();
-                const timeString = now.toLocaleTimeString('en-US', {
-                    hour: '2-digit',
-                    minute: '2-digit',
-                    second: '2-digit',
-                    hour12: true
-                });
-                
-                // Add animation class
-                timestampElement.classList.add('time-update');
-                
-                // Update the time with fade effect
-                const timeSpan = timestampElement.querySelector('.time');
-                if (timeSpan) {
-                    timeSpan.style.opacity = '0';
-                    setTimeout(() => {
-                        timeSpan.textContent = timeString;
-                        timeSpan.style.opacity = '1';
-                    }, 150);
-                }
-                
-                // Remove animation class after animation completes
-                setTimeout(() => {
-                    timestampElement.classList.remove('time-update');
-                }, 300);
-            }
-            
-            startAIStatusRotation() {
-                // Change AI status message every 5 seconds
-                setInterval(() => {
-                    const statusElement = document.getElementById('aiStatusMessage');
-                    if (!statusElement) return;
-                    
-                    const randomMessage = this.statusMessages[Math.floor(Math.random() * this.statusMessages.length)];
-                    
-                    // Fade out and in
-                    statusElement.style.opacity = '0';
-                    setTimeout(() => {
-                        statusElement.innerHTML = `⚡ ${randomMessage}`;
-                        statusElement.style.opacity = '1';
-                    }, 200);
                 }, 5000);
             }
-            
+
+            playQuantumEffect() {
+                // Create particle effect
+                for (let i = 0; i < 30; i++) {
+                    const particle = document.createElement('div');
+                    particle.style.cssText = `
+                        position: fixed;
+                        top: 50%;
+                        left: 50%;
+                        width: 10px;
+                        height: 10px;
+                        background: linear-gradient(135deg, var(--primary), var(--secondary));
+                        border-radius: 50%;
+                        pointer-events: none;
+                        z-index: 9999;
+                        animation: quantumParticle ${Math.random() * 2 + 1}s ease-out forwards;
+                        transform: translate(-50%, -50%);
+                    `;
+                    
+                    const angle = Math.random() * Math.PI * 2;
+                    const distance = Math.random() * 200 + 50;
+                    particle.style.setProperty('--tx', `${Math.cos(angle) * distance}px`);
+                    particle.style.setProperty('--ty', `${Math.sin(angle) * distance}px`);
+                    
+                    document.body.appendChild(particle);
+                    
+                    setTimeout(() => particle.remove(), 3000);
+                }
+            }
+
+            startQuantumTime() {
+                setInterval(() => {
+                    const now = new Date();
+                    document.getElementById('liveTime').textContent = 
+                        now.toLocaleTimeString('en-US', { hour12: false });
+                }, 1000);
+            }
+
+            rotateQuantumStatus() {
+                setInterval(() => {
+                    const statusElement = document.getElementById('aiStatusMessage');
+                    const randomStatus = this.quantumStatus[Math.floor(Math.random() * this.quantumStatus.length)];
+                    statusElement.innerHTML = `<i class="fas fa-circle" style="font-size: 8px; color: var(--success);"></i> ${randomStatus}`;
+                }, 3000);
+            }
+
+            createNeuralNetwork() {
+                const container = document.getElementById('neuralNetwork');
+                if (!container) return;
+                
+                for (let i = 0; i < 20; i++) {
+                    const node = document.createElement('div');
+                    node.className = 'neural-node';
+                    node.style.left = Math.random() * 100 + '%';
+                    node.style.top = Math.random() * 100 + '%';
+                    node.style.animationDelay = Math.random() * 2 + 's';
+                    container.appendChild(node);
+                }
+                
+                for (let i = 0; i < 15; i++) {
+                    const connection = document.createElement('div');
+                    connection.className = 'neural-connection';
+                    connection.style.left = Math.random() * 100 + '%';
+                    connection.style.top = Math.random() * 100 + '%';
+                    connection.style.width = Math.random() * 100 + 50 + 'px';
+                    connection.style.transform = `rotate(${Math.random() * 360}deg)`;
+                    connection.style.animationDelay = Math.random() * 2 + 's';
+                    container.appendChild(connection);
+                }
+            }
+
             initializeDragAndDrop() {
-                const cards = document.querySelectorAll('.task-card');
-                const board = document.getElementById('tasksBoard');
+                const cards = document.querySelectorAll('.task-card-premium');
+                const grid = document.getElementById('tasksGrid');
                 
                 cards.forEach(card => {
                     card.addEventListener('dragstart', (e) => {
@@ -2439,67 +2323,60 @@
                             
                             this.saveTasks();
                             this.renderTasks();
-                            this.showNotification('Task reordered with AI optimization', 'info');
+                            this.showQuantumNotification('Quantum matrix reordered', 'info');
                         }
                     });
                 });
                 
-                board.addEventListener('dragover', (e) => {
+                grid.addEventListener('dragover', (e) => {
                     e.preventDefault();
                 });
             }
         }
-        
+
         // Modal functions
-        function openModal(modalId) {
+        function openQuantumModal(modalId) {
             document.getElementById(modalId).classList.add('active');
         }
-        
-        function closeModal(modalId) {
+
+        function closeQuantumModal(modalId) {
             document.getElementById(modalId).classList.remove('active');
         }
-        
-        // Fill task suggestion
-        function fillTaskSuggestion(text) {
+
+        function fillQuantumTask(text) {
             document.getElementById('taskTitle').value = text;
         }
-        
-        // Initialize the app
-        const taskManager = new TaskManager();
-        
+
+        // Initialize the quantum task manager
+        const taskManager = new QuantumTaskManager();
+
         // Add CSS animations
         const style = document.createElement('style');
         style.textContent = `
-            @keyframes fadeOut {
-                from { opacity: 1; transform: translateY(0); }
-                to { opacity: 0; transform: translateY(20px); }
+            @keyframes notificationSlide {
+                from { transform: translateX(100%); opacity: 0; }
+                to { transform: translateX(0); opacity: 1; }
             }
             
-            @keyframes confetti {
-                to { transform: translateY(100vh) rotate(720deg); }
+            @keyframes notificationFade {
+                from { transform: translateX(0); opacity: 1; }
+                to { transform: translateX(100%); opacity: 0; }
             }
             
-            .empty-state {
-                text-align: center;
-                padding: 80px 20px;
-                color: var(--gray);
+            @keyframes quantumParticle {
+                0% {
+                    transform: translate(-50%, -50%) scale(1);
+                    opacity: 1;
+                }
+                100% {
+                    transform: translate(calc(-50% + var(--tx)), calc(-50% + var(--ty))) scale(0);
+                    opacity: 0;
+                }
             }
             
-            .empty-state i {
-                font-size: 80px;
-                margin-bottom: 20px;
-                color: var(--primary);
-                opacity: 0.5;
-            }
-            
-            .empty-state h3 {
-                color: var(--dark);
-                margin-bottom: 10px;
-                font-size: 24px;
-            }
-            
-            .empty-state p {
-                color: var(--gray);
+            .drag-over {
+                transform: scale(1.02);
+                box-shadow: 0 0 0 2px var(--primary);
             }
         `;
         document.head.appendChild(style);
